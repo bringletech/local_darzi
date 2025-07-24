@@ -1,0 +1,76 @@
+name: darzi
+description: "A new Flutter project."
+publish_to: 'none' # Remove this line if you wish to publish to pub.dev
+
+version: 1.0.4
+
+environment:
+  sdk: ">=3.5.3 <4.0.0" # Specify a range for the SDK version
+
+dependencies:
+  flutter:
+    sdk: flutter
+  flutter_localizations:
+    sdk: flutter
+  intl: any  # Check for the latest version
+
+
+  # The following adds the Cupertino Icons font to your application.
+  cupertino_icons: ^1.0.8
+  http: any
+  flutter_screenutil: any # Added here for dependency consistency
+  flutter_svg: any
+  intl_phone_field: any
+  fluttertoast: any
+  dio:
+  get: any
+  shared_preferences: any
+  image_cropper: any
+  image_picker: any
+  cached_network_image: any
+  permission_handler: any
+  firebase_core: any
+  firebase_messaging: any
+  firebase_analytics: any
+  flutter_local_notifications: any
+  url_launcher: ^6.3.1
+  flutter_rating_bar: any
+  geolocator: any
+  month_year_picker: any
+  share_plus: any
+  rename: ^3.1.0
+  change_app_package_name: ^1.5.0
+  rename_app: ^1.6.3
+
+
+
+
+dev_dependencies:
+  flutter_test:
+    sdk: flutter
+  vector_math: ^2.1.4
+  flutter_lints: ^5.0.0
+
+flutter:
+  generate: true
+  uses-material-design: true
+
+  assets:
+    - assets/images/
+    - assets/svgIcon/ # Include assets for image usage
+
+  fonts:
+    - family: Poppins
+      fonts:
+        - asset: assets/fontFamily/Poppins-Regular.ttf
+          weight: 500
+        - asset: assets/fontFamily/Poppins-Medium.ttf
+          weight: 400
+        - asset: assets/fontFamily/Poppins-SemiBold.ttf
+          weight: 600
+    - family: Inter
+      fonts:
+        - asset: assets/fontFamily/Inter.ttc
+          weight: 400
+
+

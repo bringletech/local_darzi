@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "495921549869",
+    "project_id": "darzi-app-notification",
+    "storage_bucket": "darzi-app-notification.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:495921549869:android:7f1c985c82d0c87d915ea4",
+        "android_client_info": {
+          "package_name": "com.mannytech.darzi"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAAyvRbHK03z7FoeuoFV0Tlz_kwhAxsjL4"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

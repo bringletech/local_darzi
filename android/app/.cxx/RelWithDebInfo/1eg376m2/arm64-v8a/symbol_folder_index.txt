@@ -1,0 +1,1 @@
+/Users/apple/Desktop/Darzi-App-main/build/app/intermediates/cxx/RelWithDebInfo/1eg376m2/obj/arm64-v8a

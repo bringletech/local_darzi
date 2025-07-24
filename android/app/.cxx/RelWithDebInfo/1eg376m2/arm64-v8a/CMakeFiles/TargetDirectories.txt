@@ -1,0 +1,2 @@
+/Users/apple/Desktop/Darzi-App-main/android/app/.cxx/RelWithDebInfo/1eg376m2/arm64-v8a/CMakeFiles/edit_cache.dir
+/Users/apple/Desktop/Darzi-App-main/android/app/.cxx/RelWithDebInfo/1eg376m2/arm64-v8a/CMakeFiles/rebuild_cache.dir
