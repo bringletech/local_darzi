@@ -615,7 +615,7 @@ class AppLocalizationsPa extends AppLocalizations {
       'ਡਾਰਜ਼ੀ ਨੂੰ ਤੁਹਾਡੇ ਕੈਮਰੇ ਅਤੇ ਗੈਲਰੀ ਦੀ ਪਹੁੰਚ ਦੀ ਲੋੜ ਹੈ ਤਾਂ ਜੋ ਤੁਸੀਂ ਆਪਣੀ ਪ੍ਰੋਫਾਈਲ, ਡਰੈੱਸ ਆਰਡਰ ਜਾਂ ਸਮੀਖਿਆ ਲਈ ਤਸਵੀਰਾਂ ਅੱਪਲੋਡ ਕਰ ਸਕੋ। ਤੁਹਾਡੀਆਂ ਤਸਵੀਰਾਂ ਪੂਰੀ ਤਰ੍ਹਾਂ ਨਿੱਜੀ ਰਹਿੰਦੀਆਂ ਹਨ, ਕਦੇ ਵੀ ਸਾਂਝੀਆਂ ਨਹੀਂ ਕੀਤੀਆਂ ਜਾਂਦੀਆਂ ਅਤੇ ਸਿਰਫ਼ ਐਪ ਦੇ ਅੰਦਰ ਹੀ ਵਰਤੀਆਂ ਜਾਂਦੀਆਂ ਹਨ। ਵੇਰਵਿਆਂ ਲਈ ਸਾਡੀ ਪਰਦੇਦਾਰੀ ਨੀਤੀ ਵੇਖੋ।';
 
   @override
-  String get access_continue => 'Continue';
+  String get access_continue => 'ਜਾਰੀ ਰੱਖੋ';
 
   @override
   String get enter_name => 'ਆਪਣਾ ਨਾਮ ਦਰਜ ਕਰੋ';

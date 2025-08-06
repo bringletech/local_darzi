@@ -16,7 +16,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_rating_bar/flutter_rating_bar.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:fluttertoast/fluttertoast.dart';
-import 'package:image_cropper/image_cropper.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -1159,7 +1158,7 @@ class _TailorProfilePageState extends State<TailorProfilePage> {
                         await prefs.remove("userType");
                         await prefs.remove("selectedLanguage");
                         await prefs.remove("deviceToken");
-                        // await prefs.clear();
+                        await prefs.clear();
 
                         // print("SharedPreference value are $prefs");
                         await Future.delayed(const Duration(seconds: 2));

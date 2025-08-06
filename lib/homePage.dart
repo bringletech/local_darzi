@@ -76,38 +76,52 @@ class _HomePageState extends State<HomePage> {
 
   void _updateLabels(Locale locale) {
     setState(() {
-      if (locale.languageCode == 'en') {
-        tailorLabel = "Tailor";
-        customerLabel = "Customer";
-        selectLanguage = "Select Your Language";
-      } else if (locale.languageCode == 'hi') {
-        tailorLabel = "दर्जी";
-        customerLabel = "ग्राहक";
-        selectLanguage = "अपनी भाषा चुनें।";
-      } else if (locale.languageCode == 'pa') {
-        tailorLabel = "ਦਰਜੀ";
-        customerLabel = "ਗਾਹਕ";
-        selectLanguage = "ਆਪਣੀ ਭਾਸ਼ਾ ਚੁਣੋ।";
-      } else if (locale.languageCode == 'te') {
-        tailorLabel = "దర్జీ";
-        customerLabel = "ఖాతాదారు";
-        selectLanguage = "మీ భాషను ఎంచుకోండి";
-      } else if (locale.languageCode == 'ta') {
-        tailorLabel = "தையாலகர்";
-        customerLabel = "வாடிக்கையாளர்";
-        selectLanguage = "உங்கள் மொழியைத் தேர்வுசெய்க";
-      } else if (locale.languageCode == 'kn') {
-        tailorLabel = "ದರ್ಜಿತ";
-        customerLabel = "ಗ್ರಾಹಕ";
-        selectLanguage = "ನಿಮ್ಮ ಭಾಷೆ ಆಯ್ಕೆಮಾಡಿ";
-      } else if (locale.languageCode == 'ml') {
-        tailorLabel = "തൈലോർ";
-        customerLabel = "ഉപഭോക്താവ്";
-        selectLanguage = "നിങ്ങളുടെ ഭാഷ തിരഞ്ഞെടുക്കുക";
-      } else if (locale.languageCode == 'gu') {
-        tailorLabel = "દરજી";
-        customerLabel = "ગ્રાહક";
-        selectLanguage = "તમારી ભાષા પસંદ કરો";
+      switch (locale.languageCode) {
+        case 'en':
+          tailorLabel = "Tailor";
+          customerLabel = "Customer";
+          selectLanguage = "Select Your Language";
+          break;
+        case 'hi':
+          tailorLabel = "दर्जी";
+          customerLabel = "ग्राहक";
+          selectLanguage = "अपनी भाषा चुनें।";
+          break;
+        case 'pa':
+          tailorLabel = "ਦਰਜੀ";
+          customerLabel = "ਗਾਹਕ";
+          selectLanguage = "ਆਪਣੀ ਭਾਸ਼ਾ ਚੁਣੋ।";
+          break;
+        case 'te':
+          tailorLabel = "దర్జీ";
+          customerLabel = "ఖాతాదారు";
+          selectLanguage = "మీ భాషను ఎంచుకోండి";
+          break;
+        case 'ta':
+          tailorLabel = "தையாலகர்";
+          customerLabel = "வாடிக்கையாளர்";
+          selectLanguage = "உங்கள் மொழியைத் தேர்வுசெய்க";
+          break;
+        case 'kn':
+          tailorLabel = "ದರ್ಜಿತ";
+          customerLabel = "ಗ್ರಾಹಕ";
+          selectLanguage = "ನಿಮ್ಮ ಭಾಷೆ ಆಯ್ಕೆಮಾಡಿ";
+          break;
+        case 'ml':
+          tailorLabel = "തൈലോർ";
+          customerLabel = "ഉപഭോക്താവ്";
+          selectLanguage = "നിങ്ങളുടെ ഭാഷ തിരഞ്ഞെടുക്കുക";
+          break;
+        case 'gu':
+          tailorLabel = "દરજી";
+          customerLabel = "ગ્રાહક";
+          selectLanguage = "તમારી ભાષા પસંદ કરો";
+          break;
+        case 'mr':
+          tailorLabel = "शिंपी";
+          customerLabel = "ग्राहक";
+          selectLanguage = "आपली भाषा निवडा";
+          break;
       }
     });
   }
@@ -208,22 +222,14 @@ class _HomePageState extends State<HomePage> {
                 width: 300,
                 height: 50,
                 decoration: BoxDecoration(
-                  //color: _isPressedTailor?AppColors.newUpdateColor:Colors.white,
                   color: AppColors.newUpdateColor,
-                  // gradient: LinearGradient(
-                  //   colors: _isPressedTailor
-                  //       ? AppColors.Gradient1
-                  //       : [Colors.white, Colors.white],
-                  // ),
                   borderRadius: BorderRadius.circular(8),
-                  //border: Border.all(color: AppColors.newUpdateColor, width: 2),
                 ),
                 child: Center(
                   child: Text(
                     tailorLabel,
                     style: TextStyle(
                       fontFamily: 'Poppins',
-                      //color: _isPressedTailor ? Colors.white : AppColors.newUpdateColor,
                       color: Colors.white,
                       fontWeight: FontWeight.w600,
                       fontSize: 19,
@@ -356,11 +362,9 @@ class _HomePageState extends State<HomePage> {
                       setState(() {
                         _currentLocale = newLocale; // Update the current locale
                       });
-
                       // Update app language and labels
                       widget.onChangeLanguage(newLocale);
                       _updateLabels(newLocale);
-
                       // Save the selected language to SharedPreferences
                       await _saveLanguage(newLocale);
                     }
@@ -395,7 +399,6 @@ class _HomePageState extends State<HomePage> {
                     DropdownMenuItem(
                       value: Locale('en'),
                       child: Text("English", style: TextStyle( fontFamily: 'Poppins',
-                        //color: AppColors.newUpdateColor, // Change text color based on state
                         color: Colors.white, // Change text color based on state
                         fontWeight: FontWeight.w600,
                         fontSize: 19,) ),
@@ -403,7 +406,6 @@ class _HomePageState extends State<HomePage> {
                     DropdownMenuItem(
                       value: Locale('hi'),
                       child: Text("हिन्दी (Hindi)",style: TextStyle( fontFamily: 'Poppins',
-                        //color: AppColors.newUpdateColor, // Change text color based on state
                         color: Colors.white, // Change text color based on state
                         fontWeight: FontWeight.w600,
                         fontSize: 19,) ),
@@ -411,7 +413,6 @@ class _HomePageState extends State<HomePage> {
                     DropdownMenuItem(
                       value: Locale('pa'),
                       child: Text("ਪੰਜਾਬੀ (Punjabi)",style: TextStyle( fontFamily: 'Poppins',
-                        //color: AppColors.newUpdateColor, // Change text color based on state
                         color: Colors.white, // Change text color based on state
                         fontWeight: FontWeight.w600,
                         fontSize: 19,) ),
@@ -419,7 +420,6 @@ class _HomePageState extends State<HomePage> {
                     DropdownMenuItem(
                       value: Locale('te'),
                       child: Text("తెలుగు (Telugu)", style: TextStyle( fontFamily: 'Poppins',
-                        //color: AppColors.newUpdateColor, // Change text color based on state
                         color: Colors.white, // Change text color based on state
                         fontWeight: FontWeight.w600,
                         fontSize: 19,) ),
@@ -427,7 +427,6 @@ class _HomePageState extends State<HomePage> {
                     DropdownMenuItem(
                       value: Locale('ta'),
                       child: Text("தமிழ் (Tamil)", style: TextStyle( fontFamily: 'Poppins',
-                        //color: AppColors.newUpdateColor, // Change text color based on state
                         color: Colors.white, // Change text color based on state
                         fontWeight: FontWeight.w600,
                         fontSize: 19,) ),
@@ -435,7 +434,6 @@ class _HomePageState extends State<HomePage> {
                     DropdownMenuItem(
                       value: Locale('kn'),
                       child: Text("ಕನ್ನಡ (Kannada)", style: TextStyle( fontFamily: 'Poppins',
-                        //color: AppColors.newUpdateColor, // Change text color based on state
                         color: Colors.white, // Change text color based on state
                         fontWeight: FontWeight.w600,
                         fontSize: 19,) ),
@@ -443,7 +441,6 @@ class _HomePageState extends State<HomePage> {
                     DropdownMenuItem(
                       value: Locale('ml'),
                       child: Text("മലയാളം (Malayalam)", style: TextStyle( fontFamily: 'Poppins',
-                        //color: AppColors.newUpdateColor, // Change text color based on state
                         color: Colors.white, // Change text color based on state
                         fontWeight: FontWeight.w600,
                         fontSize: 19,) ),
@@ -451,7 +448,13 @@ class _HomePageState extends State<HomePage> {
                     DropdownMenuItem(
                       value: Locale('gu'),
                       child: Text("ગુજરાતી (Gujarati)", style: TextStyle( fontFamily: 'Poppins',
-                        //color: AppColors.newUpdateColor, // Change text color based on state
+                        color: Colors.white, // Change text color based on state
+                        fontWeight: FontWeight.w600,
+                        fontSize: 19,) ),
+                    ),
+                    DropdownMenuItem(
+                      value: Locale('mr'),
+                      child: Text("मराठी (Marathi)", style: TextStyle( fontFamily: 'Poppins',
                         color: Colors.white, // Change text color based on state
                         fontWeight: FontWeight.w600,
                         fontSize: 19,) ),

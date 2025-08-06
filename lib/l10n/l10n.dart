@@ -10,5 +10,6 @@ class L10n {
     const Locale('te'),
     const Locale('ta'),
     const Locale('kn'),
+    const Locale('mr'),
   ];
 }

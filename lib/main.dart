@@ -2,6 +2,7 @@ import 'package:darzi/l10n/app_localizations.dart';
 import 'package:darzi/splash_screen.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
@@ -10,6 +11,7 @@ import 'package:month_year_picker/month_year_picker.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'firebase_options.dart';
 import 'l10n/l10n.dart';
+import 'l10n/month_year_picker_mr.dart';
 
 final GlobalKey<NavigatorState> navigatorKey = GlobalKey<NavigatorState>();
 
@@ -185,9 +187,33 @@ class _MyAppState extends State<MyApp> {
         GlobalWidgetsLocalizations.delegate,
         GlobalCupertinoLocalizations.delegate,
         MonthYearPickerLocalizations.delegate,
+        // 👇 Add this:
+        CustomMonthYearPickerLocalizationsDelegate(),
       ],
       supportedLocales: L10n.all,
       home: SplashScreen(onChangeLanguage: setLocale),
     );
   }
 }
+
+
+class CustomMonthYearPickerLocalizationsDelegate
+    extends LocalizationsDelegate<MonthYearPickerLocalizations> {
+  const CustomMonthYearPickerLocalizationsDelegate();
+
+  @override
+  bool isSupported(Locale locale) => locale.languageCode == 'mr';
+
+  @override
+  Future<MonthYearPickerLocalizations> load(Locale locale) {
+    return SynchronousFuture<MonthYearPickerLocalizations>(
+      MonthYearPickerLocalizationsMr(locale.languageCode), // ✅ FIXED
+    );
+  }
+
+  @override
+  bool shouldReload(covariant LocalizationsDelegate old) => false;
+}
+
+
+

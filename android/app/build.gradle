@@ -69,7 +69,6 @@ flutter {
 }
 
 dependencies {
-    implementation 'com.github.yalantis:ucrop:2.2.6'
     // Core library desugaring dependency
     coreLibraryDesugaring 'com.android.tools:desugar_jdk_libs:2.1.4'
 
