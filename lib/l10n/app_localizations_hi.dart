@@ -652,4 +652,24 @@ class AppLocalizationsHi extends AppLocalizations {
   @override
   String get customer_account_deletion_sub_title =>
       'क्या आप वाकई अपना खाता हटाना चाहते हैं?\\nयह आपके दर्ज़ी, पसंदीदा, ऑर्डर और संबंधित सभी डेटा को स्थायी रूप से हटा देगा।\\nयह क्रिया पूर्ववत नहीं की जा सकती।';
+
+  @override
+  String get welcome => 'स्वागत है!';
+
+  @override
+  String get first_what_we_can_call_you =>
+      'पहले हमें बताइए हम आपको क्या कहकर बुलाएँ?';
+
+  @override
+  String get get_you_know_you => 'हम आपको जानना चाहेंगे।';
+
+  @override
+  String get hide_my_number => 'मेरा नंबर छुपाएँ';
+
+  @override
+  String get hide_your_number_from_customer =>
+      '(यह आपके जोड़े गए ग्राहक से आपका नंबर नहीं छुपाएगा।)';
+
+  @override
+  String get next => 'अगला';
 }

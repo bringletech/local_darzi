@@ -656,4 +656,24 @@ class AppLocalizationsKn extends AppLocalizations {
   @override
   String get customer_account_deletion_sub_title =>
       'ನೀವು ಖಚಿತವಾಗಿ ನಿಮ್ಮ ಖಾತೆಯನ್ನು ಅಳಿಸಲು ಇಚ್ಛಿಸುತ್ತೀರಾ?\\nಇದು ನಿಮ್ಮ ಟೈಲರ್‌ಗಳು, ಇಷ್ಟದವುಗಳು, ಆರ್ಡರ್‌ಗಳು ಮತ್ತು ಸಂಬಂಧಿತ ಎಲ್ಲಾ ಡೇಟಾವನ್ನು ಶಾಶ್ವತವಾಗಿ ಅಳಿಸುತ್ತದೆ.\\nಈ ಕ್ರಿಯೆಯನ್ನು ರದ್ದುಗೊಳಿಸಲಾಗದು.';
+
+  @override
+  String get welcome => 'ಸ್ವಾಗತ!';
+
+  @override
+  String get first_what_we_can_call_you =>
+      'ಮೊದಲಿಗೆ, ನಿಮ್ಮನ್ನು ನಾವು ಏನೆಂದು ಕರೆಯಬೇಕು?';
+
+  @override
+  String get get_you_know_you => 'ನಾವು ನಿಮ್ಮನ್ನು ತಿಳಿದುಕೊಳ್ಳಲು ಬಯಸುತ್ತೇವೆ.';
+
+  @override
+  String get hide_my_number => 'ನನ್ನ ಸಂಖ್ಯೆ ಮರೆಮಾಡಿ';
+
+  @override
+  String get hide_your_number_from_customer =>
+      '(ಇದು ನೀವು ಸೇರಿಸಿದ ಗ್ರಾಹಕರಿಂದ ನಿಮ್ಮ ಸಂಖ್ಯೆಯನ್ನು ಮರೆಮಾಡುವುದಿಲ್ಲ.)';
+
+  @override
+  String get next => 'ಮುಂದಿನದು';
 }

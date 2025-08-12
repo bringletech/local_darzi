@@ -654,4 +654,25 @@ class AppLocalizationsTe extends AppLocalizations {
   @override
   String get customer_account_deletion_sub_title =>
       'మీరు ఖచ్చితంగా మీ ఖాతాను తొలగించాలని అనుకుంటున్నారా?\\nఇది మీ టైలర్లు, ఇష్టాలు, ఆర్డర్లు మరియు సంబంధిత అన్ని డేటాను శాశ్వతంగా తొలగిస్తుంది.\\nఈ చర్యను రద్దు చేయడం సాధ్యం కాదు.';
+
+  @override
+  String get welcome => 'స్వాగతం!';
+
+  @override
+  String get first_what_we_can_call_you =>
+      'ముందుగా మేము మిమ్మల్ని ఏ పేరుతో పిలవాలి?';
+
+  @override
+  String get get_you_know_you =>
+      'మేము మిమ్మల్ని తెలుసుకోవాలని కోరుకుంటున్నాము.';
+
+  @override
+  String get hide_my_number => 'నా నంబర్ దాచు';
+
+  @override
+  String get hide_your_number_from_customer =>
+      '(ఇది మీరు జోడించిన కస్టమర్ నుండి మీ నంబర్‌ను దాచదు.)';
+
+  @override
+  String get next => 'తర్వాత';
 }

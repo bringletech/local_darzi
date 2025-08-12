@@ -652,4 +652,23 @@ class AppLocalizationsEn extends AppLocalizations {
   @override
   String get customer_account_deletion_sub_title =>
       'Are you sure you want to delete your account?\nThis will permanently remove your tailors, favourites, orders, and all related data.\nThis action cannot be undone.';
+
+  @override
+  String get welcome => 'Welcome!';
+
+  @override
+  String get first_what_we_can_call_you => 'First what we can call you?';
+
+  @override
+  String get get_you_know_you => 'We’d like to get you know you.';
+
+  @override
+  String get hide_my_number => 'Hide My Number';
+
+  @override
+  String get hide_your_number_from_customer =>
+      '(This will not hide your number from Customer you add.)';
+
+  @override
+  String get next => 'Next';
 }

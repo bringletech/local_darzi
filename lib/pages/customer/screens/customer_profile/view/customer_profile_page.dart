@@ -821,7 +821,7 @@ class _CustomerProfilePageState extends State<CustomerProfilePage> {
                             await prefs.remove("userType");
                             await prefs.remove("selectedLanguage");
                             await prefs.remove("deviceToken");
-                            // await prefs.clear();
+                            await prefs.clear();
                             // print("SharedPreference value are $prefs");
                             await Future.delayed(const Duration(seconds: 2));
                             final setLocale = MyApp.of(context)?.setLocale;

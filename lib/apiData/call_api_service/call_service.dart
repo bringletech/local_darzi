@@ -35,6 +35,7 @@ import 'package:darzi/apiData/model/speicific_customer_mearsure_model.dart';
 import 'package:darzi/apiData/model/tailor_List_Response_Model.dart';
 import 'package:darzi/apiData/model/tailor_account_delete_response_model.dart';
 import 'package:darzi/apiData/model/tailor_profile_update_response_model.dart';
+import 'package:darzi/apiData/model/tailor_registration_response_model.dart';
 import 'package:darzi/apiData/model/tailor_review_list_response_model.dart';
 import 'package:darzi/apiData/model/tailor_review_response_model.dart';
 import 'package:darzi/apiData/model/update_customer_measurement_details_model.dart';
@@ -52,7 +53,7 @@ class CallService extends GetConnect{
   //1). For Getting Otp(For Tailor)
   Future<LoginResponseModel> userLogin(dynamic body) async {
     httpClient.baseUrl = apiBaseUrl;
-      var res = await post('tailor/login', body, headers: {
+      var res = await post('tailor/get-otp', body, headers: {
         'accept': 'application/json',
       });
       print("response is ${res.statusCode}");
@@ -82,6 +83,28 @@ class CallService extends GetConnect{
     if (res.statusCode == 200) {
       print("Login Response is : ${res.statusCode.toString()}");
       return OtpVerificationResponseModel.fromJson(res.body);
+    }else{
+      throw Fluttertoast.showToast(
+          msg: res.body["message"],
+          toastLength: Toast.LENGTH_SHORT,
+          gravity: ToastGravity.CENTER,
+          timeInSecForIosWeb: 1,
+          backgroundColor: Colors.black,
+          textColor: Colors.white,
+          fontSize: 16.0);
+    }
+  }
+
+  //3). For Registering New Tailor
+  Future<Tailor_Registration_Response_Model> tailor_registration(dynamic body) async {
+    httpClient.baseUrl = apiBaseUrl;
+    var res = await post('tailor/register', body, headers: {
+      'accept': 'application/json',
+    });
+    print("Registration Response is : ${res.statusCode.toString()}");
+    if (res.statusCode == 200) {
+      print("Registration Response is : ${res.statusCode.toString()}");
+      return Tailor_Registration_Response_Model.fromJson(res.body);
     }else{
       throw Fluttertoast.showToast(
           msg: res.body["message"],

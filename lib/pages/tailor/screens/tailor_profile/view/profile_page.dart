@@ -1009,7 +1009,7 @@ class _TailorProfilePageState extends State<TailorProfilePage> {
                           await prefs.remove("deviceToken");
 
                           // Optionally: clear all data (if needed)
-                          // await prefs.clear();
+                           await prefs.clear();
 
                           await Future.delayed(const Duration(seconds: 1));
 

@@ -660,4 +660,24 @@ class AppLocalizationsTa extends AppLocalizations {
   @override
   String get customer_account_deletion_sub_title =>
       'நீங்கள் உங்கள் கணக்கை நிச்சயமாக நீக்க விரும்புகிறீர்களா?\\nஇது உங்கள் தையல்காரர், விருப்பங்கள், ஆர்டர்கள் மற்றும் தொடர்புடைய அனைத்து தரவையும் நிரந்தரமாக அகற்றும்.\\nஇந்த செயல் மீட்டமைக்க முடியாது.';
+
+  @override
+  String get welcome => 'வரவேற்கிறோம்!';
+
+  @override
+  String get first_what_we_can_call_you =>
+      'முதலில், உங்களை என்ன என்று அழைக்கலாம்?';
+
+  @override
+  String get get_you_know_you => 'உங்களை அறிந்து கொள்ள விரும்புகிறோம்.';
+
+  @override
+  String get hide_my_number => 'என் எண்ணை மறைக்கவும்';
+
+  @override
+  String get hide_your_number_from_customer =>
+      '(இது, நீங்கள் சேர்த்த வாடிக்கையாளரிடமிருந்து உங்கள் எண்ணை மறைக்காது.)';
+
+  @override
+  String get next => 'அடுத்து';
 }

@@ -1365,6 +1365,42 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Are you sure you want to delete your account?\nThis will permanently remove your tailors, favourites, orders, and all related data.\nThis action cannot be undone.'**
   String get customer_account_deletion_sub_title;
+
+  /// No description provided for @welcome.
+  ///
+  /// In en, this message translates to:
+  /// **'Welcome!'**
+  String get welcome;
+
+  /// No description provided for @first_what_we_can_call_you.
+  ///
+  /// In en, this message translates to:
+  /// **'First what we can call you?'**
+  String get first_what_we_can_call_you;
+
+  /// No description provided for @get_you_know_you.
+  ///
+  /// In en, this message translates to:
+  /// **'We’d like to get you know you.'**
+  String get get_you_know_you;
+
+  /// No description provided for @hide_my_number.
+  ///
+  /// In en, this message translates to:
+  /// **'Hide My Number'**
+  String get hide_my_number;
+
+  /// No description provided for @hide_your_number_from_customer.
+  ///
+  /// In en, this message translates to:
+  /// **'(This will not hide your number from Customer you add.)'**
+  String get hide_your_number_from_customer;
+
+  /// No description provided for @next.
+  ///
+  /// In en, this message translates to:
+  /// **'Next'**
+  String get next;
 }
 
 class _AppLocalizationsDelegate

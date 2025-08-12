@@ -652,4 +652,24 @@ class AppLocalizationsPa extends AppLocalizations {
   @override
   String get customer_account_deletion_sub_title =>
       'ਕੀ ਤੁਸੀਂ ਯਕੀਨੀ ਤੌਰ \'ਤੇ ਆਪਣਾ ਖਾਤਾ ਹਟਾਉਣਾ ਚਾਹੁੰਦੇ ਹੋ?\\nਇਹ ਤੁਹਾਡੇ ਦਰਜ਼ੀ, ਮਨਪਸੰਦ, ਆਰਡਰ ਅਤੇ ਸਾਰੇ ਸੰਬੰਧਤ ਡੇਟਾ ਨੂੰ ਸਥਾਈ ਤੌਰ \'ਤੇ ਹਟਾ ਦੇਵੇਗਾ।\\nਇਹ ਕਾਰਵਾਈ ਵਾਪਸ ਨਹੀਂ ਲਈ ਜਾ ਸਕਦੀ।';
+
+  @override
+  String get welcome => 'ਜੀ ਆਇਆ ਨੂੰ!';
+
+  @override
+  String get first_what_we_can_call_you =>
+      'ਸਭ ਤੋਂ ਪਹਿਲਾਂ ਦੱਸੋ ਅਸੀਂ ਤੁਹਾਨੂੰ ਕੀ ਕਹਿ ਕੇ ਬੁਲਾਈਏ?';
+
+  @override
+  String get get_you_know_you => 'ਅਸੀਂ ਤੁਹਾਨੂੰ ਜਾਣਨਾ ਚਾਹੁੰਦੇ ਹਾਂ।';
+
+  @override
+  String get hide_my_number => 'ਮੇਰਾ ਨੰਬਰ ਲੁਕਾਓ';
+
+  @override
+  String get hide_your_number_from_customer =>
+      '(ਇਹ ਤੁਹਾਡੇ ਵੱਲੋਂ ਜੋੜੇ ਗਏ ਗਾਹਕ ਤੋਂ ਤੁਹਾਡਾ ਨੰਬਰ ਨਹੀਂ ਲੁਕਾਏਗਾ।)';
+
+  @override
+  String get next => 'ਅਗਲਾ';
 }

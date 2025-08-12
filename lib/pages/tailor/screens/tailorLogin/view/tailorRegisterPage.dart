@@ -37,7 +37,7 @@ class _TailorPageState extends State<TailorPage> {
     _changeLanguage(widget.locale);
     print("Current Locale in OTP Screen: ${widget.locale.languageCode}");
     getDeviceToken();
-    checkIfFirstTime();
+    //checkIfFirstTime();
   }
 
 
@@ -47,11 +47,6 @@ class _TailorPageState extends State<TailorPage> {
     print("My Device Token Value is: $deviceToken");
   }
 
-  Future<void> checkIfFirstTime() async {
-    SharedPreferences prefs = await SharedPreferences.getInstance();
-    isFirstTime = prefs.getBool('isFirstTimeLogin') ?? true;
-    setState(() {});
-  }
 
   void _changeLanguage(Locale locale) {
     setState(() {
@@ -113,46 +108,6 @@ class _TailorPageState extends State<TailorPage> {
                             child: Column(
                               children: [
                                 SizedBox(height: 10,),
-                                if (isFirstTime)
-                                  Container(
-                                    decoration: BoxDecoration(
-                                      boxShadow: [
-                                        BoxShadow(
-                                          color: Colors.black.withOpacity(0.3),
-                                          blurRadius: 8,
-                                          offset: Offset(0, 4),
-                                        ),
-                                      ],
-                                      borderRadius: BorderRadius.circular(20),
-                                    ),
-                                    child: TextField(
-                                      controller: nameController,
-                                      decoration: InputDecoration(
-                                        hintText: AppLocalizations.of(context)!.enter_name,
-                                        hintStyle: TextStyle(
-                                          fontFamily: 'Poppins',
-                                          fontSize: 15,
-                                          fontWeight: FontWeight.w400,
-                                          color: Colors.black.withOpacity(0.6),
-                                        ),
-                                        filled: true,
-                                        fillColor: Colors.white,
-                                        contentPadding: EdgeInsets.symmetric(vertical: 16.0, horizontal: 20.0),
-                                        enabledBorder: OutlineInputBorder(
-                                          borderSide: BorderSide(color: Colors.black),
-                                        ),
-                                        focusedBorder: OutlineInputBorder(
-                                          borderSide: BorderSide(color: Colors.black),
-                                        ),
-                                      ),
-                                      style: TextStyle(
-                                        fontFamily: 'Poppins',
-                                        fontSize: 15,
-                                        fontWeight: FontWeight.w400,
-                                      ),
-                                    ),
-                                  ),
-                                SizedBox(height: 20,),
                                 // Phone number input
                                 IntlPhoneField(
                                   focusNode: focusNode,
@@ -184,22 +139,8 @@ class _TailorPageState extends State<TailorPage> {
                                           rememberMe = value!;
                                         });
 
-                                        String name = nameController.text.trim();
-
                                         if (rememberMe) {
                                           // ✅ Check for first-time name requirement
-                                          if (isFirstTime && name.isEmpty) {
-                                            Fluttertoast.showToast(
-                                              msg: AppLocalizations.of(context)!.enter_name1,
-                                              toastLength: Toast.LENGTH_SHORT,
-                                              gravity: ToastGravity.BOTTOM,
-                                              backgroundColor: AppColors.newUpdateColor,
-                                              textColor: Colors.white,
-                                              fontSize: 16.0,
-                                            );
-                                            return;
-                                          }
-
                                           if (phoneNumber.isEmpty) {
                                             Fluttertoast.showToast(
                                               msg: AppLocalizations.of(context)!.enter_name2,
@@ -213,7 +154,7 @@ class _TailorPageState extends State<TailorPage> {
                                           }
 
                                           // ✅ Call API only when validations pass
-                                          callTailorLoginApi(phoneNumber, name);
+                                          callTailorLoginApi(phoneNumber);
                                         } else {
                                           Fluttertoast.showToast(
                                             msg: AppLocalizations.of(context)!.agreeContinue,
@@ -299,11 +240,10 @@ class _TailorPageState extends State<TailorPage> {
       ),
     );
   }
-  void callTailorLoginApi(String phoneNumber, String name) {
+  void callTailorLoginApi(String phoneNumber) {
     var map = <String, dynamic>{};
     map['mobileNo'] = phoneNumber;
-    map['name'] = name;
-    map['device_fcm_token'] = deviceToken;
+    // map['device_fcm_token'] = deviceToken;
 
     print("Map value is$map");
     isLoading = true;
@@ -320,15 +260,12 @@ class _TailorPageState extends State<TailorPage> {
 
       // ✅ Set firstTimeLogin to false only on success
       if (model.status == true) {
-        SharedPreferences prefs = await SharedPreferences.getInstance();
-        await prefs.setBool('isFirstTimeLogin', false);
-
         Navigator.pop(context);
         Navigator.push(
           context,
           MaterialPageRoute(
             builder: (context) =>
-                OtpVerificationPage(phoneNumber, name, locale: widget.locale),
+                OtpVerificationPage(phoneNumber,locale: widget.locale),
           ),
         );
       }

@@ -4,6 +4,7 @@ import 'package:darzi/apiData/model/otp_verification_model.dart';
 import 'package:darzi/colors.dart';
 import 'package:darzi/common/widgets/tailor/common_otp_app_bar_with_back.dart';
 import 'package:darzi/pages/tailor/screens/tailor_dashboard/view/tailor_dashboard_new.dart';
+import 'package:darzi/pages/tailor/screens/tailor_otp_verification/view/tailor_welcome_screen.dart';
 import 'package:flutter/material.dart';
 import 'dart:async';
 import 'package:fluttertoast/fluttertoast.dart';
@@ -14,9 +15,8 @@ import '../../../../../l10n/app_localizations.dart';
 
 class OtpVerificationPage extends StatefulWidget {
   final String phoneNumber;
-  final String name;
   final Locale locale;
-  const OtpVerificationPage(this.phoneNumber, this.name,{super.key,required this.locale});
+  const OtpVerificationPage(this.phoneNumber, {super.key,required this.locale});
 
   @override
   _OtpVerificationPageState createState() => _OtpVerificationPageState();
@@ -28,14 +28,13 @@ class _OtpVerificationPageState extends State<OtpVerificationPage> {
   List.generate(6, (index) => TextEditingController());
   int _secondsRemaining = 30;
   bool isLoading = false;
-  String otp  = "",phoneNumber = "",name="";
+  String otp  = "",phoneNumber = "";
   Timer? _timer;
 
   @override
   void initState() {
     super.initState();
     phoneNumber = widget.phoneNumber;
-    name = widget.name;
     startTimer();
   }
 
@@ -59,7 +58,7 @@ class _OtpVerificationPageState extends State<OtpVerificationPage> {
     for (var controller in otpControllers) {
       controller.clear();
     }
-    callTailorLoginApi(phoneNumber,name);
+    callTailorLoginApi(phoneNumber);
   }
 
   @override
@@ -236,7 +235,7 @@ class _OtpVerificationPageState extends State<OtpVerificationPage> {
         setState(() {
           phoneNumber = updatedNumber; // Update the phone number in the parent widget
         });
-        callTailorLoginApi(phoneNumber,name); // Call the login API with the updated phone number
+        callTailorLoginApi(phoneNumber); // Call the login API with the updated phone number
       }
     });
   }
@@ -301,40 +300,50 @@ class _OtpVerificationPageState extends State<OtpVerificationPage> {
       await CallService().tailorOtpVerification(map);
       isLoading = false;
       String message = model.message.toString();
-      String id = model.data!.id.toString();
-      String mobileNo = model.data!.mobileNo.toString();
-      String accessToken = model.data!.accessToken.toString();
-      String userType = model.data!.type.toString();
-      print("Tailor's Details $message");
-      print("Tailor's Details $id");
-      print("Tailor's Details $mobileNo");
-      print("Tailor's Details $accessToken");
-      print("Tailor's Details $userType");
-      final SharedPreferences prefs = await SharedPreferences.getInstance();
-      await prefs.setString("userId", id);
-      await prefs.setString('userMobileNumber',mobileNo);
-      await prefs.setString("userToken", accessToken);
-      await prefs.setString("userType", userType);
-      Fluttertoast.showToast(
-          msg: message,
-          toastLength: Toast.LENGTH_SHORT,
-          gravity: ToastGravity.CENTER,
-          timeInSecForIosWeb: 1,
-          backgroundColor: AppColors.newUpdateColor,
-          textColor: Colors.white,
-          fontSize: 16.0);
-      Navigator.pop(context);
-      Navigator.push(
-        context,
-        MaterialPageRoute(builder: (context) => TailorDashboardNew(locale: widget.locale)),
-      ); // Handle button press
+
+      // Fluttertoast.showToast(
+      //     msg: message,
+      //     toastLength: Toast.LENGTH_SHORT,
+      //     gravity: ToastGravity.CENTER,
+      //     timeInSecForIosWeb: 1,
+      //     backgroundColor: AppColors.newUpdateColor,
+      //     textColor: Colors.white,
+      //     fontSize: 16.0);
+      if(message == "OTP verified. Logged In Successfully !!"){
+        String id = model.data!.id.toString();
+        String mobileNo = model.data!.mobileNo.toString();
+        String accessToken = model.data!.accessToken.toString();
+        String userType = model.data!.type.toString();
+        print("Tailor's Details $message");
+        print("Tailor's Details $id");
+        print("Tailor's Details $mobileNo");
+        print("Tailor's Details $accessToken");
+        print("Tailor's Details $userType");
+        final SharedPreferences prefs = await SharedPreferences.getInstance();
+        await prefs.setString("userId", id);
+        await prefs.setString('userMobileNumber',mobileNo);
+        await prefs.setString("userToken", accessToken);
+        await prefs.setString("userType", userType);
+        Navigator.pop(context);
+        Navigator.push(
+          context,
+          MaterialPageRoute(builder: (context) => TailorDashboardNew(locale: widget.locale)),
+        ); // Handle button press
+      }else if(message == "Otp verified. But User is not registered !!"){
+        Navigator.pop(context);
+        Navigator.push(
+          context,
+          MaterialPageRoute(builder: (context) => WelcomeScreen(phoneNumber,locale: widget.locale)),
+        );
+      }
+
     });
   }
 
-  void callTailorLoginApi(String phoneNumber, String name) {
+  void callTailorLoginApi(String phoneNumber) {
     var map =  <String, dynamic>{};
     map['mobileNo'] = phoneNumber;
-    map['name'] = name;
+    // map['name'] = name;
     print("Map value is$map");
     isLoading = true;
     WidgetsBinding.instance.addPostFrameCallback((_) async {

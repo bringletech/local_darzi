@@ -650,4 +650,24 @@ class AppLocalizationsGu extends AppLocalizations {
   @override
   String get customer_account_deletion_sub_title =>
       'શું તમે ખરેખર તમારું ખાતું કાઢી નાખવા માંગો છો?\\nઆ તમારા દરજી, પસંદગી, ઓર્ડર અને સંબંધિત તમામ માહિતી ને કાયમ માટે દૂર કરશે.\\nઆ પગલું પાછું ખેંચી શકાતું નથી.';
+
+  @override
+  String get welcome => 'સ્વાગત છે!';
+
+  @override
+  String get first_what_we_can_call_you =>
+      'સૌપ્રથમ, અમે તમને શું કહીને બોલાવીએ?';
+
+  @override
+  String get get_you_know_you => 'અમે તમને જાણવા માંગીએ છીએ.';
+
+  @override
+  String get hide_my_number => 'મારો નંબર છુપાવો';
+
+  @override
+  String get hide_your_number_from_customer =>
+      '(આ તમારા દ્વારા ઉમેરાયેલા ગ્રાહકથી તમારો નંબર નહીં છુપાવે.)';
+
+  @override
+  String get next => 'આગળનું';
 }

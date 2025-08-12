@@ -657,4 +657,24 @@ class AppLocalizationsMl extends AppLocalizations {
   @override
   String get customer_account_deletion_sub_title =>
       'നിങ്ങളുടെ അക്കൗണ്ട് മായ്ക്കാൻ നിങ്ങളൊപ്പം ഉറപ്പുണ്ടോ?\\nഇത് നിങ്ങളുടെ ടൈലർമാർ, ഇഷ്ടതകൾ, ഓർഡറുകൾ എന്നിവയും ബന്ധപ്പെട്ട എല്ലാ ഡാറ്റയും സ്ഥിരമായി നീക്കം ചെയ്യും.\\nഈ പ്രവർത്തി പിൻവലിക്കാനാകില്ല.';
+
+  @override
+  String get welcome => 'സ്വാഗതം!';
+
+  @override
+  String get first_what_we_can_call_you =>
+      'ആദ്യം, ഞങ്ങൾ നിങ്ങളെ എന്ത് വിളിക്കണം?';
+
+  @override
+  String get get_you_know_you => 'ഞങ്ങൾ നിങ്ങളെ അറിയാൻ ആഗ്രഹിക്കുന്നു.';
+
+  @override
+  String get hide_my_number => 'എന്റെ നമ്പർ മറയ്ക്കുക';
+
+  @override
+  String get hide_your_number_from_customer =>
+      '(ഇത്, നിങ്ങൾ ചേർത്ത ഉപഭോക്താവിൽ നിന്ന് നിങ്ങളുടെ നമ്പർ മറയ്ക്കില്ല.)';
+
+  @override
+  String get next => 'അടുത്തത്';
 }

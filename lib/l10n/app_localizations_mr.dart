@@ -650,4 +650,24 @@ class AppLocalizationsMr extends AppLocalizations {
   @override
   String get customer_account_deletion_sub_title =>
       'आपण खात्री आहात का की, आपण आपले खाते हटवू इच्छिता?\nयामुळे आपले दर्जी, फेव्हरेट, ऑर्डर्स आणि संबंधित सर्व डेटा कायमचा नष्ट होईल.\nही क्रिया पूर्ववत केली जाऊ शकत नाही.';
+
+  @override
+  String get welcome => 'स्वागत आहे!';
+
+  @override
+  String get first_what_we_can_call_you =>
+      'सर्वप्रथम आम्ही तुम्हाला काय म्हणू शकतो ते सांगा?';
+
+  @override
+  String get get_you_know_you => 'आम्हाला तुमच्याबद्दल जाणून घ्यायला आवडेल.';
+
+  @override
+  String get hide_my_number => 'माझा क्रमांक लपवा';
+
+  @override
+  String get hide_your_number_from_customer =>
+      '(हे तुम्ही जोडलेल्या ग्राहकापासून तुमचा क्रमांक लपवणार नाही.)';
+
+  @override
+  String get next => 'पुढे';
 }
