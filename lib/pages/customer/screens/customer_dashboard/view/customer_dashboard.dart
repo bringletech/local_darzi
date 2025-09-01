@@ -736,6 +736,8 @@ class _CustomerHomeScreenState extends State<CustomerHomeScreen> {
   bool isLoading = true;
   final PageController _pageController = PageController(viewportFraction: 0.8);
   bool isBackArrowTapped = false; // By default, icon color is grey
+  String userName = "", userAddress = "";
+  String?userProfile;
 
   // Common method for access token check and navigation
   Future<bool> checkAccessTokenAndShowPopup({
@@ -865,7 +867,7 @@ class _CustomerHomeScreenState extends State<CustomerHomeScreen> {
   void initState() {
     super.initState();
     checkAccessTokenAndFetchData(); // Only fetch if token exists
-
+    getSharedPrefenceValue();
     _pageController.addListener(() {
       int newIndex = _pageController.page!.round();
       if (newIndex != currentIndex) {
@@ -896,85 +898,196 @@ class _CustomerHomeScreenState extends State<CustomerHomeScreen> {
     return Scaffold(
       extendBody: true,
       backgroundColor: Colors.white,
-      appBar: CustomAppBar(
-        title: AppLocalizations.of(context)!.appHome,
-        hasBackButton: true,
-        elevation: 2.0,
-        leadingIcon: SvgPicture.asset(
-          'assets/svgIcon/home.svg',
-          allowDrawingOutsideViewBox: true,
-        ),
-        onNotificationTap: () {
-          checkAccessTokenAndShowPopup(
-            destination: CustomerNotificationScreen(locale: widget.locale),
-            shouldNavigate: true,
-          );
-        },
-      ),
 
-      body: isLoading == true?Center(
-          child: CircularProgressIndicator(color: AppColors.newUpdateColor,))
-          :Padding(
+      body: isLoading == true
+          ? Center(
+        child: CircularProgressIndicator(
+          color: AppColors.newUpdateColor,
+        ),
+      )
+          : Padding(
         padding: const EdgeInsets.all(16.0),
         child: Column(
           children: [
             const SizedBox(height: 60),
+
+            /// 🔹 Welcome + Location + Profile Row
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
-                _buildCustomGridItem(
-                    AppLocalizations.of(context)!.myTailor,
-                    SvgPicture.asset(
-                      'assets/svgIcon/myTailor.svg',
-                      color: AppColors.newUpdateColor,
+                Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    userName.isNotEmpty?Text(
+                      userName,
+                      style: const TextStyle(
+                        fontSize: 24,
+                        fontWeight: FontWeight.bold,
+                        color: Colors.black,
+                      ),
+                    ):Text(
+                      AppLocalizations.of(context)!.welcome,
+                      style: const TextStyle(
+                        fontSize: 24,
+                        fontWeight: FontWeight.bold,
+                        color: Colors.black,
+                      ),
                     ),
-                    0),
-                _buildCustomGridItem1(
-                    AppLocalizations.of(context)!.myDresses,
-                    SvgPicture.asset(
-                      'assets/svgIcon/dress.svg',
-                      color: AppColors.newUpdateColor,
+                    const SizedBox(height: 4),
+                    userAddress.isNotEmpty?Row(
+                      children: [
+                        Icon(
+                          Icons.location_on,
+                          size: 16,
+                          color: AppColors.newUpdateColor,
+                        ),
+                        const SizedBox(width: 4),
+                        Text(
+                          userAddress,
+                          style: TextStyle(
+                            color: AppColors.newUpdateColor,
+                          ),
+                        )
+                      ],
+                    ):SizedBox(),
+                  ],
+                ),
+
+                /// 🔹 Notification + Profile
+                Row(
+                  children: [
+                    Stack(
+                      children: [
+                        GestureDetector(
+                          onTap: () {
+                            print("Bell tapped!");
+                            checkAccessTokenAndShowPopup(
+                              destination: CustomerNotificationScreen(
+                                locale: widget.locale,
+                              ),
+                              shouldNavigate: true,
+                            );
+                          },
+                          child: const Icon(
+                            Icons.notifications_none,
+                            size: 28,
+                          ),
+                        ),
+                        Positioned(
+                          right: 0,
+                          top: 0,
+                          child: Container(
+                            width: 8,
+                            height: 8,
+                            decoration: const BoxDecoration(
+                              color: Colors.red,
+                              shape: BoxShape.circle,
+                            ),
+                          ),
+                        )
+                      ],
                     ),
-                    1),
+                    const SizedBox(width: 12),
+                    CircleAvatar(
+                      radius: 20,
+                      backgroundImage: (userProfile != null &&
+                          userProfile!.isNotEmpty)
+                          ? NetworkImage(userProfile!)
+                          : AssetImage('assets/images/tailorProfile.png') as ImageProvider,
+                    )
+                  ],
+                )
               ],
             ),
+
+            const SizedBox(height: 30),
+
+            /// 🔹 Grid Items
+            SizedBox(
+              height: MediaQuery.of(context).size.height * 0.2,
+              child: GridView.count(
+                physics: const NeverScrollableScrollPhysics(),
+                crossAxisCount:
+                MediaQuery.of(context).size.width > 600 ? 3 : 2,
+                crossAxisSpacing: 20,
+                mainAxisSpacing: 20,
+                childAspectRatio: 1.4,
+                children: [
+                  _buildCustomGridItem(
+                    AppLocalizations.of(context)!.myTailor,
+                    SvgPicture.asset(
+                      'assets/svgIcon/abcd.svg',
+                      color: Colors.black,
+                    ),
+                    0,
+                  ),
+                  _buildCustomGridItem1(
+                    AppLocalizations.of(context)!.myDresses,
+                    SvgPicture.asset(
+                      'assets/svgIcon/active_dress.svg',
+                      color: Colors.black,
+                    ),
+                    1,
+                  ),
+                ],
+              ),
+            ),
+
+            /// 🔹 My Favourites Section
             Visibility(
               visible: customer_Favourite_Data.isNotEmpty,
               child: Column(
                 children: [
                   Container(
-                      margin: EdgeInsets.only(top: 40, left: 10),
-                      width: double.infinity,
-                      child: Text(AppLocalizations.of(context)!.my_favourites,
-                          style:
-                          TextStyle(fontSize: 20, fontWeight: FontWeight.bold,color: AppColors.newUpdateColor))),
+                    margin: const EdgeInsets.only(top: 40, left: 10),
+                    width: double.infinity,
+                    child: Text(
+                      AppLocalizations.of(context)!.my_favourites,
+                      style: TextStyle(
+                        fontSize: 20,
+                        fontWeight: FontWeight.bold,
+                        color: AppColors.newUpdateColor,
+                      ),
+                    ),
+                  ),
+                  SizedBox(height: 10,),
                   SizedBox(
-                    height:
-                    MediaQuery.of(context).size.height * .16, // Height of cards
+                    height: MediaQuery.of(context).size.height * .16,
                     child: ListView.builder(
                       controller: _pageController,
                       scrollDirection: Axis.horizontal,
                       itemCount: customer_Favourite_Data.length,
                       itemBuilder: (context, index) {
                         return Padding(
-                          padding: const EdgeInsets.symmetric(horizontal: 5),
+                          padding:
+                          const EdgeInsets.symmetric(horizontal: 5),
                           child: GestureDetector(
-                            onTap: (){
+                            onTap: () {
                               Navigator.push(
                                 context,
                                 MaterialPageRoute(
-                                    builder: (context) => MyFavouriteTailorDetails(
-                                      locale: widget
-                                          .locale,tailorId: customer_Favourite_Data[index].tailor!.id.toString(),) // tailor page (new route will be added)
+                                  builder: (context) =>
+                                      MyFavouriteTailorDetails(
+                                        locale: widget.locale,
+                                        tailorId: customer_Favourite_Data[index]
+                                            .tailor!
+                                            .id
+                                            .toString(),
+                                      ),
                                 ),
                               );
                             },
                             child: Container(
-                              width: MediaQuery.of(context).size.width *
-                                  0.43, // Adjust width to fit 2 cards in screen
+                              width:
+                              MediaQuery.of(context).size.width * 0.43,
                               decoration: BoxDecoration(
                                 borderRadius: BorderRadius.circular(15),
-                                boxShadow: [BoxShadow(color: Colors.black26, blurRadius: 4)],
+                                boxShadow: const [
+                                  BoxShadow(
+                                    color: Colors.black26,
+                                    blurRadius: 4,
+                                  )
+                                ],
                               ),
                               child: ClipRRect(
                                 borderRadius: BorderRadius.circular(15),
@@ -984,35 +1097,41 @@ class _CustomerHomeScreenState extends State<CustomerHomeScreen> {
                                       fit: BoxFit.cover,
                                       width: double.infinity,
                                       height: double.infinity,
-                                      imageUrl: customer_Favourite_Data[index].tailor!.profileUrl.toString(),
-                                      errorWidget: (context, url,
-                                          error) =>
-                                          Stack(
-                                            alignment: Alignment.center,
-                                            children: [
-                                              Image.network(
-                                                'https://dummyimage.com/500x500/aaa/000000.png&text=',
-                                                fit: BoxFit.cover,
-                                                width: double.infinity,
-                                                height: double.infinity,
-                                              ),
-                                              Text(
-                                                "No Image Available",
-                                                style: TextStyle(
-                                                  color: Colors.white,  // 🎨 यहाँ अपना मनचाहा रंग दें
-                                                  fontSize: 18,
-                                                  fontWeight: FontWeight.bold,
-                                                ),
-                                              ),
-                                            ],
+                                      imageUrl:
+                                      customer_Favourite_Data[index]
+                                          .tailor!
+                                          .profileUrl
+                                          .toString(),
+                                      errorWidget:
+                                          (context, url, error) => Stack(
+                                        alignment: Alignment.center,
+                                        children: [
+                                          Image.network(
+                                            'https://dummyimage.com/500x500/aaa/000000.png&text=',
+                                            fit: BoxFit.cover,
+                                            width: double.infinity,
+                                            height: double.infinity,
                                           ),
+                                          const Text(
+                                            "No Image Available",
+                                            style: TextStyle(
+                                              color: Colors.white,
+                                              fontSize: 18,
+                                              fontWeight: FontWeight.bold,
+                                            ),
+                                          ),
+                                        ],
+                                      ),
                                     ),
                                     Container(
                                       decoration: BoxDecoration(
                                         gradient: LinearGradient(
                                           begin: Alignment.bottomCenter,
                                           end: Alignment.topCenter,
-                                          colors: [Colors.black.withOpacity(0.6), Colors.transparent],
+                                          colors: [
+                                            Colors.black.withOpacity(0.6),
+                                            Colors.transparent
+                                          ],
                                         ),
                                       ),
                                     ),
@@ -1020,28 +1139,48 @@ class _CustomerHomeScreenState extends State<CustomerHomeScreen> {
                                       bottom: 15,
                                       left: 10,
                                       child: Column(
-                                        crossAxisAlignment: CrossAxisAlignment.start,
+                                        crossAxisAlignment:
+                                        CrossAxisAlignment.start,
                                         children: [
-                                          Text(customer_Favourite_Data[index].tailor!.name??AppLocalizations.of(
-                                              context)!
-                                              .noUserName,
-                                              style: TextStyle(
-                                                  fontFamily: 'Poppins',
-                                                  color: Colors.white,
-                                                  fontSize: 15,
-                                                  fontWeight: FontWeight.w500)),
+                                          Text(
+                                            customer_Favourite_Data[index]
+                                                .tailor!
+                                                .name ??
+                                                AppLocalizations.of(
+                                                    context)!
+                                                    .noUserName,
+                                            style: const TextStyle(
+                                              fontFamily: 'Poppins',
+                                              color: Colors.white,
+                                              fontSize: 15,
+                                              fontWeight: FontWeight.w500,
+                                            ),
+                                          ),
                                           Row(
                                             children: [
-                                              Icon(Icons.location_on, color: AppColors.newUpdateColor, size: 14),
-                                              SizedBox(width: 5),
-                                              Text(customer_Favourite_Data[index].tailor!.address??AppLocalizations.of(
-                                                  context)!
-                                                  .userNoAddress,
-                                                  style:
-                                                  TextStyle(fontFamily: 'Poppins',
-                                                      color: Colors.white,
-                                                      fontSize: 10,
-                                                      fontWeight: FontWeight.w400)),
+                                              Icon(
+                                                Icons.location_on,
+                                                color: AppColors
+                                                    .newUpdateColor,
+                                                size: 14,
+                                              ),
+                                              const SizedBox(width: 5),
+                                              Text(
+                                                customer_Favourite_Data[
+                                                index]
+                                                    .tailor!
+                                                    .address ??
+                                                    AppLocalizations.of(
+                                                        context)!
+                                                        .userNoAddress,
+                                                style: const TextStyle(
+                                                  fontFamily: 'Poppins',
+                                                  color: Colors.white,
+                                                  fontSize: 10,
+                                                  fontWeight:
+                                                  FontWeight.w400,
+                                                ),
+                                              ),
                                             ],
                                           ),
                                         ],
@@ -1056,7 +1195,7 @@ class _CustomerHomeScreenState extends State<CustomerHomeScreen> {
                       },
                     ),
                   ),
-                  SizedBox(height: 10),
+                  const SizedBox(height: 10),
                   Row(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
@@ -1071,20 +1210,24 @@ class _CustomerHomeScreenState extends State<CustomerHomeScreen> {
                         },
                         icon: SvgPicture.asset(
                           'assets/svgIcon/back_arrow.svg',
-                          color:
-                          currentIndex == 0 ? Colors.grey : AppColors.newUpdateColor,
+                          color: currentIndex == 0
+                              ? Colors.grey
+                              : AppColors.newUpdateColor,
                         ),
                       ),
                       IconButton(
                         onPressed: () {
-                          if (currentIndex < customer_Favourite_Data.length - 1) {
+                          if (currentIndex <
+                              customer_Favourite_Data.length - 1) {
                             _pageController.nextPage(
                               duration: const Duration(milliseconds: 500),
                               curve: Curves.ease,
                             );
-                          } // Increase index
+                          }
                         },
-                        icon: SvgPicture.asset('assets/svgIcon/forward_arrow.svg'),
+                        icon: SvgPicture.asset(
+                          'assets/svgIcon/forward_arrow.svg',
+                        ),
                       ),
                     ],
                   )
@@ -1097,101 +1240,289 @@ class _CustomerHomeScreenState extends State<CustomerHomeScreen> {
     );
   }
 
+
+  // Widget _buildCustomGridItem(String label, Widget icon, int index) {
+  //   return GestureDetector(
+  //     onTapDown: (_) {
+  //       setState(() {
+  //         _isTapped[index] = true; // Set tapped state
+  //       });
+  //     },
+  //     onTapUp: (_) {
+  //       // Reset tapped state after a brief delay
+  //       Future.delayed(const Duration(milliseconds: 100), () async {
+  //         setState(() {
+  //           _isTapped[index] = false;
+  //         });
+  //
+  //         bool isAllowed = await checkAccessTokenAndShowPopup();
+  //         if (!isAllowed) return;
+  //
+  //         // Your existing navigation logic here
+  //         if (index == 0) {
+  //           final result = await Navigator.push(
+  //             context,
+  //             MaterialPageRoute(builder: (context) => MyTailors(locale: widget.locale)),
+  //           );
+  //           if (result == true) {
+  //             setState(() {
+  //               getCustomerFavouriteData();
+  //             });
+  //           }
+  //         } else {
+  //           final result = await Navigator.push(
+  //             context,
+  //             MaterialPageRoute(builder: (context) => MyDresses(locale: widget.locale)),
+  //           );
+  //           if (result == true) {
+  //             setState(() {
+  //               getCustomerFavouriteData();
+  //             });
+  //           }
+  //         }
+  //       });
+  //
+  //     },
+  //     onTapCancel: () {
+  //       setState(() {
+  //         _isTapped[index] = false; // Reset tapped state on cancel
+  //       });
+  //     },
+  //     child: Material(
+  //       elevation: 8,
+  //       shadowColor: Colors.black.withOpacity(1.0),
+  //       borderRadius: BorderRadius.circular(25),
+  //       child: Container(
+  //         height: MediaQuery.of(context).size.height * .15,
+  //         width: MediaQuery.of(context).size.width * .4,
+  //         decoration: BoxDecoration(
+  //           color: _isTapped[index]?AppColors.newUpdateColor:Colors.white,
+  //           // gradient: LinearGradient(
+  //           //   colors: _isTapped[index]
+  //           //       ? AppColors.Gradient1 // Red gradient when pressed
+  //           //       : [
+  //           //           Colors.white,
+  //           //           Colors.white
+  //           //         ], // White background when not pressed
+  //           // ),
+  //           borderRadius: BorderRadius.circular(25),
+  //           border: Border.all(
+  //               color: AppColors.newUpdateColor,
+  //               width: 2), // Keep your original border color
+  //         ),
+  //         child: Center(
+  //           child: Column(
+  //             mainAxisAlignment: MainAxisAlignment.center,
+  //             children: [
+  //               SvgPicture.asset(
+  //                 'assets/svgIcon/myTailor.svg', //just change my image with your image
+  //                 color: _isTapped[index] ? Colors.white : AppColors.newUpdateColor,
+  //                 width: 39,
+  //                 height: 37,
+  //               ),
+  //               const SizedBox(height: 0),
+  //               Text(
+  //                 softWrap: true,
+  //                 textAlign: TextAlign.center,
+  //                 label,
+  //                 maxLines: 2,
+  //                 style: TextStyle(
+  //                   fontFamily: 'Poppins',
+  //                   fontSize: 12,
+  //                   color:
+  //                   _isTapped[index] ? Colors.white : AppColors.newUpdateColor,
+  //                   fontWeight: FontWeight.w600,
+  //                 ),
+  //               ),
+  //             ],
+  //           ),
+  //         ),
+  //       ),
+  //     ),
+  //   );
+  // }
+
+  // Widget _buildCustomGridItem1(String label, Widget icon, int index) {
+  //   return GestureDetector(
+  //     onTapDown: (_) {
+  //       setState(() {
+  //         _isTapped[index] = true; // Set tapped state
+  //       });
+  //     },
+  //     onTapUp: (_) {
+  //
+  //       Future.delayed(const Duration(milliseconds: 100), () async {
+  //         setState(() {
+  //           _isTapped[index] = false;
+  //         });
+  //
+  //         bool isAllowed = await checkAccessTokenAndShowPopup();
+  //         if (!isAllowed) return;
+  //
+  //         if (index == 0) {
+  //           final result = await Navigator.push(
+  //             context,
+  //             MaterialPageRoute(builder: (context) => MyTailors(locale: widget.locale)),
+  //           );
+  //           if (result == true) {
+  //             setState(() {
+  //               getCustomerFavouriteData();
+  //             });
+  //           }
+  //         } else {
+  //           final result = await Navigator.push(
+  //             context,
+  //             MaterialPageRoute(builder: (context) => MyDresses(locale: widget.locale)),
+  //           );
+  //           if (result == true) {
+  //             setState(() {
+  //               getCustomerFavouriteData();
+  //             });
+  //           }
+  //         }
+  //       });
+  //
+  //     },
+  //     onTapCancel: () {
+  //       setState(() {
+  //         _isTapped[index] = false; // Reset tapped state on cancel
+  //       });
+  //     },
+  //     child: Material(
+  //       elevation: 8,
+  //       shadowColor: Colors.black.withOpacity(1.0),
+  //       borderRadius: BorderRadius.circular(25),
+  //       child: Container(
+  //         height: MediaQuery.of(context).size.height * .15,
+  //         width: MediaQuery.of(context).size.width * .4,
+  //         decoration: BoxDecoration(
+  //           color: _isTapped[index]?AppColors.newUpdateColor:Colors.white,
+  //           borderRadius: BorderRadius.circular(25),
+  //           border: Border.all(
+  //               color: AppColors.newUpdateColor,
+  //               width: 2), // Keep your original border color
+  //         ),
+  //         child: Center(
+  //           child: Column(
+  //             mainAxisAlignment: MainAxisAlignment.center,
+  //             children: [
+  //               SvgPicture.asset(
+  //                 'assets/svgIcon/dress.svg', //just change my image with your image
+  //                 color: _isTapped[index] ? Colors.white : AppColors.newUpdateColor,
+  //                 width: 20,
+  //                 height: 40,
+  //               ),
+  //               const SizedBox(height: 0),
+  //               Text(
+  //                 textAlign: TextAlign.center,
+  //                 label,
+  //                 style: TextStyle(
+  //                   fontFamily: 'Poppins',
+  //                   fontSize: 12,
+  //                   color:
+  //                   _isTapped[index] ? Colors.white : AppColors.newUpdateColor,
+  //                   fontWeight: FontWeight.w600,
+  //                 ),
+  //               ),
+  //             ],
+  //           ),
+  //         ),
+  //       ),
+  //     ),
+  //   );
+  // }
+
   Widget _buildCustomGridItem(String label, Widget icon, int index) {
     return GestureDetector(
       onTapDown: (_) {
         setState(() {
-          _isTapped[index] = true; // Set tapped state
+          _isTapped[index] = true;
         });
       },
       onTapUp: (_) {
-        // Reset tapped state after a brief delay
-        Future.delayed(const Duration(milliseconds: 100), () async {
-          setState(() {
-            _isTapped[index] = false;
-          });
+              // Reset tapped state after a brief delay
+              Future.delayed(const Duration(milliseconds: 100), () async {
+                setState(() {
+                  _isTapped[index] = false;
+                });
 
-          bool isAllowed = await checkAccessTokenAndShowPopup();
-          if (!isAllowed) return;
+                bool isAllowed = await checkAccessTokenAndShowPopup();
+                if (!isAllowed) return;
 
-          // Your existing navigation logic here
-          if (index == 0) {
-            final result = await Navigator.push(
-              context,
-              MaterialPageRoute(builder: (context) => MyTailors(locale: widget.locale)),
-            );
-            if (result == true) {
-              setState(() {
-                getCustomerFavouriteData();
+                // Your existing navigation logic here
+                if (index == 0) {
+                  final result = await Navigator.push(
+                    context,
+                    MaterialPageRoute(builder: (context) => MyTailors(locale: widget.locale)),
+                  );
+                  if (result == true) {
+                    setState(() {
+                      getCustomerFavouriteData();
+                    });
+                  }
+                } else {
+                  final result = await Navigator.push(
+                    context,
+                    MaterialPageRoute(builder: (context) => MyDresses(locale: widget.locale)),
+                  );
+                  if (result == true) {
+                    setState(() {
+                      getCustomerFavouriteData();
+                    });
+                  }
+                }
               });
-            }
-          } else {
-            final result = await Navigator.push(
-              context,
-              MaterialPageRoute(builder: (context) => MyDresses(locale: widget.locale)),
-            );
-            if (result == true) {
-              setState(() {
-                getCustomerFavouriteData();
-              });
-            }
-          }
-        });
-
       },
       onTapCancel: () {
         setState(() {
-          _isTapped[index] = false; // Reset tapped state on cancel
+          _isTapped[index] = false;
         });
       },
       child: Material(
         elevation: 8,
-        shadowColor: Colors.black.withOpacity(1.0),
-        borderRadius: BorderRadius.circular(25),
+        shadowColor: Colors.black.withOpacity(0.8),
+        borderRadius: BorderRadius.circular(12),
         child: Container(
-          height: MediaQuery.of(context).size.height * .15,
-          width: MediaQuery.of(context).size.width * .4,
           decoration: BoxDecoration(
-            color: _isTapped[index]?AppColors.newUpdateColor:Colors.white,
-            // gradient: LinearGradient(
-            //   colors: _isTapped[index]
-            //       ? AppColors.Gradient1 // Red gradient when pressed
-            //       : [
-            //           Colors.white,
-            //           Colors.white
-            //         ], // White background when not pressed
-            // ),
-            borderRadius: BorderRadius.circular(25),
+            color: Colors.white,
+            borderRadius: BorderRadius.circular(12),
             border: Border.all(
-                color: AppColors.newUpdateColor,
-                width: 2), // Keep your original border color
+              color: AppColors.newUpdateColor,
+              width: 1.5,
+            ),
           ),
-          child: Center(
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                SvgPicture.asset(
-                  'assets/svgIcon/myTailor.svg', //just change my image with your image
-                  color: _isTapped[index] ? Colors.white : AppColors.newUpdateColor,
-                  width: 39,
-                  height: 37,
-                ),
-                const SizedBox(height: 0),
-                Text(
-                  softWrap: true,
-                  textAlign: TextAlign.center,
-                  label,
-                  maxLines: 2,
-                  style: TextStyle(
-                    fontFamily: 'Poppins',
-                    fontSize: 12,
-                    color:
-                    _isTapped[index] ? Colors.white : AppColors.newUpdateColor,
-                    fontWeight: FontWeight.w600,
+          child: Stack(
+            children: [
+              // ---- Top Center Text ----
+              Align(
+                alignment: Alignment.topCenter,
+                child: Padding(
+                  padding: const EdgeInsets.only(top: 20),
+                  child: Text(
+                    label,
+                    style: TextStyle(
+                      fontSize: 14,
+                      fontWeight: FontWeight.bold,
+                      color: AppColors.newUpdateColor,
+                    ),
                   ),
                 ),
-              ],
-            ),
+              ),
+
+              // ---- Bottom Right Icon/Image ----
+              Align(
+                alignment: Alignment.bottomRight,
+                child: Padding(
+                  padding: const EdgeInsets.only(right: 6, bottom: 6),
+                  child: SvgPicture.asset(
+                    "assets/svgIcon/abcd.svg", // आपका icon/image path
+                    height: 70,
+                    fit: BoxFit.contain,
+                    //color: AppColors.newUpdateColor,
+                  ),
+                ),
+              ),
+            ],
           ),
         ),
       ),
@@ -1200,91 +1531,136 @@ class _CustomerHomeScreenState extends State<CustomerHomeScreen> {
 
   Widget _buildCustomGridItem1(String label, Widget icon, int index) {
     return GestureDetector(
-      onTapDown: (_) {
-        setState(() {
-          _isTapped[index] = true; // Set tapped state
-        });
-      },
-      onTapUp: (_) {
-
-        Future.delayed(const Duration(milliseconds: 100), () async {
+        onTapDown: (_) {
           setState(() {
-            _isTapped[index] = false;
+            _isTapped[index] = true; // Set tapped state
           });
+        },
+        onTapUp: (_) {
 
-          bool isAllowed = await checkAccessTokenAndShowPopup();
-          if (!isAllowed) return;
+          Future.delayed(const Duration(milliseconds: 100), () async {
+            setState(() {
+              _isTapped[index] = false;
+            });
 
-          if (index == 0) {
-            final result = await Navigator.push(
-              context,
-              MaterialPageRoute(builder: (context) => MyTailors(locale: widget.locale)),
-            );
-            if (result == true) {
-              setState(() {
-                getCustomerFavouriteData();
-              });
+            bool isAllowed = await checkAccessTokenAndShowPopup();
+            if (!isAllowed) return;
+
+            if (index == 0) {
+              final result = await Navigator.push(
+                context,
+                MaterialPageRoute(builder: (context) => MyTailors(locale: widget.locale)),
+              );
+              if (result == true) {
+                setState(() {
+                  getCustomerFavouriteData();
+                });
+              }
+            } else {
+              final result = await Navigator.push(
+                context,
+                MaterialPageRoute(builder: (context) => MyDresses(locale: widget.locale)),
+              );
+              if (result == true) {
+                setState(() {
+                  getCustomerFavouriteData();
+                });
+              }
             }
-          } else {
-            final result = await Navigator.push(
-              context,
-              MaterialPageRoute(builder: (context) => MyDresses(locale: widget.locale)),
-            );
-            if (result == true) {
-              setState(() {
-                getCustomerFavouriteData();
-              });
-            }
-          }
-        });
-
-      },
-      onTapCancel: () {
-        setState(() {
-          _isTapped[index] = false; // Reset tapped state on cancel
-        });
-      },
-      child: Material(
-        elevation: 8,
-        shadowColor: Colors.black.withOpacity(1.0),
-        borderRadius: BorderRadius.circular(25),
-        child: Container(
-          height: MediaQuery.of(context).size.height * .15,
-          width: MediaQuery.of(context).size.width * .4,
-          decoration: BoxDecoration(
-            color: _isTapped[index]?AppColors.newUpdateColor:Colors.white,
-            borderRadius: BorderRadius.circular(25),
-            border: Border.all(
+          });
+        },
+        onTapCancel: () {
+          setState(() {
+            _isTapped[index] = false; // Reset tapped state on cancel
+          });
+        },
+        child: Material(
+          elevation: 8,
+          shadowColor: Colors.black.withOpacity(0.8),
+          borderRadius: BorderRadius.circular(12),
+          child: Container(
+            decoration: BoxDecoration(
+              color: Colors.white,
+              borderRadius: BorderRadius.circular(12),
+              border: Border.all(
                 color: AppColors.newUpdateColor,
-                width: 2), // Keep your original border color
-          ),
-          child: Center(
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.center,
+                width: 1.5,
+              ),
+            ),
+            child: Stack(
               children: [
-                SvgPicture.asset(
-                  'assets/svgIcon/dress.svg', //just change my image with your image
-                  color: _isTapped[index] ? Colors.white : AppColors.newUpdateColor,
-                  width: 20,
-                  height: 40,
+                // ---- Top Center Text ----
+                Align(
+                  alignment: Alignment.topCenter,
+                  child: Padding(
+                    padding: const EdgeInsets.only(top: 15),
+                    child: Text(
+                      label,
+                      style: TextStyle(
+                        fontSize: 14,
+                        fontWeight: FontWeight.bold,
+                        color: AppColors.newUpdateColor,
+                      ),
+                    ),
+                  ),
                 ),
-                const SizedBox(height: 0),
-                Text(
-                  textAlign: TextAlign.center,
-                  label,
-                  style: TextStyle(
-                    fontFamily: 'Poppins',
-                    fontSize: 12,
-                    color:
-                    _isTapped[index] ? Colors.white : AppColors.newUpdateColor,
-                    fontWeight: FontWeight.w600,
+
+                // ---- Bottom Right Icon/Image ----
+                Align(
+                  alignment: Alignment.bottomRight,
+                  child: Padding(
+                    padding: const EdgeInsets.only(right: 6, bottom: 6),
+                    child: SvgPicture.asset(
+                      "assets/svgIcon/active_dress.svg", // आपका icon/image path
+                      height: 70,
+                      fit: BoxFit.contain,
+                      //color: AppColors.newUpdateColor,
+                    ),
                   ),
                 ),
               ],
             ),
           ),
-        ),
-      ),
+        )
+      // Material(
+      //   elevation: 8,
+      //   shadowColor: Colors.black.withOpacity(1.0),
+      //   borderRadius: BorderRadius.circular(25),
+      //   child: Container(
+      //     decoration: BoxDecoration(
+      //       color: _isTapped[index]?AppColors.newUpdateColor:Colors.white,
+      //       borderRadius: BorderRadius.circular(25),
+      //       border: Border.all(
+      //           color: AppColors.newUpdateColor,
+      //           width: 2), // Keep your original border color
+      //     ),
+      //     child: Center(
+      //       child: Column(
+      //         mainAxisAlignment: MainAxisAlignment.center,
+      //         children: [
+      //           SvgPicture.asset(
+      //             'assets/svgIcon/dress.svg',//just change my image with your image
+      //             color: _isTapped[index] ? Colors.white : AppColors.newUpdateColor,
+      //             width: 20,
+      //             height: 40,
+      //           ),
+      //           const SizedBox(height: 0),
+      //           Text(
+      //             textAlign: TextAlign.center,
+      //             label,
+      //             style: TextStyle(
+      //               fontFamily: 'Poppins',
+      //               fontSize: 12,
+      //               color:
+      //               _isTapped[index] ? Colors.white : AppColors.newUpdateColor,
+      //               fontWeight: FontWeight.w600,
+      //             ),
+      //           ),
+      //         ],
+      //       ),
+      //     ),
+      //   ),
+      // ),
     );
   }
 
@@ -1302,4 +1678,18 @@ class _CustomerHomeScreenState extends State<CustomerHomeScreen> {
       });
     });
   }
+
+  Future<void> getSharedPrefenceValue() async {
+    final prefs = await SharedPreferences.getInstance();
+
+    setState(() {
+      userName = prefs.getString('userName') ?? "";
+      userProfile = prefs.getString('userProfile') ?? "";
+      userAddress = prefs.getString('userAddress') ?? "";
+    });
+
+    print("customer Name is $userName");
+    print("customer Profile is $userProfile");
+  }
+
 }

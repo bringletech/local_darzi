@@ -54,12 +54,12 @@ class _SearchPageState extends State<SearchPage> {
       });
     }
     try {
-      Current_Tailor_Response model =
+      Current_Tailor_Details_Response model =
       await CallService().getCurrentTailorDetails();
       setState(() {
         customersList = model.data?.customers ?? [];
         filteredContacts = customersList;
-        order = model.data?.order ?? [];
+        //order = model.data?.order ?? [];
         print("Customer list length is ${customersList.length}");
         print("Customer list length is ${order.length}");
       });
@@ -130,18 +130,41 @@ class _SearchPageState extends State<SearchPage> {
         color: AppColors.newUpdateColor,
       ),):Scaffold(
         backgroundColor: Colors.white,
-        appBar: CustomAppBarSearchCustomerWithOutBack(
-          title: AppLocalizations.of(context)!.searchCustomer,
-          hasBackButton: true,
-          elevation: 2.0,
-          leadingIcon: SvgPicture.asset(
-            'assets/svgIcon/searchCustomer.svg',
-            color: Colors.black,
+        appBar: AppBar(
+          title: Text(
+            AppLocalizations.of(context)!.searchCustomer,
+            style: const TextStyle(
+              fontFamily: 'Poppins',
+              fontWeight: FontWeight.w600,
+              fontSize: 24,
+            ),
+            textAlign: TextAlign.center,
           ),
-          onBackButtonPressed: () {
-            Navigator.pop(context);
-          },
+          backgroundColor: Colors.white,
+            leading: Padding(
+              padding: const EdgeInsets.only(left: 18.0),
+              child: SvgPicture.asset(
+                'assets/svgIcon/searchCustomer.svg',
+                color: Colors.black,
+              ),
+            ),
+          elevation: 0,
+          centerTitle: true, // 👈 yeh add karo
+          scrolledUnderElevation: 0,
+          automaticallyImplyLeading: false, // ensures no back button
         ),
+        // CustomAppBarSearchCustomerWithOutBack(
+        //   title: AppLocalizations.of(context)!.searchCustomer,
+        //   hasBackButton: true,
+        //   elevation: 2.0,
+        //   leadingIcon: SvgPicture.asset(
+        //     'assets/svgIcon/searchCustomer.svg',
+        //     color: Colors.black,
+        //   ),
+        //   onBackButtonPressed: () {
+        //     Navigator.pop(context);
+        //   },
+        // ),
         body: RefreshIndicator(
           onRefresh: () async {
             setState(() {
@@ -158,9 +181,9 @@ class _SearchPageState extends State<SearchPage> {
                 child: Container(
                   decoration: BoxDecoration(
                     color: Colors.white,
-                    borderRadius: BorderRadius.circular(30),
+                    borderRadius: BorderRadius.circular(10),
                     border: Border.all(
-                        color: const Color(0xFF000000),
+                        color: AppColors.newUpdateColor,
                         width: 1.0,
                         style: BorderStyle.solid),
                     boxShadow: [
@@ -200,6 +223,7 @@ class _SearchPageState extends State<SearchPage> {
                   )
                       : filteredContacts.isEmpty
                       ? Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
                     children: [
                       Image.asset("assets/images/no_results.png",height: 80,),
                       Center(
@@ -254,7 +278,7 @@ class _SearchPageState extends State<SearchPage> {
                                         final id = contact.id.toString(); // Local reference to avoid delay
                                         final name = contact.name.toString();
                                         final mobileNumber = contact.mobileNo.toString();
-                                        final orderId = order[index].id.toString();
+                                        //final orderId = order[index].id.toString();
                                         Future.microtask(() {
                                           showSearchBottomSheet(context, id,name,mobileNumber);
                                         });
@@ -430,7 +454,7 @@ class _SearchPageState extends State<SearchPage> {
                 width: 60,
                 height: 5,
                 decoration: BoxDecoration(
-                  color: Colors.grey,
+                  color: AppColors.newUpdateColor,
                   borderRadius: BorderRadius.circular(10),
                 ),
               ),

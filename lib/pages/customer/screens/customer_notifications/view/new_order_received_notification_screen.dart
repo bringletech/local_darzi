@@ -54,25 +54,53 @@ class _NewOrderReceivedNotificationScreenState extends State<NewOrderReceivedNot
       },
       child:Scaffold(
         backgroundColor: Colors.white,
-        appBar: CustomAppBarWithBack(
-          title: AppLocalizations.of(context)!.new_dress_order,
-          hasBackButton: true,
-          onBackButtonPressed: () async {
-            final result = await Navigator.push(
-              context,
-              MaterialPageRoute(
-                  builder: (context) => CustomerNotificationScreen(
-                    locale: widget.locale,
-                  )),
-            );
-            Navigator.pop(context, true);
-          },
-          elevation: 2.0,
-          leadingIcon: SvgPicture.asset(
-            'assets/svgIcon/activeDress.svg',
-            color: Colors.black,
+        appBar: AppBar(
+          title: Text(
+            AppLocalizations.of(context)!.new_dress_order,
+            style: const TextStyle(
+              fontFamily: 'Poppins',
+              fontWeight: FontWeight.w600,
+              fontSize: 24,
+            ),
+            textAlign: TextAlign.center,
+          ),
+          backgroundColor: Colors.white,
+          centerTitle: true,
+          elevation: 0,
+          scrolledUnderElevation: 0,
+          leading: IconButton(
+            icon: const Icon(Icons.arrow_back_ios),
+            onPressed: () async {
+              final result = await Navigator.push(
+                context,
+                MaterialPageRoute(
+                    builder: (context) => CustomerNotificationScreen(
+                      locale: widget.locale!,
+                    )),
+              );
+              Navigator.pop(context, true);
+            },
           ),
         ),
+        // CustomAppBarWithBack(
+        //   title: AppLocalizations.of(context)!.new_dress_order,
+        //   hasBackButton: true,
+        //   onBackButtonPressed: () async {
+        //     final result = await Navigator.push(
+        //       context,
+        //       MaterialPageRoute(
+        //           builder: (context) => CustomerNotificationScreen(
+        //             locale: widget.locale,
+        //           )),
+        //     );
+        //     Navigator.pop(context, true);
+        //   },
+        //   elevation: 2.0,
+        //   leadingIcon: SvgPicture.asset(
+        //     'assets/svgIcon/activeDress.svg',
+        //     color: Colors.black,
+        //   ),
+        // ),
         body: isLoading == true?Center(child: CircularProgressIndicator(color: AppColors.newUpdateColor,)):Stack(
           children: [
             Padding(

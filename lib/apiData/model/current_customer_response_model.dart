@@ -51,6 +51,7 @@ class Data {
   String? deviceFcmToken;
   String? createdAt;
   String? updatedAt;
+  bool? notificationEnabled;
   List<Order>? order;
 
   Data(
@@ -82,6 +83,7 @@ class Data {
         this.deviceFcmToken,
         this.createdAt,
         this.updatedAt,
+        this.notificationEnabled,
         this.order});
 
   Data.fromJson(Map<String, dynamic> json) {
@@ -113,6 +115,7 @@ class Data {
     deviceFcmToken = json['device_fcm_token'];
     createdAt = json['created_at'];
     updatedAt = json['updated_at'];
+    notificationEnabled = json['notificationEnabled'];
     if (json['Order'] != null) {
       order = <Order>[];
       json['Order'].forEach((v) {
@@ -151,6 +154,7 @@ class Data {
     data['device_fcm_token'] = this.deviceFcmToken;
     data['created_at'] = this.createdAt;
     data['updated_at'] = this.updatedAt;
+    data['notificationEnabled'] = this.notificationEnabled;
     if (this.order != null) {
       data['Order'] = this.order!.map((v) => v.toJson()).toList();
     }

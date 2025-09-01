@@ -86,7 +86,7 @@ class AppLocalizationsMl extends AppLocalizations {
   }
 
   @override
-  String get yourAccount => 'നിങ്ങളുടെ അക്കൗണ്ട്';
+  String get yourAccount => 'എന്റെ അക്കൗണ്ട്';
 
   @override
   String get userName => 'പേര്';
@@ -666,6 +666,9 @@ class AppLocalizationsMl extends AppLocalizations {
       'ആദ്യം, ഞങ്ങൾ നിങ്ങളെ എന്ത് വിളിക്കണം?';
 
   @override
+  String get let_get_started => 'വരൂ തുടങ്ങാം';
+
+  @override
   String get get_you_know_you => 'ഞങ്ങൾ നിങ്ങളെ അറിയാൻ ആഗ്രഹിക്കുന്നു.';
 
   @override
@@ -677,4 +680,40 @@ class AppLocalizationsMl extends AppLocalizations {
 
   @override
   String get next => 'അടുത്തത്';
+
+  @override
+  String get general_details => 'സാധാരണ വിവരങ്ങൾ';
+
+  @override
+  String get my_details => 'എന്റെ വിശദാംശങ്ങൾ';
+
+  @override
+  String get notification_and_alert => 'അറിയിപ്പുകളും അലർട്ടും';
+
+  @override
+  String get missed => 'നഷ്ടപ്പെട്ട';
+
+  @override
+  String get today => 'ഇന്ന്';
+
+  @override
+  String get this_week => 'ഈ ആഴ്ച';
+
+  @override
+  String get next_week => 'അടുത്ത ആഴ്ച';
+
+  @override
+  String get later => 'പിന്നെ';
+
+  @override
+  String get my_orders => 'എന്റെ ഓർഡറുകൾ';
+
+  @override
+  String get order_details => 'ഓർഡർ വിശദാംശങ്ങൾ';
+
+  @override
+  String get stitching_history => 'തയ്യൽ ചരിത്രം';
+
+  @override
+  String get no_stitching_history => 'തയ്യൽ ചരിത്രം ഒന്നും കണ്ടെത്തിയില്ല.';
 }

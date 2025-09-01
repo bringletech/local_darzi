@@ -26,88 +26,40 @@ class Tailor_Registration_Response_Model {
 class Tailor {
   String? id;
   String? mobileNo;
-  bool? showMobileNo;
   String? name;
-  String? street;
-  String? city;
-  String? state;
-  String? postalCode;
-  String? country;
-  String? latitude;
-  String? longitude;
-  String? address;
-  String? profileUrl;
+  String? type;
   String? deviceFcmToken;
-  bool? isDeleted;
-  String? createdAt;
-  String? updatedAt;
-  String? deletedAt;
   String? token;
+  bool? hideMobileNo;
 
   Tailor(
       {this.id,
         this.mobileNo,
-        this.showMobileNo,
         this.name,
-        this.street,
-        this.city,
-        this.state,
-        this.postalCode,
-        this.country,
-        this.latitude,
-        this.longitude,
-        this.address,
-        this.profileUrl,
+        this.type,
         this.deviceFcmToken,
-        this.isDeleted,
-        this.createdAt,
-        this.updatedAt,
-        this.deletedAt,
-        this.token});
+        this.token,
+        this.hideMobileNo});
 
   Tailor.fromJson(Map<String, dynamic> json) {
     id = json['id'];
     mobileNo = json['mobileNo'];
-    showMobileNo = json['showMobileNo'];
     name = json['name'];
-    street = json['Street'];
-    city = json['City'];
-    state = json['State'];
-    postalCode = json['PostalCode'];
-    country = json['Country'];
-    latitude = json['latitude'];
-    longitude = json['longitude'];
-    address = json['address'];
-    profileUrl = json['profileUrl'];
+    type = json['type'];
     deviceFcmToken = json['device_fcm_token'];
-    isDeleted = json['isDeleted'];
-    createdAt = json['created_at'];
-    updatedAt = json['updated_at'];
-    deletedAt = json['deleted_at'];
     token = json['token'];
+    hideMobileNo = json['hideMobileNo'];
   }
 
   Map<String, dynamic> toJson() {
     final Map<String, dynamic> data = new Map<String, dynamic>();
     data['id'] = this.id;
     data['mobileNo'] = this.mobileNo;
-    data['showMobileNo'] = this.showMobileNo;
     data['name'] = this.name;
-    data['Street'] = this.street;
-    data['City'] = this.city;
-    data['State'] = this.state;
-    data['PostalCode'] = this.postalCode;
-    data['Country'] = this.country;
-    data['latitude'] = this.latitude;
-    data['longitude'] = this.longitude;
-    data['address'] = this.address;
-    data['profileUrl'] = this.profileUrl;
+    data['type'] = this.type;
     data['device_fcm_token'] = this.deviceFcmToken;
-    data['isDeleted'] = this.isDeleted;
-    data['created_at'] = this.createdAt;
-    data['updated_at'] = this.updatedAt;
-    data['deleted_at'] = this.deletedAt;
     data['token'] = this.token;
+    data['hideMobileNo'] = this.hideMobileNo;
     return data;
   }
 }

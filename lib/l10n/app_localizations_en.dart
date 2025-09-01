@@ -85,7 +85,7 @@ class AppLocalizationsEn extends AppLocalizations {
   }
 
   @override
-  String get yourAccount => 'Your Account';
+  String get yourAccount => 'My Account';
 
   @override
   String get userName => 'Name';
@@ -511,7 +511,7 @@ class AppLocalizationsEn extends AppLocalizations {
   String get no_notification_message => 'No new notifications';
 
   @override
-  String get no_active_dress => 'There is no active dress found';
+  String get no_active_dress => 'There is no active dress found.';
 
   @override
   String get whatsapp_is_not_insatlled => 'WhatsApp is not Installed!';
@@ -660,6 +660,9 @@ class AppLocalizationsEn extends AppLocalizations {
   String get first_what_we_can_call_you => 'First what we can call you?';
 
   @override
+  String get let_get_started => 'Let\'s Get Started';
+
+  @override
   String get get_you_know_you => 'We’d like to get you know you.';
 
   @override
@@ -671,4 +674,40 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get next => 'Next';
+
+  @override
+  String get general_details => 'General Details';
+
+  @override
+  String get my_details => 'My Details';
+
+  @override
+  String get notification_and_alert => 'Notifications & Alert';
+
+  @override
+  String get missed => 'Missed';
+
+  @override
+  String get today => 'Today';
+
+  @override
+  String get this_week => 'This Week';
+
+  @override
+  String get next_week => 'Next Week';
+
+  @override
+  String get later => 'Later';
+
+  @override
+  String get my_orders => 'My Orders';
+
+  @override
+  String get order_details => 'Order Details';
+
+  @override
+  String get stitching_history => 'Stitching History';
+
+  @override
+  String get no_stitching_history => 'There is no stitching history found.';
 }

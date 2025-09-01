@@ -2,6 +2,7 @@ import 'package:darzi/apiData/call_api_service/call_service.dart';
 import 'package:darzi/apiData/model/login_model.dart';
 import 'package:darzi/colors.dart';
 import 'package:darzi/common/widgets/tailor/common_otp_app_bar_with_back.dart';
+import 'package:darzi/pages/customer/screens/Customer_Otp_Verification/view/customer_welcome_screen.dart';
 import 'package:darzi/pages/customer/screens/customer_dashboard/view/customer_dashboard_new.dart';
 import 'package:flutter/material.dart';
 import 'dart:async';
@@ -13,9 +14,8 @@ import '../../../../../l10n/app_localizations.dart';
 
 class CustomerOtpVerificationPage extends StatefulWidget {
   final String phoneNumber;
-  final String name;
   final Locale locale;
-  const CustomerOtpVerificationPage(this.phoneNumber,this.name,{super.key, required this.locale});
+  const CustomerOtpVerificationPage(this.phoneNumber,{super.key, required this.locale});
 
   @override
   _CustomerOtpVerificationPageState createState() =>
@@ -36,7 +36,6 @@ class _CustomerOtpVerificationPageState
   void initState() {
     super.initState();
     phoneNumber = widget.phoneNumber;
-    name = widget.name;
     startTimer();
     getDeviceToken();
   }
@@ -309,37 +308,63 @@ class _CustomerOtpVerificationPageState
     );
   }
 
+
   Future<void> callCustomerOtpVerifyApi(String otp, String phoneNumber) async {
-    var map = {'mobileNo': phoneNumber, 'otp': otp};
+    var map = {
+      'mobileNo': phoneNumber,
+      'otp': otp,
+    'device_fcm_token':deviceToken
+    };
+    print("Customer Otp map value is $map");
     setState(() => isLoading = true);
     final model = await CallService().customerOtpVerification(map);
+    String message = model.message.toString();
     setState(() => isLoading = false);
-    final SharedPreferences prefs = await SharedPreferences.getInstance();
-    await prefs.setString('userId', model.data!.id.toString());
-    await prefs.setString('userMobileNumber', model.data!.mobileNo.toString());
-    await prefs.setString('userToken', model.data!.accessToken.toString());
-    await prefs.setString('userType', model.data!.type.toString());
+    if(message == "OTP verified. Logged In Successfully !!") {
+      final SharedPreferences prefs = await SharedPreferences.getInstance();
+      await prefs.setString('userId', model.data!.id.toString());
+      await prefs.setString(
+          'userMobileNumber', model.data!.mobileNo.toString());
+      await prefs.setString('userToken', model.data!.accessToken.toString());
+      await prefs.setString('userType', model.data!.type.toString());
+      await prefs.setString('userName', model.data!.name.toString());
+      await prefs.setString('userProfile', model.data!.profileUrl.toString());
+      await prefs.setString('userAddress', model.data!.address.toString());
 
-    Fluttertoast.showToast(
-        msg: model.message.toString(),
-        toastLength: Toast.LENGTH_SHORT,
-        gravity: ToastGravity.CENTER,
-        timeInSecForIosWeb: 1,
-        backgroundColor: AppColors.newUpdateColor,
-        textColor: Colors.white,
-        fontSize: 16.0);
-    Navigator.pop(context);
-    Navigator.pushReplacement(
-      context,
-      MaterialPageRoute(builder: (context) => CustomerDashboardNew(locale: widget.locale)),
-    );
+      Fluttertoast.showToast(
+          msg: model.message.toString(),
+          toastLength: Toast.LENGTH_SHORT,
+          gravity: ToastGravity.CENTER,
+          timeInSecForIosWeb: 1,
+          backgroundColor: AppColors.newUpdateColor,
+          textColor: Colors.white,
+          fontSize: 16.0);
+      Navigator.pop(context);
+      Navigator.pushReplacement(
+        context,
+        MaterialPageRoute(
+            builder: (context) => CustomerDashboardNew(locale: widget.locale)),
+      );
+    }else if(message == "Otp verified. But User is not registered !!"){
+      Fluttertoast.showToast(
+          msg: model.message.toString(),
+          toastLength: Toast.LENGTH_SHORT,
+          gravity: ToastGravity.CENTER,
+          timeInSecForIosWeb: 1,
+          backgroundColor: AppColors.newUpdateColor,
+          textColor: Colors.white,
+          fontSize: 16.0);
+      Navigator.pop(context);
+      Navigator.push(
+        context,
+        MaterialPageRoute(builder: (context) => CustomerWelcomeScreen(phoneNumber,locale: widget.locale)),
+      );
+    }
   }
 
   void callCustomerLoginApi(String phoneNumber, String name) {
     var map = <String, dynamic>{};
     map['mobileNo'] = phoneNumber;
-    map['name'] = name;
-    map['device_fcm_token'] = deviceToken;
     print("Map value is$map");
     isLoading = true;
     WidgetsBinding.instance.addPostFrameCallback((_) async {
@@ -362,7 +387,7 @@ class _CustomerOtpVerificationPageState
       Navigator.push(
         context,
         MaterialPageRoute(
-            builder: (context) => CustomerOtpVerificationPage(phoneNumber,name,locale: widget.locale)),
+            builder: (context) => CustomerOtpVerificationPage(phoneNumber,locale: widget.locale)),
       );
     });
   }

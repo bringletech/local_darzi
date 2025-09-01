@@ -86,7 +86,7 @@ class AppLocalizationsKn extends AppLocalizations {
   }
 
   @override
-  String get yourAccount => 'ನಿಮ್ಮ ಖಾತೆ';
+  String get yourAccount => 'ನನ್ನ ಖಾತೆ';
 
   @override
   String get userName => 'ಹೆಸರು';
@@ -665,6 +665,9 @@ class AppLocalizationsKn extends AppLocalizations {
       'ಮೊದಲಿಗೆ, ನಿಮ್ಮನ್ನು ನಾವು ಏನೆಂದು ಕರೆಯಬೇಕು?';
 
   @override
+  String get let_get_started => 'ಬನ್ನಿ ಪ್ರಾರಂಭಿಸೋಣ';
+
+  @override
   String get get_you_know_you => 'ನಾವು ನಿಮ್ಮನ್ನು ತಿಳಿದುಕೊಳ್ಳಲು ಬಯಸುತ್ತೇವೆ.';
 
   @override
@@ -676,4 +679,40 @@ class AppLocalizationsKn extends AppLocalizations {
 
   @override
   String get next => 'ಮುಂದಿನದು';
+
+  @override
+  String get general_details => 'ಸಾಮಾನ್ಯ ವಿವರಗಳು';
+
+  @override
+  String get my_details => 'ನನ್ನ ವಿವರಗಳು';
+
+  @override
+  String get notification_and_alert => 'ಅಧಿಸೂಚನೆಗಳು ಮತ್ತು ಎಚ್ಚರಿಕೆ';
+
+  @override
+  String get missed => 'ತಪ್ಪಿದ';
+
+  @override
+  String get today => 'ಇಂದು';
+
+  @override
+  String get this_week => 'ಈ ವಾರ';
+
+  @override
+  String get next_week => 'ಮುಂದಿನ ವಾರ';
+
+  @override
+  String get later => 'ನಂತರ';
+
+  @override
+  String get my_orders => 'ನನ್ನ ಆರ್ಡರ್‌ಗಳು';
+
+  @override
+  String get order_details => 'ಆರ್ಡರ್ ವಿವರಗಳು';
+
+  @override
+  String get stitching_history => 'ಹೊಲಿಗೆ ಇತಿಹಾಸ';
+
+  @override
+  String get no_stitching_history => 'ಹೊಲಿಗೆ ಇತಿಹಾಸ ಕಂಡುಬಂದಿಲ್ಲ.';
 }

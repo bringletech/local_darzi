@@ -86,7 +86,7 @@ class AppLocalizationsGu extends AppLocalizations {
   }
 
   @override
-  String get yourAccount => 'તમારું એકાઉન્ટ';
+  String get yourAccount => 'મારું એકાઉન્ટ';
 
   @override
   String get userName => 'નામ';
@@ -659,6 +659,9 @@ class AppLocalizationsGu extends AppLocalizations {
       'સૌપ્રથમ, અમે તમને શું કહીને બોલાવીએ?';
 
   @override
+  String get let_get_started => 'ચાલો શરૂ કરીએ';
+
+  @override
   String get get_you_know_you => 'અમે તમને જાણવા માંગીએ છીએ.';
 
   @override
@@ -670,4 +673,40 @@ class AppLocalizationsGu extends AppLocalizations {
 
   @override
   String get next => 'આગળનું';
+
+  @override
+  String get general_details => 'સામાન્ય વિગતો';
+
+  @override
+  String get my_details => 'મારી વિગતો';
+
+  @override
+  String get notification_and_alert => 'સૂચનાઓ અને ચેતવણીઓ';
+
+  @override
+  String get missed => 'ચૂકી ગયેલ';
+
+  @override
+  String get today => 'આજે';
+
+  @override
+  String get this_week => 'આ અઠવાડિયે';
+
+  @override
+  String get next_week => 'આવતા અઠવાડિયે';
+
+  @override
+  String get later => 'પછી';
+
+  @override
+  String get my_orders => 'મારા ઓર્ડર';
+
+  @override
+  String get order_details => 'ઓર્ડર વિગતો';
+
+  @override
+  String get stitching_history => 'સીવણ ઇતિહાસ';
+
+  @override
+  String get no_stitching_history => 'સીવણનો ઇતિહાસ મળ્યો નથી.';
 }

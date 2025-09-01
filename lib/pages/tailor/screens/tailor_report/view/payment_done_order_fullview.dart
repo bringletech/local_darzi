@@ -52,19 +52,38 @@ class _PaymentDoneOrderFullviewState extends State<PaymentDoneOrderFullview> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: CustomAppBarWithBack(
-        title: AppLocalizations.of(context)!.payment_received,
-        hasBackButton: true,
-        onBackButtonPressed: () async{
-          Navigator.pop(context, true);
-          // Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => ActiveDress(locale: widget.locale,)));
-        },
-        elevation: 2.0,
-        leadingIcon: SvgPicture.asset(
-          'assets/svgIcon/activeDress.svg',
-          color: Colors.black,
+      appBar: AppBar(
+        title: Text(AppLocalizations.of(context)!.payment_received,
+          style: const TextStyle(
+            fontFamily: 'Poppins',
+            fontWeight: FontWeight.w600,
+            fontSize: 24,
+          ),
+          textAlign: TextAlign.center,),
+        backgroundColor: Colors.white,
+        elevation: 0,
+        centerTitle: true,
+        scrolledUnderElevation: 0,
+        leading: IconButton(
+          icon: Icon(Icons.arrow_back_ios),
+          onPressed: () async {
+            Navigator.pop(context, true);
+          },
         ),
       ),
+      // CustomAppBarWithBack(
+      //   title: AppLocalizations.of(context)!.payment_received,
+      //   hasBackButton: true,
+      //   onBackButtonPressed: () async{
+      //     Navigator.pop(context, true);
+      //     // Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => ActiveDress(locale: widget.locale,)));
+      //   },
+      //   elevation: 2.0,
+      //   leadingIcon: SvgPicture.asset(
+      //     'assets/svgIcon/activeDress.svg',
+      //     color: Colors.black,
+      //   ),
+      // ),
       body: isLoading == true?Center(child: CircularProgressIndicator(color: AppColors.darkRed,)):Stack(
         children: [
           Padding(

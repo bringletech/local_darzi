@@ -221,7 +221,7 @@ class _WelcomeScreenState extends State<WelcomeScreen> {
         await prefs.setString("userMobileNumber", model.tailor!.mobileNo ?? "");
         await prefs.setString("userToken", model.tailor!.token ?? "");
         await prefs.setString("userName", model.tailor!.name ?? "");
-
+        await prefs.setString("userType", model.tailor!.type ?? "");
         Navigator.pop(context);
         Navigator.push(
           context,

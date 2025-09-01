@@ -30,6 +30,7 @@ class Get_All_Tailors_response_Model {
 class Data {
   String? id;
   String? mobileNo;
+  bool? hideMobileNo;
   String? name;
   String? street;
   String? city;
@@ -52,6 +53,7 @@ class Data {
   Data(
       {this.id,
         this.mobileNo,
+        this.hideMobileNo,
         this.name,
         this.street,
         this.city,
@@ -74,6 +76,7 @@ class Data {
   Data.fromJson(Map<String, dynamic> json) {
     id = json['id'];
     mobileNo = json['mobileNo'];
+    hideMobileNo = json['hideMobileNo'];
     name = json['name'];
     street = json['Street'];
     city = json['City'];
@@ -101,6 +104,7 @@ class Data {
     final Map<String, dynamic> data = new Map<String, dynamic>();
     data['id'] = this.id;
     data['mobileNo'] = this.mobileNo;
+    data['hideMobileNo'] = this.hideMobileNo;
     data['name'] = this.name;
     data['Street'] = this.street;
     data['City'] = this.city;

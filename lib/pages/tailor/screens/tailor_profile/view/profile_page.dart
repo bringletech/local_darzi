@@ -3,6 +3,7 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:darzi/apiData/call_api_service/call_service.dart';
 import 'package:darzi/apiData/model/aws_response_model.dart';
 import 'package:darzi/apiData/model/current_tailor_detail_response.dart';
+import 'package:darzi/apiData/model/current_tailor_response.dart';
 import 'package:darzi/apiData/model/tailor_account_delete_response_model.dart';
 import 'package:darzi/apiData/model/tailor_profile_update_response_model.dart';
 import 'package:darzi/colors.dart';
@@ -51,6 +52,7 @@ class _TailorProfilePageState extends State<TailorProfilePage> {
   File? _selectedImage;
   String mobileNumber = "", fileName = "",presignedUrl = "",objectUrl = "",extensionWithoutDot = "";
   bool isLoading = false;
+  bool isButtonLoading = false;
   bool isPressed = false;
   String enterName = "",
       address = "",
@@ -253,7 +255,7 @@ class _TailorProfilePageState extends State<TailorProfilePage> {
     setState(() {
       isLoading = true;
       WidgetsBinding.instance.addPostFrameCallback((_) async {
-        Current_Tailor_Response model =
+        Current_Tailor_Details_Response model =
             await CallService().getCurrentTailorDetails();
         setState(() {
           isLoading = false;
@@ -412,14 +414,36 @@ class _TailorProfilePageState extends State<TailorProfilePage> {
             top: 0,
             left: 0,
             right: 0,
-            child: CustomAppBarWithBack(
-              title: AppLocalizations.of(context)!.yourAccount,
-              hasBackButton: false,
-              elevation: 2.0,
-              leadingIcon: SvgPicture.asset(
-                'assets/svgIcon/account.svg',
+            child: AppBar(
+              title: Center(
+                child: Text(AppLocalizations.of(context)!.yourAccount,
+                  style: const TextStyle(
+                    fontFamily: 'Poppins',
+                    fontWeight: FontWeight.w600,
+                    fontSize: 24,
+                  ),
+                  textAlign: TextAlign.center,),
               ),
+              backgroundColor: Colors.white,
+              elevation: 0,
+              scrolledUnderElevation: 0,
+              // leading: Padding(
+              //   padding: const EdgeInsets.only(left: 15),
+              //   child: Center(
+              //     child: SvgPicture.asset(
+              //       'assets/svgIcon/account.svg',
+              //     ),
+              //   ),
+              // ),
             ),
+            // CustomAppBarWithBack(
+            //   title: AppLocalizations.of(context)!.yourAccount,
+            //   hasBackButton: false,
+            //   elevation: 2.0,
+            //   leadingIcon: SvgPicture.asset(
+            //     'assets/svgIcon/account.svg',
+            //   ),
+            // ),
           ),
           Padding(
             padding: EdgeInsets.only(top: 350, left: 40, right: 40, bottom: 40),
@@ -860,7 +884,7 @@ class _TailorProfilePageState extends State<TailorProfilePage> {
       builder: (context, setState) {
         Future<void> handleTap() async {
           setState(() {
-            isLoading = true;
+            isButtonLoading = true;
           });
 
           try {
@@ -876,7 +900,7 @@ class _TailorProfilePageState extends State<TailorProfilePage> {
             );
           } finally {
             setState(() {
-              isLoading = false;
+              isButtonLoading = false;
               isPressed = false;
             });
           }
@@ -884,7 +908,7 @@ class _TailorProfilePageState extends State<TailorProfilePage> {
 
         return GestureDetector(
           onTap: () {
-            if (!isLoading) handleTap();
+            if (!isButtonLoading) handleTap();
           },
           onTapDown: (_) {
             setState(() {
@@ -910,7 +934,7 @@ class _TailorProfilePageState extends State<TailorProfilePage> {
               border: Border.all(color: AppColors.newUpdateColor, width: 2),
             ),
             child: Center(
-              child: isLoading
+              child: isButtonLoading
                   ? SizedBox(
                 height: 24,
                 width: 24,

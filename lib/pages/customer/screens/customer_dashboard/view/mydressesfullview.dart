@@ -52,24 +52,51 @@ class _CustomerFullActiveDressState extends State<CustomerFullActiveDress> {
       return false; // Prevent default back behavior
     },
       child:Scaffold(
-      appBar: CustomAppBarWithBack(
-        title: AppLocalizations.of(context)!.dressDetails,
-        hasBackButton: true,
-        onBackButtonPressed: (){
-          Navigator.pushReplacement(
+      appBar: AppBar(
+        title: Text(
+          AppLocalizations.of(context)!.dressDetails,
+          style: const TextStyle(
+            fontFamily: 'Poppins',
+            fontWeight: FontWeight.w600,
+            fontSize: 24,
+          ),
+          textAlign: TextAlign.center,
+        ),
+        backgroundColor: Colors.white,
+        centerTitle: true, // 👈 yeh add karo
+        elevation: 0,
+        scrolledUnderElevation: 0,
+        leading: IconButton(
+          icon: const Icon(Icons.arrow_back_ios),
+          onPressed: () async {
+            Navigator.pushReplacement(
               context,
               MaterialPageRoute(
-              builder: (context) => MyDresses(
-            locale: widget.locale,
-          )),);
-          Navigator.pop(context);
-        },
-        elevation: 2.0,
-        leadingIcon: SvgPicture.asset(
-          'assets/svgIcon/activeDress.svg',
-          color: Colors.black,
+                  builder: (context) => MyDresses(
+                    locale: widget.locale,
+                  )),);
+            Navigator.pop(context);
+          },
         ),
       ),
+      // CustomAppBarWithBack(
+      //   title: AppLocalizations.of(context)!.dressDetails,
+      //   hasBackButton: true,
+      //   onBackButtonPressed: (){
+      //     Navigator.pushReplacement(
+      //         context,
+      //         MaterialPageRoute(
+      //         builder: (context) => MyDresses(
+      //       locale: widget.locale,
+      //     )),);
+      //     Navigator.pop(context);
+      //   },
+      //   elevation: 2.0,
+      //   leadingIcon: SvgPicture.asset(
+      //     'assets/svgIcon/activeDress.svg',
+      //     color: Colors.black,
+      //   ),
+      // ),
       body: isLoading == true?Center(child: CircularProgressIndicator(color: AppColors.darkRed,)):Stack(
         children: [
           Padding(

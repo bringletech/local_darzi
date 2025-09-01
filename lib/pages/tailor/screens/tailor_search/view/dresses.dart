@@ -67,18 +67,37 @@ class _OldDressState extends State<oldDress> {
         constraints: BoxConstraints(
           maxHeight: MediaQuery.of(context).size.height,),
         child: Scaffold(
-          appBar: CustomAppBarWithBack(
-            onBackButtonPressed: () async {
-              Navigator.of(context).pop(false);
-            },
-            title: AppLocalizations.of(context)!.dresses,
-            hasBackButton: true,
-            elevation: 2.0,
-            leadingIcon: SvgPicture.asset(
-              'assets/svgIcon/dress.svg',//just change my image with your image
-              color: Colors.black,
+          appBar: AppBar(
+            title: Text(AppLocalizations.of(context)!.dresses,
+              style: const TextStyle(
+                fontFamily: 'Poppins',
+                fontWeight: FontWeight.w600,
+                fontSize: 24,
+              ),
+              textAlign: TextAlign.center,),
+            backgroundColor: Colors.white,
+            elevation: 0,
+            centerTitle: true, // 👈 yeh add karo
+            scrolledUnderElevation: 0,
+            leading: IconButton(
+              icon: Icon(Icons.arrow_back_ios),
+              onPressed: () async {
+                Navigator.of(context).pop(false);
+              },
             ),
           ),
+          // CustomAppBarWithBack(
+          //   onBackButtonPressed: () async {
+          //     Navigator.of(context).pop(false);
+          //   },
+          //   title: AppLocalizations.of(context)!.dresses,
+          //   hasBackButton: true,
+          //   elevation: 2.0,
+          //   leadingIcon: SvgPicture.asset(
+          //     'assets/svgIcon/dress.svg',//just change my image with your image
+          //     color: Colors.black,
+          //   ),
+          // ),
           body: isLoading == true?Center(child: CircularProgressIndicator(color: AppColors.darkRed,),)
               :customerDressList.isNotEmpty?Container(
             color: Colors.white,
@@ -108,72 +127,86 @@ class _OldDressState extends State<oldDress> {
                             }
                           });
                         },
-                        child: Card(
-                          color: Colors.white,
-                          shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(50.0),
-                          ),
-                          elevation: 9,
-                          child: ListTile(
-                            leading: ClipRRect(
-                              borderRadius: BorderRadius.circular(8.0),
-                              child: CachedNetworkImage(
-                                height: 90,
-                                width: 80,
-                                //imageUrl: 'https://w7.pngwing.com/pngs/827/140/png-transparent-t-shirt-fashion-clothing-mens-fashion-tshirt-abdomen-formal-wear.png',
-                                imageUrl: contact.dressImgUrl.toString(),
-                                progressIndicatorBuilder: (context, url, downloadProgress) =>
-                                    CircularProgressIndicator(value: downloadProgress.progress,color:AppColors.newUpdateColor),
-                                errorWidget: (context, url, error) =>  Image.network(
-                                    'https://dummyimage.com/500x500/aaa/000000.png&text=No+Image',
-                                    width: 110,
-                                    height: 110,
-                                    fit: BoxFit.cover),
+                        child: Padding(
+                          padding: const EdgeInsets.all(8.0),
+                          child: Card(
+                            color: Colors.white,
+                            shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(10.0),
+                              side: BorderSide(
+                                color: AppColors.newUpdateColor, // Orange border
+                                width: 1,
                               ),
                             ),
-                            title: Text(contact.name != null
-                                ? contact.name.toString()
-                                : AppLocalizations.of(context)!
-                                .noUserName,style: TextStyle(fontFamily: "Poppins",fontSize: 19,fontWeight: FontWeight.w500),), // Change to dynamic name
-                            subtitle: Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: [
-                                Text(
-                                  "${AppLocalizations.of(context)!.dueDate} :  ${dateTime.toString()}",
-                                  style: TextStyle(fontFamily: "Poppins", fontSize: 14, fontWeight: FontWeight.w400),
+                            elevation: 9,
+                            child: ListTile(
+                              leading: ClipRRect(
+                                borderRadius: BorderRadius.circular(8.0),
+                                child: CachedNetworkImage(
+                                  height: 90,
+                                  width: 80,
+                                  //imageUrl: 'https://w7.pngwing.com/pngs/827/140/png-transparent-t-shirt-fashion-clothing-mens-fashion-tshirt-abdomen-formal-wear.png',
+                                  imageUrl: contact.dressImgUrl.toString(),
+                                  progressIndicatorBuilder: (context, url, downloadProgress) =>
+                                      CircularProgressIndicator(value: downloadProgress.progress,color:AppColors.newUpdateColor),
+                                  errorWidget: (context, url, error) =>  Image.network(
+                                      'https://dummyimage.com/500x500/aaa/000000.png&text=No+Image',
+                                      width: 110,
+                                      height: 110,
+                                      fit: BoxFit.cover),
                                 ),
-                                Text(
-                                    contact.status == "Received"
-                                        ? "${AppLocalizations.of(context)!.dressStatus}: "
-                                        "${AppLocalizations.of(context)!.order_Received}"
-                                        : contact.status == "InProgress"
-                                        ? "${AppLocalizations.of(context)!.dressStatus}: "
-                                        "${AppLocalizations.of(context)!.dressProgress}"
-                                        : contact.status ==
-                                        "Cancelled"
-                                        ? "${AppLocalizations.of(context)!.dressStatus}: "
-                                        "${AppLocalizations.of(context)!.order_cancelled}"
-                                        :contact.status == "PaymentDone"? "${AppLocalizations.of(context)!.dressStatus}: "
-                                        "${AppLocalizations.of(context)!.payment_done}"
-                                        : "${AppLocalizations.of(context)!.dressStatus}: "
-                                        "${AppLocalizations.of(context)!.dressComplete}",
-                                    style: TextStyle(
-                                        fontFamily: "Inter",
-                                        fontSize: 14,
-                                        fontWeight: FontWeight.w700,
-                                        color: contact.status ==
-                                            "Received" ||
-                                            contact.status ==
-                                                "InProgress"
-                                            ? AppColors.statusColor
-                                            : AppColors.primaryRed))
-                              ],
-                            ),
-                            trailing: Column(
-                              children: [
-                                Text(AppLocalizations.of(context)!.cost,style: TextStyle(fontFamily: "Poppins",fontSize: 19,fontWeight: FontWeight.w500,color: Colors.black),),
-                                Text('₹${contact.stitchingCost.toString()}',style: TextStyle(fontFamily: "Poppins",fontSize: 14,fontWeight: FontWeight.w400),),
-                              ],
+                              ),
+                              title:Text(
+                                contact.name != null
+                                    ? "${contact.name.toString()} (${contact.dressName ?? AppLocalizations.of(context)!.noDressName})"
+                                    : AppLocalizations.of(context)!.noUserName,
+                                style: const TextStyle(
+                                  fontFamily: "Poppins",
+                                  fontSize: 19,
+                                  fontWeight: FontWeight.w500,
+                                ),
+                              ),
+                              // Change to dynamic name
+                              subtitle: Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  Text(
+                                    "${AppLocalizations.of(context)!.dueDate} :  ${dateTime.toString()}",
+                                    style: TextStyle(fontFamily: "Poppins", fontSize: 14, fontWeight: FontWeight.w400),
+                                  ),
+                                  Text(
+                                      contact.status == "Received"
+                                          ? "${AppLocalizations.of(context)!.dressStatus}: "
+                                          "${AppLocalizations.of(context)!.order_Received}"
+                                          : contact.status == "InProgress"
+                                          ? "${AppLocalizations.of(context)!.dressStatus}: "
+                                          "${AppLocalizations.of(context)!.dressProgress}"
+                                          : contact.status ==
+                                          "Cancelled"
+                                          ? "${AppLocalizations.of(context)!.dressStatus}: "
+                                          "${AppLocalizations.of(context)!.order_cancelled}"
+                                          :contact.status == "PaymentDone"? "${AppLocalizations.of(context)!.dressStatus}: "
+                                          "${AppLocalizations.of(context)!.payment_done}"
+                                          : "${AppLocalizations.of(context)!.dressStatus}: "
+                                          "${AppLocalizations.of(context)!.dressComplete}",
+                                      style: TextStyle(
+                                          fontFamily: "Inter",
+                                          fontSize: 14,
+                                          fontWeight: FontWeight.w700,
+                                          color: contact.status ==
+                                              "Received" ||
+                                              contact.status ==
+                                                  "InProgress"
+                                              ? AppColors.statusColor
+                                              : AppColors.primaryRed))
+                                ],
+                              ),
+                              trailing: Column(
+                                children: [
+                                  Text(AppLocalizations.of(context)!.cost,style: TextStyle(fontFamily: "Poppins",fontSize: 19,fontWeight: FontWeight.w500,color: Colors.black),),
+                                  Text('₹${contact.stitchingCost.toString()}',style: TextStyle(fontFamily: "Poppins",fontSize: 14,fontWeight: FontWeight.w400),),
+                                ],
+                              ),
                             ),
                           ),
                         ),

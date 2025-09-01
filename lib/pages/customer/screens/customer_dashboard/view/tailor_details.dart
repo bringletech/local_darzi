@@ -168,26 +168,54 @@ class _TailorDetailsState extends State<TailorDetails> {
 
       child:Scaffold(
           backgroundColor: Colors.white,
-          appBar: CustomAppBarWithBack(
-            title: AppLocalizations.of(context)!.myTailor,
-            // title: AppLocalizations.of(context)!.tailorDetail ,
-            hasBackButton: true,
-            elevation: 2.0,
-            onBackButtonPressed: () async {
-              final result = await Navigator.push(
-                context,
-                MaterialPageRoute(
-                    builder: (context) => MyTailors(
-                      locale: widget.locale,
-                    )),
-              );
-              Navigator.pop(context, true);
-            },
-            leadingIcon: SvgPicture.asset(
-              'assets/svgIcon/myTailor.svg',
-              color: Colors.black,
+          appBar: AppBar(
+            title: Text(
+              AppLocalizations.of(context)!.myTailor,
+              style: const TextStyle(
+                fontFamily: 'Poppins',
+                fontWeight: FontWeight.w600,
+                fontSize: 24,
+              ),
+              textAlign: TextAlign.center,
+            ),
+            backgroundColor: Colors.white,
+            centerTitle: true,
+            elevation: 0,
+            scrolledUnderElevation: 0,
+            leading: IconButton(
+              icon: const Icon(Icons.arrow_back_ios),
+              onPressed: () async {
+                final result = await Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                      builder: (context) => MyTailors(
+                        locale: widget.locale,
+                      )),
+                );
+                Navigator.pop(context, true);
+              },
             ),
           ),
+          // CustomAppBarWithBack(
+          //   title: AppLocalizations.of(context)!.myTailor,
+          //   // title: AppLocalizations.of(context)!.tailorDetail ,
+          //   hasBackButton: true,
+          //   elevation: 2.0,
+          //   onBackButtonPressed: () async {
+          //     final result = await Navigator.push(
+          //       context,
+          //       MaterialPageRoute(
+          //           builder: (context) => MyTailors(
+          //             locale: widget.locale,
+          //           )),
+          //     );
+          //     Navigator.pop(context, true);
+          //   },
+          //   leadingIcon: SvgPicture.asset(
+          //     'assets/svgIcon/myTailor.svg',
+          //     color: Colors.black,
+          //   ),
+          // ),
           body: isLoading || tailorDetailsData == null
               ? Center(child: CircularProgressIndicator())
               :SingleChildScrollView(

@@ -86,7 +86,7 @@ class AppLocalizationsTe extends AppLocalizations {
   }
 
   @override
-  String get yourAccount => 'మీ ఖాతా';
+  String get yourAccount => 'నా ఖాతా';
 
   @override
   String get userName => 'పేరు';
@@ -663,6 +663,9 @@ class AppLocalizationsTe extends AppLocalizations {
       'ముందుగా మేము మిమ్మల్ని ఏ పేరుతో పిలవాలి?';
 
   @override
+  String get let_get_started => 'రండి మొదలు పెట్టుదాం';
+
+  @override
   String get get_you_know_you =>
       'మేము మిమ్మల్ని తెలుసుకోవాలని కోరుకుంటున్నాము.';
 
@@ -675,4 +678,40 @@ class AppLocalizationsTe extends AppLocalizations {
 
   @override
   String get next => 'తర్వాత';
+
+  @override
+  String get general_details => 'సాధారణ వివరాలు';
+
+  @override
+  String get my_details => 'నా వివరాలు';
+
+  @override
+  String get notification_and_alert => 'నోటిఫికేషన్లు & అలర్ట్';
+
+  @override
+  String get missed => 'మిస్సైన';
+
+  @override
+  String get today => 'ఈ రోజు';
+
+  @override
+  String get this_week => 'ఈ వారం';
+
+  @override
+  String get next_week => 'వచ్చే వారం';
+
+  @override
+  String get later => 'తరువాత';
+
+  @override
+  String get my_orders => 'నా ఆర్డర్లు';
+
+  @override
+  String get order_details => 'ఆర్డర్ వివరాలు';
+
+  @override
+  String get stitching_history => 'కుట్టు చరిత్ర';
+
+  @override
+  String get no_stitching_history => 'కుట్టు చరిత్ర కనుగొనబడలేదు.';
 }

@@ -1,12 +1,12 @@
 import 'package:darzi/common/common_bottom_navigation.dart';
 import 'package:darzi/common/widgets/tab_data.dart';
 import 'package:darzi/pages/tailor/screens/tailor_dashboard/view/darzi_home_screen.dart';
-import 'package:darzi/pages/tailor/screens/tailor_profile/view/profile_page.dart';
 import 'package:darzi/pages/tailor/screens/tailor_search/view/search_page.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 // Import the new routes file
 import '../../../../../colors.dart';
+import '../../tailor_profile/view/profile_page1.dart';
 
 class TailorDashboardNew extends StatefulWidget {
   static const TextStyle titleStyle = TextStyle(

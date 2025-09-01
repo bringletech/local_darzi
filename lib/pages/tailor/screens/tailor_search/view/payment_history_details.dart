@@ -66,18 +66,37 @@ class _PaymentHistoryDetailState extends State<PaymentHistoryDetail> {
       ),
       child: Scaffold(
         backgroundColor: Colors.white,
-        appBar: CustomAppBarWithBack(
-          title: AppLocalizations.of(context)!.payment_history,
-          hasBackButton: true,
-          elevation: 2.0,
-          leadingIcon: SvgPicture.asset(
-            'assets/svgIcon/payment_history_icon_1.svg',
-            color: Colors.black,
+        appBar: AppBar(
+          title: Text(AppLocalizations.of(context)!.payment_history,
+            style: const TextStyle(
+              fontFamily: 'Poppins',
+              fontWeight: FontWeight.w600,
+              fontSize: 24,
+            ),
+            textAlign: TextAlign.center,),
+          backgroundColor: Colors.white,
+          centerTitle: true, // 👈 yeh add karo
+          elevation: 0,
+          scrolledUnderElevation: 0,
+          leading: IconButton(
+            icon: Icon(Icons.arrow_back_ios),
+            onPressed: () async {
+              Navigator.pop(context, true);
+            },
           ),
-          onBackButtonPressed: () async {
-            Navigator.pop(context, true);
-          },
         ),
+        // CustomAppBarWithBack(
+        //   title: AppLocalizations.of(context)!.payment_history,
+        //   hasBackButton: true,
+        //   elevation: 2.0,
+        //   leadingIcon: SvgPicture.asset(
+        //     'assets/svgIcon/payment_history_icon_1.svg',
+        //     color: Colors.black,
+        //   ),
+        //   onBackButtonPressed: () async {
+        //     Navigator.pop(context, true);
+        //   },
+        // ),
         body: isLoading == true?Center(child: CircularProgressIndicator(color: AppColors.newUpdateColor,),):
         SingleChildScrollView(
           padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 12.0),
@@ -90,14 +109,14 @@ class _PaymentHistoryDetailState extends State<PaymentHistoryDetail> {
                     text: '${AppLocalizations.of(context)!.userName} : ',
                     fontFamily: 'Poppins',
                     fontSize: 17,
-                    fontWeight: FontWeight.w500,
+                    fontWeight: FontWeight.w600,
                   ),
                   SizedBox(width: 10),
                   AllText(
                     text: widget.name,
                     fontFamily: 'Poppins',
                     fontSize: 14,
-                    fontWeight: FontWeight.w400,
+                    fontWeight: FontWeight.w500,
                   ),
                 ],
               ),
@@ -108,14 +127,14 @@ class _PaymentHistoryDetailState extends State<PaymentHistoryDetail> {
                     text: '${AppLocalizations.of(context)!.mobileNumber} : ',
                     fontFamily: 'Poppins',
                     fontSize: 17,
-                    fontWeight: FontWeight.w500,
+                    fontWeight: FontWeight.w600,
                   ),
                   SizedBox(width: 10),
                   AllText(
                     text: widget.phoneNumber,
                     fontFamily: 'Poppins',
                     fontSize: 14,
-                    fontWeight: FontWeight.w400,
+                    fontWeight: FontWeight.w500,
                   ),
                 ],
               ),
@@ -133,33 +152,37 @@ class _PaymentHistoryDetailState extends State<PaymentHistoryDetail> {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
                       children: [
                         AllText(text:'${AppLocalizations.of(context)!.dressName} :',
                           fontFamily: 'Poppins',
                           fontSize: 17,
-                          fontWeight: FontWeight.w500,),
+                          fontWeight: FontWeight.w600,),
                         SizedBox(width: 10),
                         AllText(
-                          text: data!.dressName.toString(),
+                          text: (data!.dressName == null || data!.dressName!.trim().isEmpty)
+                              ? "NA"
+                              : data!.dressName.toString(),
                           fontFamily: 'Poppins',
                           fontSize: 17,
-                          fontWeight: FontWeight.w300,
+                          fontWeight: FontWeight.w500,
                         ),
                       ],
                     ),
                     SizedBox(height: 8),
                     Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
                       children: [
                         AllText(text:'${AppLocalizations.of(context)!.advance_payment} :',
                           fontFamily: 'Poppins',
                           fontSize: 17,
-                          fontWeight: FontWeight.w500,),
+                          fontWeight: FontWeight.w600,),
                         SizedBox(width: 10),
                         AllText(
                           text: '₹${data!.advanceReceived.toString()}',
                           fontFamily: 'Poppins',
                           fontSize: 17,
-                          fontWeight: FontWeight.w300,
+                          fontWeight: FontWeight.w500,
                         ),
                       ],
                     ),
@@ -203,6 +226,7 @@ class _PaymentHistoryDetailState extends State<PaymentHistoryDetail> {
                     ),
                     SizedBox(height: 16),
                     // Total Payment
+                    Divider(),
                     Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
@@ -212,7 +236,7 @@ class _PaymentHistoryDetailState extends State<PaymentHistoryDetail> {
                         ),
                         Text(
                           '₹${data!.totalAmount.toString()}',
-                          style: TextStyle(fontSize: 16),
+                          style: TextStyle(fontWeight: FontWeight.bold,fontSize: 16,color: Colors.green),
                         ),
                       ],
                     ),

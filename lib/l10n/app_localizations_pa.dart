@@ -86,7 +86,7 @@ class AppLocalizationsPa extends AppLocalizations {
   }
 
   @override
-  String get yourAccount => 'ਤੁਹਾਡਾ ਖਾਤਾ';
+  String get yourAccount => 'ਮੇਰਾ ਖਾਤਾ';
 
   @override
   String get userName => 'ਨਾਮ';
@@ -661,6 +661,9 @@ class AppLocalizationsPa extends AppLocalizations {
       'ਸਭ ਤੋਂ ਪਹਿਲਾਂ ਦੱਸੋ ਅਸੀਂ ਤੁਹਾਨੂੰ ਕੀ ਕਹਿ ਕੇ ਬੁਲਾਈਏ?';
 
   @override
+  String get let_get_started => 'ਚਲੋ ਸ਼ੁਰੂ ਕਰਦੇ ਹਾਂ';
+
+  @override
   String get get_you_know_you => 'ਅਸੀਂ ਤੁਹਾਨੂੰ ਜਾਣਨਾ ਚਾਹੁੰਦੇ ਹਾਂ।';
 
   @override
@@ -672,4 +675,40 @@ class AppLocalizationsPa extends AppLocalizations {
 
   @override
   String get next => 'ਅਗਲਾ';
+
+  @override
+  String get general_details => 'ਆਮ ਵੇਰਵਾ';
+
+  @override
+  String get my_details => 'ਮੇਰੀ ਜਾਣਕਾਰੀ';
+
+  @override
+  String get notification_and_alert => 'ਸੂਚਨਾਵਾਂ ਅਤੇ ਚੇਤਾਵਨੀ';
+
+  @override
+  String get missed => 'ਗੁਆਚਿਆ';
+
+  @override
+  String get today => 'ਅੱਜ';
+
+  @override
+  String get this_week => 'ਇਸ ਹਫ਼ਤੇ';
+
+  @override
+  String get next_week => 'ਅਗਲੇ ਹਫ਼ਤੇ';
+
+  @override
+  String get later => 'ਬਾਅਦ ਵਿੱਚ';
+
+  @override
+  String get my_orders => 'ਮੇਰੇ ਆਰਡਰ';
+
+  @override
+  String get order_details => 'ਆਰਡਰ ਵੇਰਵੇ';
+
+  @override
+  String get stitching_history => 'ਸਿਲਾਈ ਇਤਿਹਾਸ';
+
+  @override
+  String get no_stitching_history => 'ਕੋਈ ਸਿਲਾਈ ਦਾ ਇਤਿਹਾਸ ਨਹੀਂ ਮਿਲਿਆ।';
 }

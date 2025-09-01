@@ -40,17 +40,36 @@ class _PaymentReceivedState extends State<PaymentReceived> {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: Colors.white,
-      appBar: CustomAppBarWithBack(
-          title: AppLocalizations.of(context)!.payment_received,
-          hasBackButton: true,
-          elevation: 2.0,
-          leadingIcon: SvgPicture.asset(
-            'assets/svgIcon/payment.svg', //just change my image with your image
+      appBar: AppBar(
+        title: Text(AppLocalizations.of(context)!.payment_received,
+          style: const TextStyle(
+            fontFamily: 'Poppins',
+            fontWeight: FontWeight.w600,
+            fontSize: 24,
           ),
-          onBackButtonPressed:  () {
-            Navigator.pop(context, true );
-          }
+          textAlign: TextAlign.center,),
+        backgroundColor: Colors.white,
+        elevation: 0,
+        centerTitle: true,
+        scrolledUnderElevation: 0,
+        leading: IconButton(
+          icon: Icon(Icons.arrow_back_ios),
+          onPressed: () async {
+            Navigator.pop(context, true);
+          },
+        ),
       ),
+      // CustomAppBarWithBack(
+      //     title: AppLocalizations.of(context)!.payment_received,
+      //     hasBackButton: true,
+      //     elevation: 2.0,
+      //     leadingIcon: SvgPicture.asset(
+      //       'assets/svgIcon/payment.svg', //just change my image with your image
+      //     ),
+      //     onBackButtonPressed:  () {
+      //       Navigator.pop(context, true );
+      //     }
+      // ),
       body: SingleChildScrollView(
         child: Padding(
           padding:  EdgeInsets.all(8.0),

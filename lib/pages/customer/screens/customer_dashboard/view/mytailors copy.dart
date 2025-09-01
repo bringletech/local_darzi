@@ -121,25 +121,54 @@ class _MyTailorsState extends State<MyTailors> {
           return false; // Prevent default back behavior
         },
         child: Scaffold(
-          appBar: CustomAppBarWithBack(
-            title: AppLocalizations.of(context)!.myTailor,
-            hasBackButton: true,
-            elevation: 2.0,
-            leadingIcon: SvgPicture.asset(
-              'assets/svgIcon/myTailor.svg', //just change my image with your image
-              color: Colors.black,
+          backgroundColor: Colors.white,
+          appBar: AppBar(
+            title: Text(
+              AppLocalizations.of(context)!.myTailor,
+              style: const TextStyle(
+                fontFamily: 'Poppins',
+                fontWeight: FontWeight.w600,
+                fontSize: 24,
+              ),
+              textAlign: TextAlign.center,
             ),
-            onBackButtonPressed: () async {
-              final result = await Navigator.push(
-                context,
-                MaterialPageRoute(
-                    builder: (context) => CustomerDashboardNew(
-                      locale: widget.locale,
-                    )),
-              );
-              Navigator.pop(context, true);
-            },
+            backgroundColor: Colors.white,
+            centerTitle: true,
+            elevation: 0,
+            scrolledUnderElevation: 0,
+            leading: IconButton(
+              icon: const Icon(Icons.arrow_back_ios),
+              onPressed: () async {
+                final result = await Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                      builder: (context) => CustomerDashboardNew(
+                        locale: widget.locale,
+                      )),
+                );
+                Navigator.pop(context, true);
+              },
+            ),
           ),
+          // CustomAppBarWithBack(
+          //   title: AppLocalizations.of(context)!.myTailor,
+          //   hasBackButton: true,
+          //   elevation: 2.0,
+          //   leadingIcon: SvgPicture.asset(
+          //     'assets/svgIcon/myTailor.svg', //just change my image with your image
+          //     color: Colors.black,
+          //   ),
+          //   onBackButtonPressed: () async {
+          //     final result = await Navigator.push(
+          //       context,
+          //       MaterialPageRoute(
+          //           builder: (context) => CustomerDashboardNew(
+          //             locale: widget.locale,
+          //           )),
+          //     );
+          //     Navigator.pop(context, true);
+          //   },
+          // ),
           body: isLoading
               ? const Center(
                   child: CircularProgressIndicator(

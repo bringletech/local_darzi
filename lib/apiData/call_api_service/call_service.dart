@@ -4,12 +4,14 @@ import 'package:darzi/apiData/model/add_new_customer_response_model.dart';
 import 'package:darzi/apiData/model/aws_response_model.dart';
 import 'package:darzi/apiData/model/current_customer_response_model.dart';
 import 'package:darzi/apiData/model/current_tailor_detail_response.dart';
+import 'package:darzi/apiData/model/current_tailor_response.dart';
 import 'package:darzi/apiData/model/customer_add_to_favourite_response_model.dart';
 import 'package:darzi/apiData/model/customer_delete_account_response_model.dart';
 import 'package:darzi/apiData/model/customer_delete_response_model.dart';
 import 'package:darzi/apiData/model/customer_favourite_response_model.dart';
 import 'package:darzi/apiData/model/customer_otp_verification_model.dart';
 import 'package:darzi/apiData/model/customer_payment_history_response_model.dart';
+import 'package:darzi/apiData/model/customer_register_response_model.dart';
 import 'package:darzi/apiData/model/customer_update_response_model.dart';
 import 'package:darzi/apiData/model/get_all_tailors_model.dart';
 import 'package:darzi/apiData/model/get_cancelled_order_response_model.dart';
@@ -31,9 +33,13 @@ import 'package:darzi/apiData/model/specific_customer_dress_details_model.dart';
 import 'package:darzi/apiData/model/specific_notification_response_model.dart';
 import 'package:darzi/apiData/model/specific_notification_review_response_model.dart';
 import 'package:darzi/apiData/model/specific_order_detail_response_model.dart';
+import 'package:darzi/apiData/model/specific_stitching_history_response_model.dart';
 import 'package:darzi/apiData/model/speicific_customer_mearsure_model.dart';
 import 'package:darzi/apiData/model/tailor_List_Response_Model.dart';
 import 'package:darzi/apiData/model/tailor_account_delete_response_model.dart';
+import 'package:darzi/apiData/model/tailor_completed_dress_response_model.dart';
+import 'package:darzi/apiData/model/tailor_hide_response_model.dart';
+import 'package:darzi/apiData/model/tailor_notification_disable_response_model.dart';
 import 'package:darzi/apiData/model/tailor_profile_update_response_model.dart';
 import 'package:darzi/apiData/model/tailor_registration_response_model.dart';
 import 'package:darzi/apiData/model/tailor_review_list_response_model.dart';
@@ -117,8 +123,8 @@ class CallService extends GetConnect{
     }
   }
 
-  //3). For Getting Current Tailor Details
-  Future<Current_Tailor_Response> getCurrentTailorDetails() async {
+  //4). For Getting Current Tailor Details
+  Future<Current_Tailor_Details_Response> getCurrentTailorDetails() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     String? accessToken = prefs.getString('userToken');
     print("User Access Token Value is : $accessToken");
@@ -127,6 +133,107 @@ class CallService extends GetConnect{
       'accept': 'application/json',
       'Authorization': "Bearer $accessToken",
     });
+    print("User Access Token Value is : ${res.statusCode}");
+    if (res.statusCode == 200) {
+      return Current_Tailor_Details_Response.fromJson(res.body);
+    } else {
+      throw Fluttertoast.showToast(
+          msg: res.body["message"],
+          toastLength: Toast.LENGTH_SHORT,
+          gravity: ToastGravity.CENTER,
+          timeInSecForIosWeb: 1,
+          backgroundColor: Colors.black,
+          textColor: Colors.white,
+          fontSize: 16.0);
+    }
+  }
+
+  //5). For Getting Current Tailor Completed Dress List
+  Future<Tailor_Completed_Dress_Response_Model> getCurrentTailorCompletedDress() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    String? accessToken = prefs.getString('userToken');
+    print("User Access Token Value is : $accessToken");
+    httpClient.baseUrl = apiBaseUrl;
+    var res = await get('tailor/getCompletedDressesOfTailor', headers: {
+      'accept': 'application/json',
+      'Authorization': "Bearer $accessToken",
+    });
+    print("User Access Token Value is : ${res.statusCode}");
+    if (res.statusCode == 200) {
+      return Tailor_Completed_Dress_Response_Model.fromJson(res.body);
+    } else {
+      throw Fluttertoast.showToast(
+          msg: res.body["message"],
+          toastLength: Toast.LENGTH_SHORT,
+          gravity: ToastGravity.CENTER,
+          timeInSecForIosWeb: 1,
+          backgroundColor: Colors.black,
+          textColor: Colors.white,
+          fontSize: 16.0);
+    }
+  }
+
+  //6). For Getting Current Tailor Completed Dress List(Filter By Month)
+  Future<Tailor_Completed_Dress_Response_Model> getCurrentTailorFilterCompletedDress(String month, String year) async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    String? accessToken = prefs.getString('userToken');
+    print("User Access Token Value is : $accessToken");
+    httpClient.baseUrl = apiBaseUrl;
+    var res = await get('tailor/getFilteredCompletedDressessOfTailor?month=$month&year=$year', headers: {
+      'accept': 'application/json',
+      'Authorization': "Bearer $accessToken",
+    });
+    print("User Access Token Value is : ${res.statusCode}");
+    if (res.statusCode == 200) {
+      return Tailor_Completed_Dress_Response_Model.fromJson(res.body);
+    } else {
+      throw Fluttertoast.showToast(
+          msg: res.body["message"],
+          toastLength: Toast.LENGTH_SHORT,
+          gravity: ToastGravity.CENTER,
+          timeInSecForIosWeb: 1,
+          backgroundColor: Colors.black,
+          textColor: Colors.white,
+          fontSize: 16.0);
+    }
+  }
+
+  //7). For Getting Specific Completed Order Details
+  Future<Specific_Stitching_History_Response_Model> getSpecificHistoryOrderDetails(String orderId) async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    String? accessToken = prefs.getString('userToken');
+    print("User Access Token Value is : $accessToken");
+    httpClient.baseUrl = apiBaseUrl;
+    var res = await get('tailor/getSpecificCompletedDressOfTailor/$orderId', headers: {
+      'accept': 'application/json',
+      'Authorization': "Bearer $accessToken",
+    });
+    print("User Access Token Value is : ${res.statusCode}");
+    if (res.statusCode == 200) {
+      return Specific_Stitching_History_Response_Model.fromJson(res.body);
+    } else {
+      throw Fluttertoast.showToast(
+          msg: res.body["message"],
+          toastLength: Toast.LENGTH_SHORT,
+          gravity: ToastGravity.CENTER,
+          timeInSecForIosWeb: 1,
+          backgroundColor: Colors.black,
+          textColor: Colors.white,
+          fontSize: 16.0);
+    }
+  }
+
+  //8). For Getting Current Tailor Details
+  Future<Current_Tailor_Response> getCurrentTailorCustomerDetails() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    String? accessToken = prefs.getString('userToken');
+    print("User Access Token Value is : $accessToken");
+    httpClient.baseUrl = apiBaseUrl;
+    var res = await get('tailor/getCurrentTailor', headers: {
+      'accept': 'application/json',
+      'Authorization': "Bearer $accessToken",
+    });
+    print("User Access Token Value is : ${res.statusCode}");
     if (res.statusCode == 200) {
       return Current_Tailor_Response.fromJson(res.body);
     } else {
@@ -141,7 +248,8 @@ class CallService extends GetConnect{
     }
   }
 
-  //3). For Getting Current Tailor Details
+
+  //9). For Getting Current Tailor Details
   Future<My_Tailor_Details_Respone_Model> getMyTailorDetails(String tailorId) async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     String? accessToken = prefs.getString('userToken');
@@ -179,7 +287,7 @@ class CallService extends GetConnect{
   }
 
 
-  //4). For Getting Specific Customer's Measurement  Details
+  //10). For Getting Specific Customer's Measurement  Details
   Future<Specific_Cutomer_Measurement_Response_Model> getSpecificCustomerMeasurementDetails(String customerId) async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     String? accessToken = prefs.getString('userToken');
@@ -206,7 +314,7 @@ class CallService extends GetConnect{
     }
   }
 
-  //5). For Getting Specific Customer Dress Details
+  //11). For Getting Specific Customer Dress Details
   Future<Specific_Customer_Dress_Details_Model> getSpecificCustomerDressDetails(String customerId) async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     String? accessToken = prefs.getString('userToken');
@@ -233,7 +341,7 @@ class CallService extends GetConnect{
     }
   }
 
-  //6). For Updating Measurement Details
+  //12). For Updating Measurement Details
   Future<Update_Customer_Measurement_Details_Model> updateCustomerMeasurementDressDetails(dynamic body) async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     String? accessToken = prefs.getString('userToken');
@@ -259,7 +367,7 @@ class CallService extends GetConnect{
     }
   }
 
-  //7). For Verifying Measurement Details
+  //13). For Verifying Measurement Details
   Future<Mobile_Verify_Model> verifyCustomerMobile(dynamic body) async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     String? accessToken = prefs.getString('userToken');
@@ -286,7 +394,7 @@ class CallService extends GetConnect{
     }
   }
 
-  //8). For Updating The Dress Status
+  //14). For Updating The Dress Status
   Future<Order_Status_Change_Model> updateDreesOrderStatus(dynamic body) async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     String? accessToken = prefs.getString('userToken');
@@ -313,7 +421,7 @@ class CallService extends GetConnect{
     }
   }
 
-  //9). For Getting The Specific Dress Details
+  //15). For Getting The Specific Dress Details
   Future<Specific_Order_Detail_Response_Model> getSpecificDreesDetails(String dressId) async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     String? accessToken = prefs.getString('userToken');
@@ -340,7 +448,7 @@ class CallService extends GetConnect{
     }
   }
 
-  //10). For Updating The Dress Status
+  //16). For Updating The Dress Status
   Future<CustomerDeleteResponseModel> removeCustomerFromList(dynamic body) async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     String? accessToken = prefs.getString('userToken');
@@ -368,7 +476,7 @@ class CallService extends GetConnect{
     }
   }
 
-//11). For Deleting Tailor Account
+//17). For Deleting Tailor Account
   Future<Tailor_Account_Delete_Response_Model> removeTailor() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     String? accessToken = prefs.getString('userToken');
@@ -394,7 +502,7 @@ class CallService extends GetConnect{
     }
   }
 
-//12). For Calling Aws in For Uploading Profile Picture User/Counsellor
+//18). For Calling Aws in For Uploading Profile Picture User/Counsellor
   Future<AwsResponseModel> getAwsUrl(String fileType,folder_name) async {
     httpClient.baseUrl = apiBaseUrl;
     print("Story Response is ${fileType}");
@@ -418,7 +526,7 @@ class CallService extends GetConnect{
     }
   }
 
-//13). For Updating Tailor Profile(With Image/Without Image)
+//19). For Updating Tailor Profile(With Image/Without Image)
   Future<Tailor_Profile_Update_Response_Model> updateTailorProfile(dynamic body) async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     String? accessToken = prefs.getString('userToken');
@@ -444,7 +552,7 @@ class CallService extends GetConnect{
     }
   }
 
-//14). For Adding New Customer
+//20). For Adding New Customer
   Future<Add_New_Customer_Response_Model> addNewCustomer(dynamic body) async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     String? accessToken = prefs.getString('userToken');
@@ -470,7 +578,7 @@ class CallService extends GetConnect{
     }
   }
 
-//15). For Adding New Order For Specific Customer
+//21). For Adding New Order For Specific Customer
   Future<Add_New_Customer_Order_Response_Model> addNewCustomerOrder(dynamic body) async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     String? accessToken = prefs.getString('userToken');
@@ -496,12 +604,66 @@ class CallService extends GetConnect{
     }
   }
 
+  //22). For Hiding Tailor Number
+  Future<Tailor_Hide_Response_Model> hide_tailor_number(dynamic body) async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    String? accessToken = prefs.getString('userToken');
+    print("User Access Token Value is : $accessToken");
+    print("User Access Token Value is : $body");
+    httpClient.baseUrl = apiBaseUrl;
+    var res = await patch('tailor/toggle-hide-mobile-no',body, headers: {
+      'accept': 'application/json',
+      'Authorization': "Bearer $accessToken",
+    });
+
+    print("Tailor Number Response is ${res.statusCode}");
+    if (res.statusCode == 200) {
+      return Tailor_Hide_Response_Model.fromJson(res.body);
+    } else {
+      throw Fluttertoast.showToast(
+          msg: res.body["message"],
+          toastLength: Toast.LENGTH_SHORT,
+          gravity: ToastGravity.CENTER,
+          timeInSecForIosWeb: 1,
+          backgroundColor: AppColors.newUpdateColor,
+          textColor: Colors.white,
+          fontSize: 16.0);
+    }
+  }
+
+  //23). For Enabling Tailor Notification
+  Future<Tailor_Notification_Disable_Response_Model> enable_tailor_number(dynamic body) async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    String? accessToken = prefs.getString('userToken');
+    print("User Access Token Value is : $accessToken");
+    print("User Access Token Value is : $body");
+    httpClient.baseUrl = apiBaseUrl;
+    var res = await patch('tailor/toggle-notification',body, headers: {
+      'accept': 'application/json',
+      'Authorization': "Bearer $accessToken",
+    });
+
+    print("Tailor Number Response is ${res.statusCode}");
+    if (res.statusCode == 200) {
+      return Tailor_Notification_Disable_Response_Model.fromJson(res.body);
+    } else {
+      throw Fluttertoast.showToast(
+          msg: res.body["message"],
+          toastLength: Toast.LENGTH_SHORT,
+          gravity: ToastGravity.CENTER,
+          timeInSecForIosWeb: 1,
+          backgroundColor: AppColors.newUpdateColor,
+          textColor: Colors.white,
+          fontSize: 16.0);
+    }
+  }
+
 
   //Customer
 //1). For Getting Otp(For Customer)
   Future<LoginResponseModel> customerLogin(dynamic body) async {
     httpClient.baseUrl = apiBaseUrl;
-    var res = await post('customer/login', body, headers: {
+    var res = await post('customer/get-otp', body, headers: {
       'accept': 'application/json',
       /*'Authorization': "Bearer $accessToken",*/
     });
@@ -542,7 +704,30 @@ class CallService extends GetConnect{
     }
   }
 
-  //3). For updating details in profile of customer
+  //3). For Registering New Customer
+  Future<Customer_Register_Response_Model> customer_registeration(dynamic body) async {
+    httpClient.baseUrl = apiBaseUrl;
+    var res = await post('customer/register', body, headers: {
+      'accept': 'application/json',
+      /*'Authorization': "Bearer $accessToken",*/
+    });
+    print("Customer Register Response is : ${res.statusCode.toString()}");
+    if (res.statusCode == 200) {
+      print("Customer Register Response is : ${res.statusCode.toString()}");
+      return Customer_Register_Response_Model.fromJson(res.body);
+    }else{
+      throw Fluttertoast.showToast(
+          msg: res.body["message"],
+          toastLength: Toast.LENGTH_SHORT,
+          gravity: ToastGravity.CENTER,
+          timeInSecForIosWeb: 1,
+          backgroundColor: Colors.black,
+          textColor: Colors.white,
+          fontSize: 16.0);
+    }
+  }
+
+  //4). For updating details in profile of customer
   Future<Update_Customer_Profile_response_Model> customerUpdateProfile(dynamic body) async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     String? accessToken = prefs.getString('userToken');
@@ -570,7 +755,7 @@ class CallService extends GetConnect{
     }
   }
 
-  //4. For Getting Current Customer Details
+  //5. For Getting Current Customer Details
   Future<Current_Customer_response_Model> getCurrentCustomerDetails() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     String? accessToken = prefs.getString('userToken');
@@ -594,7 +779,7 @@ class CallService extends GetConnect{
     }
   }
 
-  //5. For Getting All tailors list
+  //6. For Getting All tailors list
   Future<Get_All_Tailors_response_Model> getAllTailorsList() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     String? accessToken = prefs.getString('userToken');
@@ -627,7 +812,7 @@ class CallService extends GetConnect{
   }
 
 
-  //6). For Getting My Tailor List And Order List
+  //7). For Getting My Tailor List And Order List
   Future<Get_Current_Customer_Response_Model> getMyTailorList_order() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     String? accessToken = prefs.getString('userToken');
@@ -651,7 +836,7 @@ class CallService extends GetConnect{
     }
   }
 
-  //7). For Getting My Tailor List And Order List
+  //8). For Getting My Tailor List And Order List
   Future<Customer_Favourites_Response_Model> getMyFavourite_TailorList() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     String? accessToken = prefs.getString('userToken');
@@ -675,7 +860,7 @@ class CallService extends GetConnect{
     }
   }
 
-//8). For Getting My Tailor Review List
+//9). For Getting My Tailor Review List
   Future<Get_Customer_Tailor_Reviews_Response_Model> get_Tailor_Review_List(String tailorId) async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     String? accessToken = prefs.getString('userToken');
@@ -714,7 +899,7 @@ class CallService extends GetConnect{
   }
 
 
-  //9). For Getting My Tailor List And Order List
+  //10). For Getting My Tailor List And Order List
   Future<Tailor_List_Response_Model> getMyTailorList(int page,int pageLimit) async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     String? accessToken = prefs.getString('userToken');
@@ -738,7 +923,7 @@ class CallService extends GetConnect{
     }
   }
 
-  //10). For Getting Specific Customer Dress Details
+  //11). For Getting Specific Customer Dress Details
   Future<Specific_Customer_Dress_Detail_Response_Model> getCustomerSpecificDressDetail(String dressId) async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     String? accessToken = prefs.getString('userToken');
@@ -762,7 +947,7 @@ class CallService extends GetConnect{
     }
   }
 
-  //11). For Getting Specific Customer Notification Details
+  //12). For Getting Specific Customer Notification Details
   Future<SpecificNotificationResponseModel> getCustomerSpecificNotificationDetail(String notificationId) async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     String? accessToken = prefs.getString('userToken');
@@ -786,7 +971,7 @@ class CallService extends GetConnect{
     }
   }
 
-  //12). For Getting Specific Tailor Review Details
+  //13). For Getting Specific Tailor Review Details
   Future<Specific_Notification_Review_Response_Model> getSpecificTailorReviewNotificationDetail(String notificationId) async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     String? accessToken = prefs.getString('userToken');
@@ -810,7 +995,7 @@ class CallService extends GetConnect{
     }
   }
 
-  //13). For Getting Specific Customer Payment
+  //14). For Getting Specific Customer Payment
   Future<Receive_Payment_Response_Model> customerDressPayment(dynamic body) async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     String? accessToken = prefs.getString('userToken');
@@ -835,7 +1020,7 @@ class CallService extends GetConnect{
     }
   }
 
-  //13). For Adding Specific Tailor As A Favourite
+  //15). For Adding Specific Tailor As A Favourite
   Future<Customer_Add_To_Favourite_Response_Model> add_Tailor_To_Favourites(dynamic body) async {
     httpClient.baseUrl = apiBaseUrl;
     SharedPreferences prefs = await SharedPreferences.getInstance();
@@ -861,7 +1046,7 @@ class CallService extends GetConnect{
     }
   }
 
-  //14). For Getting Tailor Review
+  //16). For Getting Tailor Review
   Future<Get_Tailor_Review_Response_Model> getCurrentTailorReviewDetails() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     String? accessToken = prefs.getString('userToken');
@@ -886,7 +1071,7 @@ class CallService extends GetConnect{
     }
   }
 
-  //15). For Getting Tailor Monthly Sales
+  //17). For Getting Tailor Monthly Sales
   Future<Monthly_Sales_Tailor_Response_Model> getTailorMonthlySales(String month, String year) async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     String? accessToken = prefs.getString('userToken');
@@ -911,7 +1096,7 @@ class CallService extends GetConnect{
     }
   }
 
-  //16). For Getting Outstanding Balance Of Tailor
+  //18). For Getting Outstanding Balance Of Tailor
   Future<Tailor_Outstanding_Balance_Response_Model> getTailorOutstandingBalance() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     String? accessToken = prefs.getString('userToken');
@@ -937,7 +1122,7 @@ class CallService extends GetConnect{
   }
 
 
-  //17). For Getting Cancelled order
+  //19). For Getting Cancelled order
   Future<GetCancelled_Order_Response_Model> getCancelledOrder() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     String? accessToken = prefs.getString('userToken');
@@ -962,7 +1147,7 @@ class CallService extends GetConnect{
     }
   }
 
-  //18). For Getting PaymentDone order
+  //20). For Getting PaymentDone order
   Future<GetPaymentDoneListResponseModel> getPaymentDoneOrder(String month, String year) async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     String? accessToken = prefs.getString('userToken');
@@ -987,7 +1172,7 @@ class CallService extends GetConnect{
     }
   }
 
-  //19). For Getting Notification
+  //21). For Getting Notification
   Future<NotificationResponseModel> getNotification() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     String? accessToken = prefs.getString('userToken');
@@ -1012,7 +1197,7 @@ class CallService extends GetConnect{
     }
   }
 
-  //20). For Reopening Cancelled Order
+  //22). For Reopening Cancelled Order
   Future<Re_Open_Cancelled_Order_Response_Model> reopenOrder(dynamic body) async {
     print("otp body value is $body");
     SharedPreferences prefs = await SharedPreferences.getInstance();
@@ -1037,7 +1222,7 @@ class CallService extends GetConnect{
     }
   }
 
-  //21). For Getting Customer Payment History List
+  //23). For Getting Customer Payment History List
   Future<Customer_Payment_History_Response_Model> getPaymentHistory(String customerId,page,limit) async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     String? accessToken = prefs.getString('userToken');
@@ -1063,7 +1248,7 @@ class CallService extends GetConnect{
     }
   }
 
-  //22). For Getting Customer Payment History List
+  //24). For Getting Customer Payment History List
   Future<Particular_Customer_Order_Payment_History_Response_Model> getParticularOrderPaymentHistory(String orderId) async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     String? accessToken = prefs.getString('userToken');
@@ -1089,7 +1274,7 @@ class CallService extends GetConnect{
     }
   }
 
-  //23). For Deleting Customer Account
+  //25). For Deleting Customer Account
   Future<Customer_Delete_Account_Response_Model> removeCustomer() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     String? accessToken = prefs.getString('userToken');
@@ -1115,7 +1300,7 @@ class CallService extends GetConnect{
     }
   }
 
-//24). For Updating Customer Profile(With Image/Without Image)
+//26). For Updating Customer Profile(With Image/Without Image)
   Future<Customer_Update_Response_Model> updateCustomerProfile(dynamic body) async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     String? accessToken = prefs.getString('userToken');
@@ -1142,7 +1327,7 @@ class CallService extends GetConnect{
   }
 
 
-//25).For Uploading Tailor Review By Customer(With Image/Without Image)
+//27).For Uploading Tailor Review By Customer(With Image/Without Image)
   Future<Tailor_Review_Response_Model> uploadTailorReviewByCustomer(dynamic body) async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     String? accessToken = prefs.getString('userToken');
@@ -1156,6 +1341,33 @@ class CallService extends GetConnect{
     print("Story Response is ${res.statusCode}");
     if (res.statusCode == 201) {
       return Tailor_Review_Response_Model.fromJson(res.body);
+    } else {
+      throw Fluttertoast.showToast(
+          msg: res.body["message"],
+          toastLength: Toast.LENGTH_SHORT,
+          gravity: ToastGravity.CENTER,
+          timeInSecForIosWeb: 1,
+          backgroundColor: AppColors.newUpdateColor,
+          textColor: Colors.white,
+          fontSize: 16.0);
+    }
+  }
+
+  //28). For Enabling Customer Notification
+  Future<Tailor_Notification_Disable_Response_Model> enable_customer_number(dynamic body) async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    String? accessToken = prefs.getString('userToken');
+    print("User Access Token Value is : $accessToken");
+    print("User Access Token Value is : $body");
+    httpClient.baseUrl = apiBaseUrl;
+    var res = await patch('customer/toggle-notification',body, headers: {
+      'accept': 'application/json',
+      'Authorization': "Bearer $accessToken",
+    });
+
+    print("Tailor Number Response is ${res.statusCode}");
+    if (res.statusCode == 200) {
+      return Tailor_Notification_Disable_Response_Model.fromJson(res.body);
     } else {
       throw Fluttertoast.showToast(
           msg: res.body["message"],

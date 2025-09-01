@@ -28,7 +28,7 @@ class _OtpVerificationPageState extends State<OtpVerificationPage> {
   List.generate(6, (index) => TextEditingController());
   int _secondsRemaining = 30;
   bool isLoading = false;
-  String otp  = "",phoneNumber = "";
+  String otp  = "",phoneNumber = "",deviceToken = "";
   Timer? _timer;
 
   @override
@@ -36,6 +36,13 @@ class _OtpVerificationPageState extends State<OtpVerificationPage> {
     super.initState();
     phoneNumber = widget.phoneNumber;
     startTimer();
+    getDeviceToken();
+  }
+
+  Future<void> getDeviceToken() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    deviceToken = prefs.getString('deviceToken')!;
+    print("My Device Token Value is: $deviceToken");
   }
 
   void startTimer() {
@@ -294,6 +301,8 @@ class _OtpVerificationPageState extends State<OtpVerificationPage> {
     var map = <String, dynamic>{};
     map['mobileNo'] = phoneNumber;
     map['otp'] = otp;
+    map['device_fcm_token'] = deviceToken;
+    print("Tailor Otp Value is $map");
     isLoading = true;
     WidgetsBinding.instance.addPostFrameCallback((_) async {
       OtpVerificationResponseModel model =

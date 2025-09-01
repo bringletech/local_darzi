@@ -101,18 +101,36 @@ class _TailorReportState extends State<TailorReport> {
         constraints: BoxConstraints(maxHeight: MediaQuery.of(context).size.height,),
         child: Scaffold(
           backgroundColor: Colors.white,
-          appBar: CustomAppBarWithBack(
-              title: AppLocalizations.of(context)!.report,
-              hasBackButton: true,
-              elevation: 2.0,
-              leadingIcon: SvgPicture.asset(
-                'assets/svgIcon/report.svg',
-                //just change my image with your image
-                color: Colors.black,
+          appBar: AppBar(
+            title: Text(AppLocalizations.of(context)!.report,
+              style: const TextStyle(
+                fontFamily: 'Poppins',
+                fontWeight: FontWeight.w600,
+                fontSize: 24,
               ),
-              onBackButtonPressed: () async {
+              textAlign: TextAlign.center,),
+            backgroundColor: Colors.white,
+            centerTitle: true, // 👈 yeh add karo
+            elevation: 0,
+            leading: IconButton(
+              icon: Icon(Icons.arrow_back_ios),
+              onPressed: () async {
                 Navigator.pop(context, true);
-              }),
+              },
+            ),
+          ),
+          // CustomAppBarWithBack(
+          //     title: AppLocalizations.of(context)!.report,
+          //     hasBackButton: true,
+          //     elevation: 2.0,
+          //     leadingIcon: SvgPicture.asset(
+          //       'assets/svgIcon/report.svg',
+          //       //just change my image with your image
+          //       color: Colors.black,
+          //     ),
+          //     onBackButtonPressed: () async {
+          //       Navigator.pop(context, true);
+          //     }),
           body: Padding(
             padding: const EdgeInsets.all(12.0),
             child: Column(
@@ -133,7 +151,7 @@ class _TailorReportState extends State<TailorReport> {
                         ? "${DateFormat('MMMM').format(DateTime(int.parse(selectedYear), int.parse(selectedMonth)))} $selectedYear"
                         : DateFormat('MMMM yyyy').format(_selectedDate), // Default: Current month-year
                     style: const TextStyle(
-                      fontWeight: FontWeight.w400,
+                      fontWeight: FontWeight.w600,
                       fontFamily: 'Poppins',
                       fontSize: 17,
                     ),
@@ -246,39 +264,44 @@ class _TailorReportState extends State<TailorReport> {
     VoidCallback? onTap,
   }) {
     final card = Container(
-      width: MediaQuery.of(context).size.width * 0.45, // responsive width
-      padding: const EdgeInsets.all(12),
+      width: MediaQuery.of(context).size.width * 0.42, // responsive width
+      padding: const EdgeInsets.symmetric(vertical: 16, horizontal: 8),
       decoration: BoxDecoration(
         color: Colors.white,
-        borderRadius: BorderRadius.circular(12),
-        boxShadow: const [
-          BoxShadow(
-            color: Colors.black12,
-            blurRadius: 4,
-            spreadRadius: 1,
-            offset: Offset(2, 2),
-          ),
-        ],
+        borderRadius: BorderRadius.circular(8),
+        border: Border.all(
+          color: AppColors.newUpdateColor, // orange border
+          width: 1.5,
+        ),
       ),
       child: Column(
         mainAxisSize: MainAxisSize.min,
         children: [
           Text(
             title,
-            style:TextStyle(
-              fontSize: 16, color: Colors.black,
-              fontWeight: FontWeight.w600,
+            style: const TextStyle(
+              fontSize: 14,
+              color: Colors.black,
+              fontWeight: FontWeight.w700,
             ),
             textAlign: TextAlign.center,
           ),
-          SizedBox(height: 6),
+          const SizedBox(height: 6),
           Text(
             value,
-            style: TextStyle(fontSize: 20, fontWeight: FontWeight.w400),
+            style: const TextStyle(
+              fontSize: 18,
+              fontWeight: FontWeight.bold,
+              color: Colors.black,
+            ),
           ),
         ],
       ),
     );
-    return onTap != null ? GestureDetector(onTap: onTap, child: card) : card;
+
+    return onTap != null
+        ? GestureDetector(onTap: onTap, child: card)
+        : card;
   }
+
 }

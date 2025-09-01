@@ -1,11 +1,16 @@
-import 'package:darzi/colors.dart';
 import 'package:flutter/material.dart';
+import 'package:darzi/colors.dart'; // aapke color file ka path
 
 class AnimatedSwitch extends StatefulWidget {
   final bool value;
   final ValueChanged<bool> onChanged;
   final Color enabledTrackColor;
-  AnimatedSwitch({required this.value,required this.enabledTrackColor,required this.onChanged});
+
+  AnimatedSwitch({
+    required this.value,
+    required this.enabledTrackColor,
+    required this.onChanged,
+  });
 
   @override
   _AnimatedSwitchState createState() => _AnimatedSwitchState();
@@ -13,13 +18,24 @@ class AnimatedSwitch extends StatefulWidget {
 
 class _AnimatedSwitchState extends State<AnimatedSwitch> {
   late bool isEnabled;
-  final animationDuration = Duration(milliseconds: 500);
+  final Duration animationDuration = Duration(milliseconds: 300);
 
   @override
   void initState() {
     super.initState();
     isEnabled = widget.value;
   }
+
+  @override
+  void didUpdateWidget(covariant AnimatedSwitch oldWidget) {
+    super.didUpdateWidget(oldWidget);
+    if (widget.value != oldWidget.value) {
+      setState(() {
+        isEnabled = widget.value; // parent se value change hone par update
+      });
+    }
+  }
+
 
   @override
   Widget build(BuildContext context) {
@@ -31,19 +47,24 @@ class _AnimatedSwitchState extends State<AnimatedSwitch> {
         });
       },
       child: AnimatedContainer(
-        height: 20,
-        width: 45,
+        height: 25,
+        width: 50,
         duration: animationDuration,
         decoration: BoxDecoration(
           borderRadius: BorderRadius.circular(25),
-          color: isEnabled ? Color(0xff808080) : AppColors.newUpdateColor,
+          color: isEnabled
+              ? AppColors.newUpdatedColor // ON color
+              :widget.enabledTrackColor, // OFF color
         ),
         child: AnimatedAlign(
           duration: animationDuration,
-          alignment: isEnabled ? Alignment.centerRight : Alignment.centerLeft,
+          alignment:
+          isEnabled ? Alignment.centerRight : Alignment.centerLeft,
+          curve: Curves.easeInOut,
           child: Container(
-            width: 19,
-            height: 30,
+            width: 22,
+            height: 22,
+            margin: EdgeInsets.all(1.5),
             decoration: BoxDecoration(
               shape: BoxShape.circle,
               color: Colors.white,
@@ -52,4 +73,5 @@ class _AnimatedSwitchState extends State<AnimatedSwitch> {
         ),
       ),
     );
-  }}
+  }
+}

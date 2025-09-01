@@ -43,20 +43,47 @@ class _TailorNotificationScreenState extends State<TailorNotificationScreen> {
       child: Scaffold(
         extendBody: true,
         backgroundColor: Colors.white,
-        appBar: CustomAppBarWithBack(
-          title: AppLocalizations.of(context)!.application_notifications,
-          hasBackButton: true,
-          elevation: 2.0,
-          onBackButtonPressed: () {
-            Navigator.pushReplacement(
-              context,
-              MaterialPageRoute(
-                  builder: (context) => TailorDashboardNew(
-                    locale: widget.locale!,
-                  )),
-            );
-          },
+        appBar: AppBar(
+          title: Text(
+            AppLocalizations.of(context)!.application_notifications,
+            style: const TextStyle(
+              fontFamily: 'Poppins',
+              fontWeight: FontWeight.w600,
+              fontSize: 24,
+            ),
+            textAlign: TextAlign.center,
+          ),
+          backgroundColor: Colors.white,
+          centerTitle: true, // 👈 yeh add karo
+          elevation: 0,
+          scrolledUnderElevation: 0,
+          leading: IconButton(
+            icon: const Icon(Icons.arrow_back_ios),
+            onPressed: () async {
+              Navigator.pushReplacement(
+                context,
+                MaterialPageRoute(
+                    builder: (context) => TailorDashboardNew(
+                      locale: widget.locale!,
+                    )),
+              );
+            },
+          ),
         ),
+        // CustomAppBarWithBack(
+        //   title: AppLocalizations.of(context)!.application_notifications,
+        //   hasBackButton: true,
+        //   elevation: 2.0,
+        //   onBackButtonPressed: () {
+        //     Navigator.pushReplacement(
+        //       context,
+        //       MaterialPageRoute(
+        //           builder: (context) => TailorDashboardNew(
+        //             locale: widget.locale!,
+        //           )),
+        //     );
+        //   },
+        // ),
         body: isLoading
             ? const Center(
             child: CircularProgressIndicator(

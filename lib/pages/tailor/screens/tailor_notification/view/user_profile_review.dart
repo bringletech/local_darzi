@@ -98,26 +98,53 @@ class _UserProfileReviewState extends State<UserProfileReview> {
         return false; // Prevent default back behavior
       },
       child: Scaffold(
-        appBar: CustomAppBarWithBack(
-          title: AppLocalizations.of(context)!.my_review,
-          // title: AppLocalizations.of(context)!.tailorDetail ,
-          hasBackButton: true,
-          elevation: 2.0,
-          onBackButtonPressed: () async {
-            final result = await Navigator.push(
-              context,
-              MaterialPageRoute(
-                  builder: (context) => TailorNotificationScreen(
-                        locale: widget.locale!,
-                      )),
-            );
-            Navigator.pop(context, true);
-          },
-          leadingIcon: SvgPicture.asset(
-            'assets/svgIcon/myTailor.svg',
-            color: Colors.black,
+        appBar: AppBar(
+          title: Text(
+            AppLocalizations.of(context)!.my_review,
+            style: const TextStyle(
+              fontFamily: 'Poppins',
+              fontWeight: FontWeight.w600,
+              fontSize: 24,
+            ),
+            textAlign: TextAlign.center,
+          ),
+          backgroundColor: Colors.white,
+          centerTitle: true, // 👈 yeh add karo
+          elevation: 0,
+          scrolledUnderElevation: 0,
+          leading: IconButton(
+            icon: const Icon(Icons.arrow_back_ios),
+            onPressed: () async {
+              Navigator.pushReplacement(
+                context,
+                MaterialPageRoute(
+                    builder: (context) => TailorNotificationScreen(
+                      locale: widget.locale!,
+                    )),
+              );
+            },
           ),
         ),
+        // CustomAppBarWithBack(
+        //   title: AppLocalizations.of(context)!.my_review,
+        //   // title: AppLocalizations.of(context)!.tailorDetail ,
+        //   hasBackButton: true,
+        //   elevation: 2.0,
+        //   onBackButtonPressed: () async {
+        //     final result = await Navigator.push(
+        //       context,
+        //       MaterialPageRoute(
+        //           builder: (context) => TailorNotificationScreen(
+        //                 locale: widget.locale!,
+        //               )),
+        //     );
+        //     Navigator.pop(context, true);
+        //   },
+        //   leadingIcon: SvgPicture.asset(
+        //     'assets/svgIcon/myTailor.svg',
+        //     color: Colors.black,
+        //   ),
+        // ),
         body: isLoading == true?Center(child: CircularProgressIndicator(color: AppColors.primaryRed,),):
         SingleChildScrollView(
           child: Column(

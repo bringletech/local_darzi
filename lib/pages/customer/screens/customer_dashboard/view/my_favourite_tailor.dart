@@ -164,26 +164,54 @@ class _MyFavouriteTailorDetailsState extends State<MyFavouriteTailorDetails> {
     },
       child: Scaffold(
         backgroundColor: Colors.white,
-        appBar: CustomAppBarWithBack(
-          title: AppLocalizations.of(context)!.myTailor,
-          // title: AppLocalizations.of(context)!.tailorDetail ,
-          hasBackButton: true,
-          elevation: 2.0,
-          onBackButtonPressed: () async {
-            final result = await Navigator.push(
-              context,
-              MaterialPageRoute(
-                  builder: (context) => CustomerDashboardNew(
-                    locale: widget.locale,
-                  )),
-            );
-            Navigator.pop(context, true);
-          },
-          leadingIcon: SvgPicture.asset(
-            'assets/svgIcon/myTailor.svg',
-            color: Colors.black,
+        appBar: AppBar(
+          title: Text(
+            AppLocalizations.of(context)!.myTailor,
+            style: const TextStyle(
+              fontFamily: 'Poppins',
+              fontWeight: FontWeight.w600,
+              fontSize: 24,
+            ),
+            textAlign: TextAlign.center,
+          ),
+          backgroundColor: Colors.white,
+          centerTitle: true, // 👈 yeh add karo
+          elevation: 0,
+          scrolledUnderElevation: 0,
+          leading: IconButton(
+            icon: const Icon(Icons.arrow_back_ios),
+            onPressed: () async {
+              final result = await Navigator.push(
+                context,
+                MaterialPageRoute(
+                    builder: (context) => CustomerDashboardNew(
+                      locale: widget.locale,
+                    )),
+              );
+              Navigator.pop(context, true);
+            },
           ),
         ),
+        // CustomAppBarWithBack(
+        //   title: AppLocalizations.of(context)!.myTailor,
+        //   // title: AppLocalizations.of(context)!.tailorDetail ,
+        //   hasBackButton: true,
+        //   elevation: 2.0,
+        //   onBackButtonPressed: () async {
+        //     final result = await Navigator.push(
+        //       context,
+        //       MaterialPageRoute(
+        //           builder: (context) => CustomerDashboardNew(
+        //             locale: widget.locale,
+        //           )),
+        //     );
+        //     Navigator.pop(context, true);
+        //   },
+        //   leadingIcon: SvgPicture.asset(
+        //     'assets/svgIcon/myTailor.svg',
+        //     color: Colors.black,
+        //   ),
+        // ),
         body: isLoading || tailorDetailsData == null
             ? Center(child: CircularProgressIndicator())
             :SingleChildScrollView(
@@ -588,7 +616,7 @@ class _MyFavouriteTailorDetailsState extends State<MyFavouriteTailorDetails> {
                       padding: EdgeInsets.symmetric(horizontal: 12),
                       decoration: BoxDecoration(
                         borderRadius: BorderRadius.vertical(top: Radius.circular(14)),
-                        color: Color(0xFFD9D9D9),
+                        color: AppColors.newUpdateColor,
                       ),
                       child: Row(
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -599,11 +627,11 @@ class _MyFavouriteTailorDetailsState extends State<MyFavouriteTailorDetails> {
                               fontFamily: 'Poppins',
                               fontSize: 20,
                               fontWeight: FontWeight.w400,
-                              color: Colors.black,
+                              color: Colors.white,
                             ),
                           ),
                           IconButton(
-                            icon: Icon(Icons.close),
+                            icon: Icon(Icons.close,color: Colors.white,),
                             onPressed: () => Navigator.pop(context),
                           ),
                         ],

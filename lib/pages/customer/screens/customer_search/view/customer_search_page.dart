@@ -98,15 +98,37 @@ class _CustomerSearchPageState extends State<CustomerSearchPage> {
       return false; // Prevent default back behavior
     },child:Scaffold(
       backgroundColor: Colors.white,
-      appBar: CustomAppBarSearchCustomerWithOutBack(
-        title: AppLocalizations.of(context)!.searchTailor,
-        hasBackButton: true,
-        elevation: 2.0,
-        leadingIcon: SvgPicture.asset(
-          'assets/svgIcon/myTailor.svg',
-          color: Colors.black,
+      appBar: AppBar(
+        title: Text(
+          AppLocalizations.of(context)!.searchTailor,
+          style: const TextStyle(
+            fontFamily: 'Poppins',
+            fontWeight: FontWeight.w600,
+            fontSize: 24,
+          ),
+          textAlign: TextAlign.center,
+        ),
+        backgroundColor: Colors.white,
+        elevation: 0,
+        centerTitle: true, // 👈 yeh add karo
+        scrolledUnderElevation: 0,
+        leading: Padding(
+          padding: const EdgeInsets.only(left: 18.0),
+          child: SvgPicture.asset(
+            'assets/svgIcon/myTailor.svg',
+            color: Colors.black,
+          ),
         ),
       ),
+      // CustomAppBarSearchCustomerWithOutBack(
+      //   title: AppLocalizations.of(context)!.searchTailor,
+      //   hasBackButton: true,
+      //   elevation: 2.0,
+      //   leadingIcon: SvgPicture.asset(
+      //     'assets/svgIcon/myTailor.svg',
+      //     color: Colors.black,
+      //   ),
+      // ),
       body: RefreshIndicator(
         onRefresh: _loadData,
         child: Column(
@@ -116,7 +138,11 @@ class _CustomerSearchPageState extends State<CustomerSearchPage> {
               child: Container(
                 decoration: BoxDecoration(
                   color: Colors.white,
-                  borderRadius: BorderRadius.circular(30),
+                  borderRadius: BorderRadius.circular(10),
+                  border: Border.all(
+                      color: AppColors.newUpdateColor,
+                      width: 1.0,
+                      style: BorderStyle.solid),
                   boxShadow: [
                     BoxShadow(
                       color: Colors.grey.withOpacity(0.5),
@@ -165,219 +191,222 @@ class _CustomerSearchPageState extends State<CustomerSearchPage> {
                               ),
                             ],
                           )
-                        : ListView.builder(
-                            physics: BouncingScrollPhysics(),
-                            itemCount: filteredTailorList.length,
-                            itemBuilder: (context, index) {
-                              final contact = filteredTailorList[index];
-                              // customerId = contact.id.toString();
-                              return GestureDetector(
-                                onTap: () async {
+                        : Padding(
+                          padding: const EdgeInsets.only(top: 10),
+                          child: ListView.builder(
+                              physics: BouncingScrollPhysics(),
+                              itemCount: filteredTailorList.length,
+                              itemBuilder: (context, index) {
+                                final contact = filteredTailorList[index];
+                                // customerId = contact.id.toString();
+                                return GestureDetector(
+                                  onTap: () async {
 
-                                  final shouldRefresh = await
-                                  Navigator.push(
-                                      context,
-                                      MaterialPageRoute(
-                                          builder: (context) => TailorFullView(
-                                              locale: widget.locale,tailorId: contact.id.toString())));
+                                    final shouldRefresh = await
+                                    Navigator.push(
+                                        context,
+                                        MaterialPageRoute(
+                                            builder: (context) => TailorFullView(
+                                                locale: widget.locale,tailorId: contact.id.toString())));
 
-                                  // 👇👇 Yahan print karo
-                                  print('shouldRefresh: $shouldRefresh');
+                                    // 👇👇 Yahan print karo
+                                    print('shouldRefresh: $shouldRefresh');
 
-                                  if (shouldRefresh == true) {
-                                    // ✅ Refresh this screen
-                                    _loadData(); // ya jo bhi API/function chahiye
-                                  }
-                                },
-                                child: Padding(
-                                  padding: const EdgeInsets.symmetric(
-                                      vertical: 3,
-                                      horizontal:
-                                          15), // 👈 Card ke beech ka space kam kiya
-                                  child: Card(
-                                    color: Colors.white,
-                                    shape: RoundedRectangleBorder(
-                                      borderRadius: BorderRadius.circular(15),
-                                    ),
-                                    elevation: 10,
-                                    child: Padding(
-                                      padding: const EdgeInsets.symmetric(
-                                          vertical: 5, horizontal: 10),
-                                      child: Row(
-                                        crossAxisAlignment:
-                                            CrossAxisAlignment.start,
-                                        children: [
-                                          /// IMAGE VIEW ///
-                                          ClipRRect(
-                                            borderRadius:
-                                                BorderRadius.circular(20),
-                                            child: SizedBox(
-                                              width: 70,
-                                              height: 70,
-                                              child:
-                                                  //Image.network('https://randomuser.me/api/portraits/women/10.jpg',),
-                                                  CachedNetworkImage(
-                                                fit: BoxFit.cover,
-                                                height: 50,
-                                                width: 50,
-                                                imageUrl: contact.profileUrl
-                                                    .toString(),
-                                                errorWidget: (context, url,
-                                                        error) =>
-                                                    SvgPicture.asset(
-                                                      'assets/svgIcon/profilepic.svg', // Default profile icon
-                                                      width: 120,
-                                                      height: 120,
-                                                    ),
+                                    if (shouldRefresh == true) {
+                                      // ✅ Refresh this screen
+                                      _loadData(); // ya jo bhi API/function chahiye
+                                    }
+                                  },
+                                  child: Padding(
+                                    padding: const EdgeInsets.symmetric(
+                                        vertical: 3,
+                                        horizontal:
+                                            15), // 👈 Card ke beech ka space kam kiya
+                                    child: Card(
+                                      color: Colors.white,
+                                      shape: RoundedRectangleBorder(
+                                        borderRadius: BorderRadius.circular(15),
+                                      ),
+                                      elevation: 10,
+                                      child: Padding(
+                                        padding: const EdgeInsets.symmetric(
+                                            vertical: 5, horizontal: 10),
+                                        child: Row(
+                                          crossAxisAlignment:
+                                              CrossAxisAlignment.start,
+                                          children: [
+                                            /// IMAGE VIEW ///
+                                            ClipRRect(
+                                              borderRadius:
+                                                  BorderRadius.circular(20),
+                                              child: SizedBox(
+                                                width: 70,
+                                                height: 70,
+                                                child:
+                                                    //Image.network('https://randomuser.me/api/portraits/women/10.jpg',),
+                                                    CachedNetworkImage(
+                                                  fit: BoxFit.cover,
+                                                  height: 50,
+                                                  width: 50,
+                                                  imageUrl: contact.profileUrl
+                                                      .toString(),
+                                                  errorWidget: (context, url,
+                                                          error) =>
+                                                      SvgPicture.asset(
+                                                        'assets/svgIcon/profilepic.svg', // Default profile icon
+                                                        width: 120,
+                                                        height: 120,
+                                                      ),
+                                                ),
                                               ),
                                             ),
-                                          ),
 
-                                          /// CARD DETAIL VIEW ///
-                                          const SizedBox(
-                                              width:
-                                                  8), // 👈 Spacing Between Image and Text Kam Kiya
-                                          Expanded(
-                                            flex: 5,
-                                            child: Column(
-                                              crossAxisAlignment:
-                                                  CrossAxisAlignment.start,
-                                              children: [
-                                                Text(
-                                                  contact.name ??
-                                                      AppLocalizations.of(
-                                                              context)!
-                                                          .noUserName,
-                                                  overflow:
-                                                      TextOverflow.ellipsis,
-                                                  style: const TextStyle(
-                                                    color: Color(0xFF000000),
-                                                    fontSize: 19,
-                                                    fontFamily: 'Poppins',
-                                                    fontWeight: FontWeight.w500,
+                                            /// CARD DETAIL VIEW ///
+                                            const SizedBox(
+                                                width:
+                                                    8), // 👈 Spacing Between Image and Text Kam Kiya
+                                            Expanded(
+                                              flex: 5,
+                                              child: Column(
+                                                crossAxisAlignment:
+                                                    CrossAxisAlignment.start,
+                                                children: [
+                                                  Text(
+                                                    contact.name ??
+                                                        AppLocalizations.of(
+                                                                context)!
+                                                            .noUserName,
+                                                    overflow:
+                                                        TextOverflow.ellipsis,
+                                                    style: const TextStyle(
+                                                      color: Color(0xFF000000),
+                                                      fontSize: 19,
+                                                      fontFamily: 'Poppins',
+                                                      fontWeight: FontWeight.w500,
+                                                    ),
                                                   ),
-                                                ),
-                                                Row(
-                                                  crossAxisAlignment: CrossAxisAlignment.start,
-                                                  children: [
-                                                    SvgPicture.asset(
-                                                      'assets/svgIcon/location.svg',
-                                                    ),
-                                                    SizedBox(
-                                                      width: 5,
-                                                    ),
-                                                    Expanded(
-                                                      child: Container(
-                                                        width: MediaQuery.of(context).size.width*0.3,
-                                                        child: Text(
-                                                          contact.address ??
-                                                              AppLocalizations.of(
-                                                                      context)!
-                                                                  .userNoAddress,
-                                                          overflow: TextOverflow
-                                                              .ellipsis,
-                                                          maxLines: 2,
-                                                          style: const TextStyle(
-                                                            color:
-                                                                Color(0xFF000000),
-                                                            fontSize: 13,
-                                                            fontFamily: 'Poppins',
-                                                            fontWeight:
-                                                                FontWeight.w500,
+                                                  Row(
+                                                    crossAxisAlignment: CrossAxisAlignment.start,
+                                                    children: [
+                                                      SvgPicture.asset(
+                                                        'assets/svgIcon/location.svg',
+                                                      ),
+                                                      SizedBox(
+                                                        width: 5,
+                                                      ),
+                                                      Expanded(
+                                                        child: Container(
+                                                          width: MediaQuery.of(context).size.width*0.3,
+                                                          child: Text(
+                                                            contact.address ??
+                                                                AppLocalizations.of(
+                                                                        context)!
+                                                                    .userNoAddress,
+                                                            overflow: TextOverflow
+                                                                .ellipsis,
+                                                            maxLines: 2,
+                                                            style: const TextStyle(
+                                                              color:
+                                                                  Color(0xFF000000),
+                                                              fontSize: 13,
+                                                              fontFamily: 'Poppins',
+                                                              fontWeight:
+                                                                  FontWeight.w500,
+                                                            ),
                                                           ),
                                                         ),
                                                       ),
-                                                    ),
-                                                  ],
+                                                    ],
+                                                  ),
+                                                  Row(
+                                                    children: [
+                                                      RatingBarIndicator(
+                                                        rating: contact.avgRating!
+                                                            .toDouble(),
+                                                        direction:
+                                                            Axis.horizontal,
+                                                        itemBuilder:
+                                                            (context, index) =>
+                                                                Icon(
+                                                          Icons.star,
+                                                          color: AppColors
+                                                              .ratingBarColor,
+                                                        ),
+                                                        itemCount: 5,
+                                                        itemSize: 20.0,
+                                                        //unratedColor : Colors.blue
+                                                      ),
+                                                      SizedBox(width: 6),
+                                                      Container(
+                                                        padding:
+                                                            EdgeInsets.symmetric(
+                                                                horizontal: 8,
+                                                                vertical: 1.5),
+                                                        decoration: BoxDecoration(
+                                                          color: Colors.black,
+                                                          borderRadius:
+                                                              BorderRadius
+                                                                  .circular(4),
+                                                        ),
+                                                        child: Text(
+                                                          contact.avgRating != null
+                                                              ? contact.avgRating!.toStringAsFixed(1)
+                                                              : '0.0',
+                                                          style: TextStyle(
+                                                              fontFamily: "Inter",
+                                                              color: Colors.white,
+                                                              fontWeight:
+                                                                  FontWeight.w600,
+                                                              fontSize: 16),
+                                                        ),
+                                                      ),
+                                                    ],
+                                                  ),
+                                                ],
+                                              ),
+                                            ),
+
+                                            /// ICON BUTTONS ///
+                                            contact.hideMobileNo == false?Column(
+                                              children: [
+                                                GestureDetector(
+                                                  onTap: () {
+                                                    openWhatsApp(
+                                                        context,
+                                                        contact.mobileNo
+                                                            .toString());
+                                                  },
+                                                  child: Image.asset(
+                                                    'assets/images/whatsapp.png',
+                                                    width: 28,
+                                                    height: 28,
+                                                  ),
                                                 ),
-                                                Row(
-                                                  children: [
-                                                    RatingBarIndicator(
-                                                      rating: contact.avgRating!
-                                                          .toDouble(),
-                                                      direction:
-                                                          Axis.horizontal,
-                                                      itemBuilder:
-                                                          (context, index) =>
-                                                              Icon(
-                                                        Icons.star,
-                                                        color: AppColors
-                                                            .ratingBarColor,
-                                                      ),
-                                                      itemCount: 5,
-                                                      itemSize: 20.0,
-                                                      //unratedColor : Colors.blue
-                                                    ),
-                                                    SizedBox(width: 6),
-                                                    Container(
-                                                      padding:
-                                                          EdgeInsets.symmetric(
-                                                              horizontal: 8,
-                                                              vertical: 1.5),
-                                                      decoration: BoxDecoration(
-                                                        color: Colors.black,
-                                                        borderRadius:
-                                                            BorderRadius
-                                                                .circular(4),
-                                                      ),
-                                                      child: Text(
-                                                        contact.avgRating != null
-                                                            ? contact.avgRating!.toStringAsFixed(1)
-                                                            : '0.0',
-                                                        style: TextStyle(
-                                                            fontFamily: "Inter",
-                                                            color: Colors.white,
-                                                            fontWeight:
-                                                                FontWeight.w600,
-                                                            fontSize: 16),
-                                                      ),
-                                                    ),
-                                                  ],
+                                                const SizedBox(height: 20),
+                                                GestureDetector(
+                                                  onTap: () {
+                                                    _makePhoneCall(
+                                                        context,
+                                                        contact.mobileNo
+                                                            .toString());
+                                                  },
+                                                  child: SvgPicture.asset(
+                                                    'assets/svgIcon/phone_color.svg',
+                                                    width: 28,
+                                                    height: 28,
+                                                  ),
                                                 ),
                                               ],
-                                            ),
-                                          ),
-
-                                          /// ICON BUTTONS ///
-                                          Column(
-                                            children: [
-                                              GestureDetector(
-                                                onTap: () {
-                                                  openWhatsApp(
-                                                      context,
-                                                      contact.mobileNo
-                                                          .toString());
-                                                },
-                                                child: Image.asset(
-                                                  'assets/images/whatsapp.png',
-                                                  width: 28,
-                                                  height: 28,
-                                                ),
-                                              ),
-                                              const SizedBox(height: 20),
-                                              GestureDetector(
-                                                onTap: () {
-                                                  _makePhoneCall(
-                                                      context,
-                                                      contact.mobileNo
-                                                          .toString());
-                                                },
-                                                child: SvgPicture.asset(
-                                                  'assets/svgIcon/phone_color.svg',
-                                                  width: 28,
-                                                  height: 28,
-                                                ),
-                                              ),
-                                            ],
-                                          ),
-                                        ],
+                                            ):SizedBox(),
+                                          ],
+                                        ),
                                       ),
                                     ),
                                   ),
-                                ),
-                              );
-                            },
-                          )),
+                                );
+                              },
+                            ),
+                        )),
           ],
         ),
       ),

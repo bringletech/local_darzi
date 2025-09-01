@@ -157,11 +157,12 @@ import 'package:darzi/common/widgets/tab_data.dart';
 import 'package:darzi/l10n/app_localizations.dart';
 import 'package:darzi/pages/customer/screens/customer_Login/view/customerRegisterPage.dart';
 import 'package:darzi/pages/customer/screens/customer_dashboard/view/customer_dashboard.dart';
-import 'package:darzi/pages/customer/screens/customer_profile/view/customer_profile_page.dart';
 import 'package:darzi/pages/customer/screens/customer_search/view/customer_search_page.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+
+import '../../customer_profile/view/customer_profile_page1.dart';
 
 class CustomerDashboardNew extends StatefulWidget {
   static const TextStyle titleStyle = TextStyle(

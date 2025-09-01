@@ -259,7 +259,7 @@ abstract class AppLocalizations {
   /// No description provided for @yourAccount.
   ///
   /// In en, this message translates to:
-  /// **'Your Account'**
+  /// **'My Account'**
   String get yourAccount;
 
   /// No description provided for @userName.
@@ -1093,7 +1093,7 @@ abstract class AppLocalizations {
   /// No description provided for @no_active_dress.
   ///
   /// In en, this message translates to:
-  /// **'There is no active dress found'**
+  /// **'There is no active dress found.'**
   String get no_active_dress;
 
   /// No description provided for @whatsapp_is_not_insatlled.
@@ -1378,6 +1378,12 @@ abstract class AppLocalizations {
   /// **'First what we can call you?'**
   String get first_what_we_can_call_you;
 
+  /// No description provided for @let_get_started.
+  ///
+  /// In en, this message translates to:
+  /// **'Let\'s Get Started'**
+  String get let_get_started;
+
   /// No description provided for @get_you_know_you.
   ///
   /// In en, this message translates to:
@@ -1401,6 +1407,78 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Next'**
   String get next;
+
+  /// No description provided for @general_details.
+  ///
+  /// In en, this message translates to:
+  /// **'General Details'**
+  String get general_details;
+
+  /// No description provided for @my_details.
+  ///
+  /// In en, this message translates to:
+  /// **'My Details'**
+  String get my_details;
+
+  /// No description provided for @notification_and_alert.
+  ///
+  /// In en, this message translates to:
+  /// **'Notifications & Alert'**
+  String get notification_and_alert;
+
+  /// No description provided for @missed.
+  ///
+  /// In en, this message translates to:
+  /// **'Missed'**
+  String get missed;
+
+  /// No description provided for @today.
+  ///
+  /// In en, this message translates to:
+  /// **'Today'**
+  String get today;
+
+  /// No description provided for @this_week.
+  ///
+  /// In en, this message translates to:
+  /// **'This Week'**
+  String get this_week;
+
+  /// No description provided for @next_week.
+  ///
+  /// In en, this message translates to:
+  /// **'Next Week'**
+  String get next_week;
+
+  /// No description provided for @later.
+  ///
+  /// In en, this message translates to:
+  /// **'Later'**
+  String get later;
+
+  /// No description provided for @my_orders.
+  ///
+  /// In en, this message translates to:
+  /// **'My Orders'**
+  String get my_orders;
+
+  /// No description provided for @order_details.
+  ///
+  /// In en, this message translates to:
+  /// **'Order Details'**
+  String get order_details;
+
+  /// No description provided for @stitching_history.
+  ///
+  /// In en, this message translates to:
+  /// **'Stitching History'**
+  String get stitching_history;
+
+  /// No description provided for @no_stitching_history.
+  ///
+  /// In en, this message translates to:
+  /// **'There is no stitching history found.'**
+  String get no_stitching_history;
 }
 
 class _AppLocalizationsDelegate

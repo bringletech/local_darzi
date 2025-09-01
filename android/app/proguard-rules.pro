@@ -6,6 +6,12 @@
 -dontwarn io.flutter.embedding.**
 
 ##################################
+## MainActivity & App Classes
+##################################
+-keep class com.mannytech.darzi.MainActivity { *; }
+-keep class com.mannytech.darzi.** { *; }
+
+##################################
 ## Firebase
 ##################################
 -keep class com.google.firebase.** { *; }
@@ -29,12 +35,20 @@
 -keep,allowobfuscation,allowshrinking class * extends com.google.gson.reflect.TypeToken
 
 ##################################
-## App Models
-##################################
--keep class com.mannytech.darzi.models.** { *; }
-
-##################################
 ## AndroidX
 ##################################
 -keep class androidx.** { *; }
 -dontwarn androidx.**
+
+##################################
+## Activities / Services / Receivers
+##################################
+-keep class * extends android.app.Activity
+-keep class * extends android.app.Service
+-keep class * extends android.content.BroadcastReceiver
+-keep class * extends android.content.ContentProvider
+
+##################################
+## Prevent Flutter Generated Code Removal
+##################################
+-keep class io.flutter.plugins.GeneratedPluginRegistrant { *; }

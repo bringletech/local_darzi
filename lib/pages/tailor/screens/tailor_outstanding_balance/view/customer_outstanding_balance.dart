@@ -59,24 +59,50 @@ class _CustomerOutstandingBalanceState
             maxHeight: MediaQuery.of(context).size.height,
           ),
           child: Scaffold(
-            appBar: CustomAppBarWithBack(
-                title: AppLocalizations.of(context)!.outstandingBalance1,
-                hasBackButton: true,
-                elevation: 2.0,
-                leadingIcon: SvgPicture.asset(
-                  'assets/svgIcon/outstanding_balance_black.svg', //just change my image with your image
-                  color: Colors.black,
+            backgroundColor: Colors.white,
+            appBar: AppBar(
+              title: Text(AppLocalizations.of(context)!.outstandingBalance1,
+                style: const TextStyle(
+                  fontFamily: 'Poppins',
+                  fontWeight: FontWeight.w600,
+                  fontSize: 24,
                 ),
-                onBackButtonPressed: () async {
+                textAlign: TextAlign.center,),
+              backgroundColor: Colors.white,
+              elevation: 0,
+              centerTitle: true, // 👈 yeh add karo
+              leading: IconButton(
+                icon: Icon(Icons.arrow_back_ios),
+                onPressed: () async {
                   final result = await Navigator.push(
                     context,
                     MaterialPageRoute(
                         builder: (context) => TailorDashboardNew(
-                              locale: widget.locale,
-                            )),
+                          locale: widget.locale,
+                        )),
                   );
                   Navigator.pop(context, true);
-                }),
+                },
+              ),
+            ),
+            // CustomAppBarWithBack(
+            //     title: AppLocalizations.of(context)!.outstandingBalance1,
+            //     hasBackButton: true,
+            //     elevation: 2.0,
+            //     leadingIcon: SvgPicture.asset(
+            //       'assets/svgIcon/outstanding_balance_black.svg', //just change my image with your image
+            //       color: Colors.black,
+            //     ),
+            //     onBackButtonPressed: () async {
+            //       final result = await Navigator.push(
+            //         context,
+            //         MaterialPageRoute(
+            //             builder: (context) => TailorDashboardNew(
+            //                   locale: widget.locale,
+            //                 )),
+            //       );
+            //       Navigator.pop(context, true);
+            //     }),
             body: Container(
               height: MediaQuery.of(context).size.height,
               child: customers==null || customers!.isEmpty

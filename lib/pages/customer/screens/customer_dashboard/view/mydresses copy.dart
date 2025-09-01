@@ -65,26 +65,55 @@ class _MyDressesState extends State<MyDresses> {
       return false; // Prevent default back behavior
     },
       child:Scaffold(
-      appBar: CustomAppBarWithBack(
-        title: AppLocalizations.of(context)!.myDresses,
-        hasBackButton: true,
-        onBackButtonPressed: () async {
-          final result = await Navigator.push(
-            context,
-            MaterialPageRoute(
-                builder: (context) => CustomerDashboardNew(
-                  locale: widget.locale,
-                )),
-          );
-          Navigator.pop(context, true);
-        },
-        elevation: 2.0,
-        leadingIcon: SvgPicture.asset(
-          'assets/svgIcon/dress.svg', // Replace with actual SVG asset
-          color: Colors.black,
+        backgroundColor: Colors.white,
+      appBar: AppBar(
+        title: Text(
+          AppLocalizations.of(context)!.myDresses,
+          style: const TextStyle(
+            fontFamily: 'Poppins',
+            fontWeight: FontWeight.w600,
+            fontSize: 24,
+          ),
+          textAlign: TextAlign.center,
         ),
-        color: Colors.white,
+        backgroundColor: Colors.white,
+        centerTitle: true, // 👈 yeh add karo
+        elevation: 0,
+        scrolledUnderElevation: 0,
+        leading: IconButton(
+          icon: const Icon(Icons.arrow_back_ios),
+          onPressed: () async {
+                final result = await Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                      builder: (context) => CustomerDashboardNew(
+                        locale: widget.locale,
+                      )),
+                );
+                Navigator.pop(context, true);
+          },
+        ),
       ),
+      // CustomAppBarWithBack(
+      //   title: AppLocalizations.of(context)!.myDresses,
+      //   hasBackButton: true,
+      //   onBackButtonPressed: () async {
+      //     final result = await Navigator.push(
+      //       context,
+      //       MaterialPageRoute(
+      //           builder: (context) => CustomerDashboardNew(
+      //             locale: widget.locale,
+      //           )),
+      //     );
+      //     Navigator.pop(context, true);
+      //   },
+      //   elevation: 2.0,
+      //   leadingIcon: SvgPicture.asset(
+      //     'assets/svgIcon/dress.svg', // Replace with actual SVG asset
+      //     color: Colors.black,
+      //   ),
+      //   color: Colors.white,
+      // ),
       body: isLoading
           ? const Center(
         child: CircularProgressIndicator(), // Show loader while fetching

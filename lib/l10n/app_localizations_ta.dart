@@ -86,7 +86,7 @@ class AppLocalizationsTa extends AppLocalizations {
   }
 
   @override
-  String get yourAccount => 'உங்கள் கணக்கு';
+  String get yourAccount => 'என் கணக்கு';
 
   @override
   String get userName => 'பெயர்';
@@ -669,6 +669,9 @@ class AppLocalizationsTa extends AppLocalizations {
       'முதலில், உங்களை என்ன என்று அழைக்கலாம்?';
 
   @override
+  String get let_get_started => 'வாங்க தொடங்குவோம்';
+
+  @override
   String get get_you_know_you => 'உங்களை அறிந்து கொள்ள விரும்புகிறோம்.';
 
   @override
@@ -680,4 +683,40 @@ class AppLocalizationsTa extends AppLocalizations {
 
   @override
   String get next => 'அடுத்து';
+
+  @override
+  String get general_details => 'பொது விவரங்கள்';
+
+  @override
+  String get my_details => 'என் விவரங்கள்';
+
+  @override
+  String get notification_and_alert => 'அறிவிப்புகள் & எச்சரிக்கை';
+
+  @override
+  String get missed => 'தவறிய';
+
+  @override
+  String get today => 'இன்று';
+
+  @override
+  String get this_week => 'இந்த வாரம்';
+
+  @override
+  String get next_week => 'அடுத்த வாரம்';
+
+  @override
+  String get later => 'பிறகு';
+
+  @override
+  String get my_orders => 'என் ஆர்டர்கள்';
+
+  @override
+  String get order_details => 'ஆர்டர் விவரங்கள்';
+
+  @override
+  String get stitching_history => 'தையல் வரலாறு';
+
+  @override
+  String get no_stitching_history => 'தையல் வரலாறு எதுவும் கிடைக்கவில்லை.';
 }

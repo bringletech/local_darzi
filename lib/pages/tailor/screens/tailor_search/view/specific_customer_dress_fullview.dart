@@ -67,21 +67,40 @@ class _SpecificCustomerDressFullviewState extends State<SpecificCustomerDressFul
         return false;
       },
       child:Scaffold(
-        appBar: CustomAppBarWithBack(
-          title: AppLocalizations.of(context)!.dressDetails,
-          hasBackButton: true,
-          elevation: 2.0,
-          leadingIcon: SvgPicture.asset(
-            'assets/svgIcon/activeDress.svg',
-            color: Colors.black,
+        backgroundColor: Colors.white,
+        appBar: AppBar(
+          title: Text(AppLocalizations.of(context)!.dressDetails,
+            style: const TextStyle(
+              fontFamily: 'Poppins',
+              fontWeight: FontWeight.w600,
+              fontSize: 24,
+            ),
+            textAlign: TextAlign.center,),
+          backgroundColor: Colors.white,
+          elevation: 0,
+          scrolledUnderElevation: 0,
+          leading: IconButton(
+            icon: Icon(Icons.arrow_back_ios),
+            onPressed: () async {
+              Navigator.pop(context, true); // pass true to signal refresh
+            },
           ),
-          onBackButtonPressed: () async {
-            Navigator.pop(context, true); // pass true to signal refresh
-          },
         ),
+        // CustomAppBarWithBack(
+        //   title: AppLocalizations.of(context)!.dressDetails,
+        //   hasBackButton: true,
+        //   elevation: 2.0,
+        //   leadingIcon: SvgPicture.asset(
+        //     'assets/svgIcon/activeDress.svg',
+        //     color: Colors.black,
+        //   ),
+        //   onBackButtonPressed: () async {
+        //     Navigator.pop(context, true); // pass true to signal refresh
+        //   },
+        // ),
         body: isLoading
             ? Center(
-          child: CircularProgressIndicator(color: AppColors.darkRed),
+          child: CircularProgressIndicator(color: AppColors.newUpdateColor),
         )
             : Stack(
           children: [

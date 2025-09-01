@@ -48,23 +48,48 @@ class _CancelledOrderState extends State<CancelledOrder> {
         },
         child: Scaffold(
           backgroundColor: Colors.white,
-          appBar: CustomAppBarWithBack(
-              title: AppLocalizations.of(context)!.cancel_order_title,
-              hasBackButton: true,
-              elevation: 2.0,
-              leadingIcon: SvgPicture.asset(
-                'assets/svgIcon/dress.svg', //just change my image with your image
-                color: Colors.black,
+          appBar: AppBar(
+            title: Text(AppLocalizations.of(context)!.cancel_order_title,
+              style: const TextStyle(
+                fontFamily: 'Poppins',
+                fontWeight: FontWeight.w600,
+                fontSize: 24,
               ),
-              onBackButtonPressed: () async {
+              textAlign: TextAlign.center,),
+            backgroundColor: Colors.white,
+            elevation: 0,
+            centerTitle: true,
+            scrolledUnderElevation: 0,
+            leading: IconButton(
+              icon: Icon(Icons.arrow_back_ios),
+              onPressed: () async {
                 final result = await Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                      builder: (context) =>
-                          TailorDashboardNew(locale: widget.locale)),
-                );
-                Navigator.pop(context, true);
-              }),
+                            context,
+                            MaterialPageRoute(
+                                builder: (context) =>
+                                    TailorDashboardNew(locale: widget.locale)),
+                          );
+                          Navigator.pop(context, true);
+              },
+            ),
+          ),
+          // CustomAppBarWithBack(
+          //     title: AppLocalizations.of(context)!.cancel_order_title,
+          //     hasBackButton: true,
+          //     elevation: 2.0,
+          //     leadingIcon: SvgPicture.asset(
+          //       'assets/svgIcon/dress.svg', //just change my image with your image
+          //       color: Colors.black,
+          //     ),
+          //     onBackButtonPressed: () async {
+          //       final result = await Navigator.push(
+          //         context,
+          //         MaterialPageRoute(
+          //             builder: (context) =>
+          //                 TailorDashboardNew(locale: widget.locale)),
+          //       );
+          //       Navigator.pop(context, true);
+          //     }),
           body: SingleChildScrollView(
             child: Padding(
               padding: EdgeInsets.all(8.0),

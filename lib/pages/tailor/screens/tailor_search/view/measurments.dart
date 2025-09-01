@@ -5,11 +5,13 @@ import 'package:darzi/apiData/model/verify_mobile_model.dart';
 import 'package:darzi/colors.dart';
 import 'package:darzi/common/all_text.dart';
 import 'package:darzi/common/all_text_form_field.dart';
+import 'package:darzi/common/all_text_form_field1.dart';
 import 'package:darzi/common/widgets/tailor/commAddCustTextField.dart';
 import 'package:darzi/common/widgets/tailor/common_app_bar_with_back.dart';
 import 'package:darzi/common/widgets/tailor/custom_toggle_button.dart';
 import 'package:darzi/constants/string_constant.dart';
 import 'package:darzi/l10n/app_localizations.dart';
+import 'package:darzi/pages/tailor/screens/tailor_add_customer/view/add_customer1.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:fluttertoast/fluttertoast.dart';
@@ -190,30 +192,64 @@ class _MeasurementsScreenState extends State<MeasurementsScreen> {
         }
       },
       child: Scaffold(
-        appBar: CustomAppBarWithBack(
-          onBackButtonPressed:() async {
-            //Navigator.pop(widget.context,true);
-            if (_isFormDirty()) {
-              bool? shouldPop = await showWarningMessage(
-                context,
-                locale: widget.locale,
-                onChangeLanguage: (newLocale) {
-                  print("Language changed to: ${newLocale.languageCode}");
-                },
-              );
-              print("pop up value is $shouldPop");
-              if (shouldPop == true) {
-                Navigator.pop(context);
+        backgroundColor: Colors.white,
+        appBar: AppBar(
+          title: Text(AppLocalizations.of(context)!.measurements,
+            style: const TextStyle(
+              fontFamily: 'Poppins',
+              fontWeight: FontWeight.w600,
+              fontSize: 24,
+            ),
+            textAlign: TextAlign.center,),
+          centerTitle: true, // 👈 yeh add karo
+          backgroundColor: Colors.white,
+          elevation: 0,
+          scrolledUnderElevation: 0,
+          leading: IconButton(
+            icon: Icon(Icons.arrow_back_ios),
+            onPressed: () async {
+              if (_isFormDirty()) {
+                bool? shouldPop = await showWarningMessage(
+                  context,
+                  locale: widget.locale,
+                  onChangeLanguage: (newLocale) {
+                    print("Language changed to: ${newLocale.languageCode}");
+                  },
+                );
+                print("pop up value is $shouldPop");
+                if (shouldPop == true) {
+                  Navigator.pop(context);
+                }
+              } else {
+                Navigator.pop(context); // No warning if form untouched
               }
-            } else {
-              Navigator.pop(context); // No warning if form untouched
-            }
-          },
-          title: AppLocalizations.of(context)!.measurements,
-          hasBackButton: true,
-          leadingIcon: SvgPicture.asset('assets/svgIcon/measurement.svg',),
+            },
+          ),
         ),
-        body: isLoading == true?Center(child: CircularProgressIndicator(color: AppColors.darkRed,)):SingleChildScrollView(
+        // CustomAppBarWithBack(
+        //   onBackButtonPressed:() async {
+        //     //Navigator.pop(widget.context,true);
+        //     if (_isFormDirty()) {
+        //       bool? shouldPop = await showWarningMessage(
+        //         context,
+        //         locale: widget.locale,
+        //         onChangeLanguage: (newLocale) {
+        //           print("Language changed to: ${newLocale.languageCode}");
+        //         },
+        //       );
+        //       print("pop up value is $shouldPop");
+        //       if (shouldPop == true) {
+        //         Navigator.pop(context);
+        //       }
+        //     } else {
+        //       Navigator.pop(context); // No warning if form untouched
+        //     }
+        //   },
+        //   title: AppLocalizations.of(context)!.measurements,
+        //   hasBackButton: true,
+        //   leadingIcon: SvgPicture.asset('assets/svgIcon/measurement.svg',),
+        // ),
+        body: isLoading == true?Center(child: CircularProgressIndicator(color: AppColors.newUpdateColor,)):SingleChildScrollView(
           child: Container(
             color: Colors.white,
             child: Stack(
@@ -257,13 +293,16 @@ class _MeasurementsScreenState extends State<MeasurementsScreen> {
                         height: 60,
                         child: ElevatedButton(
                           style: ElevatedButton.styleFrom(
-                            backgroundColor: AppColors.newUpdateColor,
-                            //side: BorderSide(color: AppColors.newUpdateColor, width: 2),
+                            backgroundColor: Colors.white, // White background
+                            side: BorderSide(
+                              color: AppColors.newUpdateColor, // Orange border
+                              width: 1.5,
+                            ),
                             shape: RoundedRectangleBorder(
-                              borderRadius: BorderRadius.circular(8), // <-- Rounded corners
-                            ),),
+                              borderRadius: BorderRadius.circular(8),
+                            ),
+                          ),
                           onPressed: () {
-                            // showAlertDialog(context,locale: widget.locale);
                             shareMeasurementDetails();
                           },
                           child: Row(
@@ -271,23 +310,22 @@ class _MeasurementsScreenState extends State<MeasurementsScreen> {
                             children: [
                               SvgPicture.asset(
                                 "assets/svgIcon/share_icon.svg",
-                                color: Colors.white,
-                                // color: AppColors.newUpdateColor,
+                                color: Colors.black, // Orange icon (to match border)
                               ),
-                              SizedBox(width: 6), // Space between icon and text
+                              const SizedBox(width: 6),
                               Text(
                                 AppLocalizations.of(context)!.share_details,
-                                style: TextStyle(
-                                    fontFamily: 'Poppins',
-                                    fontWeight: FontWeight.w600,
-                                    fontSize: 19,
-                                    color: Colors.white
-                                  // color: isPressed ? Colors.white : AppColors.newUpdateColor,
+                                style: const TextStyle(
+                                  fontFamily: 'Poppins',
+                                  fontWeight: FontWeight.w600,
+                                  fontSize: 19,
+                                  color: Colors.black, // Orange text
                                 ),
                               ),
                             ],
-                          ),),
-                      ),
+                          ),
+                        ),
+                      )
                     ),
                     SizedBox(height: 20,),
                     Padding(
@@ -301,7 +339,7 @@ class _MeasurementsScreenState extends State<MeasurementsScreen> {
                           SizedBox(width: 8),
                           Expanded(
                               flex: 3,
-                              child: AllTextFormField(inputType: TextInputType.text, hintText: AppLocalizations.of(context)!.enterName, mController: nameController, readOnly: false,)
+                              child: AllTextFormField1(inputType: TextInputType.text, hintText: AppLocalizations.of(context)!.enterName, mController: nameController, readOnly: false,)
                           ),
                         ],
                       ),
@@ -324,7 +362,8 @@ class _MeasurementsScreenState extends State<MeasurementsScreen> {
                               children: [
                                 Stack(
                                   children: [
-                                    Material(elevation: 8, shadowColor: Colors.black.withOpacity(0.8), borderRadius: BorderRadius.circular(30),
+                                    Material(
+                                      elevation: 8, shadowColor: Colors.black.withOpacity(0.8), borderRadius: BorderRadius.circular(0),
                                       child: TextFormField(
                                         keyboardType: TextInputType.number,
                                         onChanged: (value) => _checkInput(value),
@@ -422,71 +461,225 @@ class _MeasurementsScreenState extends State<MeasurementsScreen> {
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
                           SizedBox(height: 10,),
+                          // Container(
+                          //   //color: Colors.black,
+                          //   margin: EdgeInsets.all(0),
+                          //   child: Row(
+                          //     mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          //     crossAxisAlignment: CrossAxisAlignment.start,
+                          //     children: [
+                          //       Expanded(
+                          //         child: Container(
+                          //           // color : Colors.cyan,
+                          //           decoration: BoxDecoration(
+                          //               borderRadius: BorderRadius.circular(10),
+                          //               color: Colors.white
+                          //           ),
+                          //           child: Column(
+                          //             crossAxisAlignment: CrossAxisAlignment.start,
+                          //             children: [
+                          //               Commonaddcusttextfield(text: AppLocalizations.of(context)!.neck,hintText: "",controller: neckController,inputType: TextInputType.number,),
+                          //               SizedBox(height: 25,),
+                          //               Commonaddcusttextfield(text: AppLocalizations.of(context)!.bust,hintText: "",controller: bustController,inputType: TextInputType.number),
+                          //               SizedBox(height: 25,),
+                          //               Commonaddcusttextfield(text: AppLocalizations.of(context)!.underBust,hintText: "",controller: underBustController,inputType: TextInputType.number),
+                          //               SizedBox(height: 25,),
+                          //               Commonaddcusttextfield(text: AppLocalizations.of(context)!.waist,hintText: "",controller: waistController,inputType: TextInputType.number),
+                          //               SizedBox(height: 25,),
+                          //               Commonaddcusttextfield(text: AppLocalizations.of(context)!.hips,hintText: "",controller: hipsController,inputType: TextInputType.number),
+                          //               SizedBox(height: 25,),
+                          //               Commonaddcusttextfield(text: AppLocalizations.of(context)!.neckAbove,hintText: "",controller: neckToAboveKneeController,inputType: TextInputType.number),
+                          //               SizedBox(height: 25),
+                          //               Commonaddcusttextfield(text: AppLocalizations.of(context)!.armLength,hintText: "",controller: armLengthController,inputType: TextInputType.number),
+                          //               SizedBox(height: 25,),
+                          //               Commonaddcusttextfield(text: AppLocalizations.of(context)!.shoulderSeam,hintText: "",controller: shoulderSeamController,inputType: TextInputType.number),
+                          //               SizedBox(height: 25,),
+                          //               Commonaddcusttextfield(text: AppLocalizations.of(context)!.armHole,hintText: "",controller: armHoleController,inputType: TextInputType.number),
+                          //               SizedBox(height: 25,),
+                          //               Commonaddcusttextfield(text: AppLocalizations.of(context)!.bicep,hintText: "",controller: bicepController,inputType: TextInputType.number),
+                          //               SizedBox(height: 25,),
+                          //               Commonaddcusttextfield(text: AppLocalizations.of(context)!.foreArm,hintText: "",controller: foreArmController,inputType: TextInputType.number),
+                          //               SizedBox(height: 25,),
+                          //               Commonaddcusttextfield(text: AppLocalizations.of(context)!.wrist,hintText: "",controller: wristController,inputType: TextInputType.number),
+                          //               SizedBox(height: 25,),
+                          //               Commonaddcusttextfield(text: AppLocalizations.of(context)!.shoulderWaist,hintText: "",controller: shoulderToWaistController,inputType: TextInputType.number),
+                          //               SizedBox(height: 25,),
+                          //               Commonaddcusttextfield(text: AppLocalizations.of(context)!.bottomLength,hintText: "",controller: bottomLengthController,inputType: TextInputType.number),
+                          //               SizedBox(height: 25,),
+                          //               Commonaddcusttextfield(text: AppLocalizations.of(context)!.ankle,hintText: "",controller: ankleController,inputType: TextInputType.number),
+                          //               SizedBox(height: 25,),
+                          //               Text(
+                          //                 AppLocalizations.of(context)!.notes,
+                          //                 style: TextStyle(fontFamily: 'Poppins', fontWeight: FontWeight.w600, fontSize: 14),),
+                          //               SizedBox(height: 5,),
+                          //               TextField(controller: textarea,
+                          //                 keyboardType: TextInputType.multiline, maxLines: 4, maxLength: 500,
+                          //                 decoration: InputDecoration(hintText: AppLocalizations.of(context)!.textHere, enabledBorder: const OutlineInputBorder(
+                          //                   borderSide: const BorderSide(color: Colors.grey, width: 0.0),),
+                          //                     focusedBorder: OutlineInputBorder(borderSide: BorderSide(width: 0.0, color: Colors.grey))),
+                          //               ),
+                          //             ],
+                          //           ),
+                          //         ),
+                          //       ),
+                          //     ],
+                          //   ),
+                          //
+                          // ),
                           Container(
-                            //color: Colors.black,
                             margin: EdgeInsets.all(0),
-                            child: Row(
-                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            child: Column(
                               crossAxisAlignment: CrossAxisAlignment.start,
                               children: [
-                                Expanded(
-                                  child: Container(
-                                    // color : Colors.cyan,
-                                    decoration: BoxDecoration(
-                                        borderRadius: BorderRadius.circular(10),
-                                        color: Colors.white
-                                    ),
-                                    child: Column(
-                                      crossAxisAlignment: CrossAxisAlignment.start,
-                                      children: [
-                                        Commonaddcusttextfield(text: AppLocalizations.of(context)!.neck,hintText: "",controller: neckController,inputType: TextInputType.number,),
-                                        SizedBox(height: 25,),
-                                        Commonaddcusttextfield(text: AppLocalizations.of(context)!.bust,hintText: "",controller: bustController,inputType: TextInputType.number),
-                                        SizedBox(height: 25,),
-                                        Commonaddcusttextfield(text: AppLocalizations.of(context)!.underBust,hintText: "",controller: underBustController,inputType: TextInputType.number),
-                                        SizedBox(height: 25,),
-                                        Commonaddcusttextfield(text: AppLocalizations.of(context)!.waist,hintText: "",controller: waistController,inputType: TextInputType.number),
-                                        SizedBox(height: 25,),
-                                        Commonaddcusttextfield(text: AppLocalizations.of(context)!.hips,hintText: "",controller: hipsController,inputType: TextInputType.number),
-                                        SizedBox(height: 25,),
-                                        Commonaddcusttextfield(text: AppLocalizations.of(context)!.neckAbove,hintText: "",controller: neckToAboveKneeController,inputType: TextInputType.number),
-                                        SizedBox(height: 25),
-                                        Commonaddcusttextfield(text: AppLocalizations.of(context)!.armLength,hintText: "",controller: armLengthController,inputType: TextInputType.number),
-                                        SizedBox(height: 25,),
-                                        Commonaddcusttextfield(text: AppLocalizations.of(context)!.shoulderSeam,hintText: "",controller: shoulderSeamController,inputType: TextInputType.number),
-                                        SizedBox(height: 25,),
-                                        Commonaddcusttextfield(text: AppLocalizations.of(context)!.armHole,hintText: "",controller: armHoleController,inputType: TextInputType.number),
-                                        SizedBox(height: 25,),
-                                        Commonaddcusttextfield(text: AppLocalizations.of(context)!.bicep,hintText: "",controller: bicepController,inputType: TextInputType.number),
-                                        SizedBox(height: 25,),
-                                        Commonaddcusttextfield(text: AppLocalizations.of(context)!.foreArm,hintText: "",controller: foreArmController,inputType: TextInputType.number),
-                                        SizedBox(height: 25,),
-                                        Commonaddcusttextfield(text: AppLocalizations.of(context)!.wrist,hintText: "",controller: wristController,inputType: TextInputType.number),
-                                        SizedBox(height: 25,),
-                                        Commonaddcusttextfield(text: AppLocalizations.of(context)!.shoulderWaist,hintText: "",controller: shoulderToWaistController,inputType: TextInputType.number),
-                                        SizedBox(height: 25,),
-                                        Commonaddcusttextfield(text: AppLocalizations.of(context)!.bottomLength,hintText: "",controller: bottomLengthController,inputType: TextInputType.number),
-                                        SizedBox(height: 25,),
-                                        Commonaddcusttextfield(text: AppLocalizations.of(context)!.ankle,hintText: "",controller: ankleController,inputType: TextInputType.number),
-                                        SizedBox(height: 25,),
-                                        Text(
-                                          AppLocalizations.of(context)!.notes,
-                                          style: TextStyle(fontFamily: 'Poppins', fontWeight: FontWeight.w600, fontSize: 14),),
-                                        SizedBox(height: 5,),
-                                        TextField(controller: textarea,
-                                          keyboardType: TextInputType.multiline, maxLines: 4, maxLength: 500,
-                                          decoration: InputDecoration(hintText: AppLocalizations.of(context)!.textHere, enabledBorder: const OutlineInputBorder(
-                                            borderSide: const BorderSide(color: Colors.grey, width: 0.0),),
-                                              focusedBorder: OutlineInputBorder(borderSide: BorderSide(width: 0.0, color: Colors.grey))),
-                                        ),
-                                      ],
-                                    ),
-                                  ),
+                                Row(
+                                  children: [
+                                    Expanded(child: MeasurementField(label: AppLocalizations.of(context)!.neck, controller: neckController,inputType: TextInputType.number,)),
+                                    const SizedBox(width: 20),
+                                    Expanded(child: MeasurementField(label: AppLocalizations.of(context)!.bust, controller: bustController,inputType: TextInputType.number,)),
+                                    // const SizedBox(width: 12),
+                                    // Expanded(child: MeasurementField(label: AppLocalizations.of(context)!.underBust, controller: underBustController,inputType: TextInputType.number,)),
+                                  ],
+                                ),
+                                const SizedBox(height: 12),
+
+                                // Row 2
+                                Row(
+                                  children: [
+                                    Expanded(child: MeasurementField(label: AppLocalizations.of(context)!.underBust, controller: underBustController,inputType: TextInputType.number,)),
+                                    const SizedBox(width: 20),
+                                    Expanded(child: MeasurementField(label: AppLocalizations.of(context)!.waist, controller: waistController,inputType: TextInputType.number,)),
+                                    // Expanded(child: MeasurementField(label:  AppLocalizations.of(context)!.hips, controller: hipsController,inputType: TextInputType.number,)),
+                                    // const SizedBox(width: 12),
+                                    // Expanded(child: MeasurementField(label: AppLocalizations.of(context)!.neckAbove, controller: wristController,inputType: TextInputType.number,)),
+                                  ],
+                                ),
+                                const SizedBox(height: 12),
+                                // Row 3
+                                Row(
+                                  children: [
+                                    // Expanded(child: MeasurementField(label: AppLocalizations.of(context)!.underBust, controller: underBustController,inputType: TextInputType.number,)),
+                                    // const SizedBox(width: 20),
+                                    // Expanded(child: MeasurementField(label: AppLocalizations.of(context)!.waist, controller: waistController,inputType: TextInputType.number,)),
+                                    // const SizedBox(width: 12),
+                                    Expanded(child: MeasurementField(label:  AppLocalizations.of(context)!.hips, controller: hipsController,inputType: TextInputType.number,)),
+                                    const SizedBox(width: 20),
+                                    Expanded(child: MeasurementField(label: AppLocalizations.of(context)!.neckAbove, controller: wristController,inputType: TextInputType.number,)),
+                                  ],
+                                ),
+                                SizedBox(height: 12,),
+                                // Row 4
+                                Row(
+                                  children: [
+                                    Expanded(child: MeasurementField(label: AppLocalizations.of(context)!.armLength, controller: armLengthController,inputType: TextInputType.number,)),
+                                    const SizedBox(width: 20),
+                                    Expanded(child: MeasurementField(label: AppLocalizations.of(context)!.shoulderSeam, controller: shoulderSeamController,inputType: TextInputType.number,)),
+                                    // const SizedBox(width: 12),
+                                    // Expanded(child: MeasurementField(label: AppLocalizations.of(context)!.armHole, controller: armHoleController,inputType: TextInputType.number,)),
+                                  ],
+                                ),
+                                const SizedBox(height: 12),
+                                // Row 5
+                                Row(
+                                  children: [
+                                    Expanded(child: MeasurementField(label: AppLocalizations.of(context)!.armHole, controller: armHoleController,inputType: TextInputType.number,)),
+                                    const SizedBox(width: 20),
+                                    Expanded(child: MeasurementField(label: AppLocalizations.of(context)!.bicep, controller: bicepController,inputType: TextInputType.number,)),
+                                    // const SizedBox(width: 12),
+                                    // Expanded(child: MeasurementField(label: AppLocalizations.of(context)!.foreArm, controller: foreArmController,inputType: TextInputType.number,)),
+                                    // const SizedBox(width: 12),
+                                    // Expanded(child: MeasurementField(label: AppLocalizations.of(context)!.wrist, controller: wristController,inputType: TextInputType.number,)),
+                                  ],
+                                ),
+                                const SizedBox(height: 12),
+                                Row(
+                                  children: [
+                                    Expanded(child: MeasurementField(label: AppLocalizations.of(context)!.foreArm, controller: foreArmController,inputType: TextInputType.number,)),
+                                    const SizedBox(width: 20),
+                                    Expanded(child: MeasurementField(label: AppLocalizations.of(context)!.wrist, controller: wristController,inputType: TextInputType.number,)),
+                                  ],
+                                ),
+                                const SizedBox(height: 12),
+                                // Row 6
+                                Row(
+                                  children: [
+                                    Expanded(child: MeasurementField(label: AppLocalizations.of(context)!.shoulderWaist, controller: shoulderToWaistController,inputType: TextInputType.number,)),
+                                    const SizedBox(width: 20),
+                                    Expanded(child: MeasurementField(label: AppLocalizations.of(context)!.bottomLength, controller: bottomLengthController,inputType: TextInputType.number,)),
+                                    //const SizedBox(width: 12),
+                                  ],
+                                ),
+                                const SizedBox(height: 12),
+                                Row(
+                                  children: [
+                                    Expanded(child: MeasurementField(label: AppLocalizations.of(context)!.ankle, controller: ankleController,inputType: TextInputType.number,)),
+                                    Spacer()
+                                  ],
+                                ),
+                                const SizedBox(height: 12),
+                                Text(
+                                  AppLocalizations.of(context)!.notes,
+                                  style: TextStyle(fontFamily: 'Poppins', fontWeight: FontWeight.w600, fontSize: 14),),
+                                SizedBox(height: 10,),
+                                TextField(controller: textarea,
+                                  keyboardType: TextInputType.multiline, maxLines: 4, maxLength: 500,
+                                  decoration: InputDecoration(hintText: AppLocalizations.of(context)!.textHere,
+                                      enabledBorder: const OutlineInputBorder(
+                                        borderSide: const BorderSide(color: Colors.grey, width: 0.5),),
+                                      focusedBorder: OutlineInputBorder(borderSide: BorderSide(width: 0.0, color: Colors.grey))),
                                 ),
                               ],
                             ),
-
+                            // Row(mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            //     crossAxisAlignment: CrossAxisAlignment.start,
+                            //     children: [
+                            //       Expanded(
+                            //         child: Container(
+                            //           decoration: BoxDecoration(borderRadius: BorderRadius.circular(10),color: Colors.white),
+                            //           child: Column(
+                            //             children: [
+                            //               Commonaddcusttextfield(inputType: TextInputType.number, text: AppLocalizations.of(context)!.neck, hintText: optional, controller: neckController,),
+                            //               SizedBox(height: 10,),
+                            //               Commonaddcusttextfield(inputType: TextInputType.number,text: AppLocalizations.of(context)!.bust, hintText: optional, controller: bustController,),
+                            //               SizedBox(height: 10,),
+                            //               Commonaddcusttextfield(inputType: TextInputType.number, text: AppLocalizations.of(context)!.underBust, hintText: optional, controller: underBustController,),
+                            //               SizedBox(height: 10,),
+                            //               Commonaddcusttextfield(inputType: TextInputType.number, text: AppLocalizations.of(context)!.waist, hintText: optional, controller: waistController,),
+                            //               SizedBox(height: 10,),
+                            //               Commonaddcusttextfield(inputType: TextInputType.number, text: AppLocalizations.of(context)!.hips, hintText: optional, controller: hipsController,),
+                            //               SizedBox(height: 10,),
+                            //               Commonaddcusttextfield(inputType: TextInputType.number, text: AppLocalizations.of(context)!.neckAbove, hintText: optional, controller: neckToAboveKneeController,),
+                            //               SizedBox(height: 10,),
+                            //               Commonaddcusttextfield(inputType: TextInputType.number, text: AppLocalizations.of(context)!.armLength, hintText: optional, controller: armLengthController,),
+                            //               SizedBox(height: 10,),
+                            //               Commonaddcusttextfield(inputType: TextInputType.number, text: AppLocalizations.of(context)!.shoulderSeam, hintText: optional, controller: shoulderSeamController,),
+                            //               SizedBox(height: 10,),
+                            //               Commonaddcusttextfield(inputType: TextInputType.number, text: AppLocalizations.of(context)!.armHole, hintText: optional, controller: armHoleController,),
+                            //               SizedBox(height: 10,),
+                            //               Commonaddcusttextfield(inputType: TextInputType.number, text: AppLocalizations.of(context)!.bicep, hintText: optional, controller: bicepController,),
+                            //               SizedBox(height: 10,),
+                            //               Commonaddcusttextfield(inputType: TextInputType.number, text: AppLocalizations.of(context)!.foreArm, hintText: optional, controller: foreArmController,),
+                            //               SizedBox(height: 10,),
+                            //               Commonaddcusttextfield(inputType: TextInputType.number, text: AppLocalizations.of(context)!.wrist, hintText: optional, controller: wristController,),
+                            //               SizedBox(height: 10,),
+                            //               Commonaddcusttextfield(inputType: TextInputType.number, text: AppLocalizations.of(context)!.shoulderWaist, hintText: optional, controller: shoulderToWaistController,),
+                            //               SizedBox(height: 10,),
+                            //               Commonaddcusttextfield(inputType: TextInputType.number, text: AppLocalizations.of(context)!.bottomLength, hintText: optional, controller: bottomLengthController,),
+                            //               SizedBox(height: 10,),
+                            //               Commonaddcusttextfield(inputType: TextInputType.number, text: AppLocalizations.of(context)!.ankle, hintText: optional, controller: ankleController,),
+                            //               SizedBox(height: 10,),
+                            //               Commonaddcusttextfield(inputType: TextInputType.number, text: AppLocalizations.of(context)!.stitchingCost, hintText: "₹", controller: stitchingCostController,),
+                            //               SizedBox(height: 10,),
+                            //               Commonaddcusttextfield(inputType: TextInputType.number, text: AppLocalizations.of(context)!.advancedCost, hintText: "₹", controller: advancedReceivedController,),
+                            //               SizedBox(height: 10,),
+                            //               Commonaddcusttextfield(inputType: TextInputType.number, text: AppLocalizations.of(context)!.outstandingBalance, hintText: "₹", controller: outStandingBalanceController,),
+                            //             ],
+                            //           ),
+                            //         ),
+                            //       ),
+                            //     ]
+                            // ),
                           ),
+                          SizedBox(height: 12,),
 
                         ],
                       ),

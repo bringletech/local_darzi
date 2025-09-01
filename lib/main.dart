@@ -80,7 +80,7 @@ Future<void> requestNotificationPermissions() async {
 
 Future<void> initializeLocalNotifications() async {
   const AndroidInitializationSettings initializationSettingsAndroid =
-  AndroidInitializationSettings('@mipmap/ic_launcher');
+  AndroidInitializationSettings('ic_stat_darzi'); // 👈 yaha change
 
   final DarwinInitializationSettings initializationSettingsIOS =
   DarwinInitializationSettings(
@@ -131,6 +131,22 @@ class _MyAppState extends State<MyApp> {
       AndroidNotification? android = message.notification?.android;
 
       if (notification != null && android != null) {
+        // flutterLocalNotificationsPlugin.show(
+        //   notification.hashCode,
+        //   notification.title,
+        //   notification.body,
+        //   NotificationDetails(
+        //     android: AndroidNotificationDetails(
+        //       'high_importance_channel',
+        //       'High Importance Notifications',
+        //       channelDescription:
+        //       'This channel is used for important notifications.',
+        //       importance: Importance.max,
+        //       priority: Priority.high,
+        //       icon: '@mipmap/ic_launcher',
+        //     ),
+        //   ),
+        // );
         flutterLocalNotificationsPlugin.show(
           notification.hashCode,
           notification.title,
@@ -139,14 +155,16 @@ class _MyAppState extends State<MyApp> {
             android: AndroidNotificationDetails(
               'high_importance_channel',
               'High Importance Notifications',
-              channelDescription:
-              'This channel is used for important notifications.',
+              channelDescription: 'This channel is used for important notifications.',
               importance: Importance.max,
               priority: Priority.high,
-              icon: '@mipmap/ic_launcher',
+              icon: 'ic_stat_darzi', // white-only icon
+              largeIcon: const DrawableResourceAndroidBitmap('ic_swing'), // colorful icon
+              color: Color(0xFFD66D11), // accent color
             ),
           ),
         );
+
       }
     });
 

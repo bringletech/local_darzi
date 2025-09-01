@@ -8,6 +8,7 @@ import 'package:darzi/pages/tailor/screens/tailor_active_dress/view/active_dress
 import 'package:darzi/pages/tailor/screens/tailor_add_customer/view/add_customer.dart';
 import 'package:darzi/pages/tailor/screens/tailor_notification/view/tailor_notification_screen.dart';
 import 'package:darzi/pages/tailor/screens/tailor_outstanding_balance/view/customer_outstanding_balance.dart';
+import 'package:darzi/pages/tailor/screens/tailor_stitching_history/view/tailor_stitching_history.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
@@ -36,11 +37,12 @@ class _DarziHomeScreenState extends State<DarziHomeScreen> {
 
   final CallService callService = CallService();
   bool isLoading = false;
-  List<SpecificCustomerOrder> orderList = [];
+  // List<SpecificCustomerOrder> orderList = [];
   List<Customers> customersList = [];
+  Current_Tailor_Data? current_tailor_data;
 
   // Track if the buttons are tapped
-  final List<bool> _isTapped = [false, false,false,false];
+  final List<bool> _isTapped = [false, false,false,false, false];
   int _selectedIndex = 0;
   final int pageIndex = 0;
 
@@ -51,13 +53,14 @@ class _DarziHomeScreenState extends State<DarziHomeScreen> {
     setState(() {
       isLoading = true;
       WidgetsBinding.instance.addPostFrameCallback((_) async {
-        Current_Tailor_Response model =
+        Current_Tailor_Details_Response model =
         await CallService().getCurrentTailorDetails();
         setState(() {
           isLoading = false;
-          orderList = model.data!.order!;
+          //orderList = model.data!.order!;
+          current_tailor_data = model.data!;
           customersList = model.data!.customers!;
-          print("list Value is: $orderList");
+         // print("list Value is: $orderList");
           print("list Value is: ${customersList.length}");
         });
       });
@@ -79,12 +82,12 @@ class _DarziHomeScreenState extends State<DarziHomeScreen> {
 
     WidgetsBinding.instance.addPostFrameCallback((_) async {
       try {
-        Current_Tailor_Response model = await CallService().getCurrentTailorDetails();
+        Current_Tailor_Details_Response model = await CallService().getCurrentTailorDetails();
         setState(() {
           isLoading = false;
-          orderList = model.data!.order!;
+          //orderList = model.data!.order!;
           customersList = model.data!.customers!;
-          print("list Value is: $orderList");
+          //print("list Value is: $orderList");
           print("list Value is: ${customersList.length}");
         });
       } catch (e) {
@@ -111,37 +114,137 @@ class _DarziHomeScreenState extends State<DarziHomeScreen> {
 
   @override
   Widget build(BuildContext context) {
+
+
     return Container(
       child: Scaffold(
         extendBody: true,
         backgroundColor: Colors.white,
-        appBar: CustomAppBar(
-            title: AppLocalizations.of(context)!.appHome,
-            elevation: 2.0,
-            leadingIcon: SvgPicture.asset(
-              'assets/svgIcon/home.svg',
-              allowDrawingOutsideViewBox: true,
-            ),
-          onNotificationTap: () {
-            print("Bell tapped!");
-            Navigator.push(
-              context,
-              MaterialPageRoute(
-                builder: (context) => TailorNotificationScreen(locale: widget.locale,),
-              ),
-            );
-          },
-        ),
-        body: isLoading == true?Center(
+        // appBar: CustomAppBar(
+        //     title: AppLocalizations.of(context)!.appHome,
+        //     elevation: 2.0,
+        //     leadingIcon: SvgPicture.asset(
+        //       'assets/svgIcon/home.svg',
+        //       allowDrawingOutsideViewBox: true,
+        //     ),
+        //   onNotificationTap: () {
+        //     print("Bell tapped!");
+        //     Navigator.push(
+        //       context,
+        //       MaterialPageRoute(
+        //         builder: (context) => TailorNotificationScreen(locale: widget.locale,),
+        //       ),
+        //     );
+        //   },
+        // ),
+
+        body:
+        isLoading == true?Center(
             child: CircularProgressIndicator(color: AppColors.newUpdateColor,))
             :Padding(
-          padding: const EdgeInsets.all(16.0),
+          padding: const EdgeInsets.all(16),
           child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              const SizedBox(height: 60),
+              SizedBox(height: 60),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      customersList.isEmpty?Text(
+                        AppLocalizations.of(context)!.welcome,
+                        style: TextStyle(
+                          fontSize: 24,
+                          fontWeight: FontWeight.bold,
+                            color: Colors.black
+                        ),
+
+                      ):Text(
+                        (current_tailor_data?.name?.isNotEmpty ?? false)
+                            ? current_tailor_data!.name!
+                            : AppLocalizations.of(context)!.noUserName, // fallback value
+                        style: TextStyle(
+                          fontSize: 24,
+                          fontWeight: FontWeight.bold,
+                        ),
+                      ),
+                      SizedBox(height: 4),
+                      (current_tailor_data?.city?.isNotEmpty ?? false) ||
+                          (current_tailor_data?.state?.isNotEmpty ?? false)
+                          ? Row(
+                        children: [
+                          Icon(Icons.location_on,
+                              size: 16, color: AppColors.newUpdateColor),
+                          const SizedBox(width: 4),
+                          Text(
+                            "${(current_tailor_data?.city?.isNotEmpty ?? false) ? current_tailor_data!.city! : ''}"
+                                "${(current_tailor_data?.state?.isNotEmpty ?? false) ? ', ${current_tailor_data!.state!}' : ''}",
+                            style: TextStyle(color: AppColors.newUpdateColor),
+                          ),
+                        ],
+                      )
+                          : const SizedBox.shrink(),
+
+                    ],
+                  ),
+                  Row(
+                    children: [
+                      Stack(
+                        children: [
+                          GestureDetector(onTap: (){
+                            print("Bell tapped!");
+                            Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                builder: (context) => TailorNotificationScreen(locale: widget.locale,),
+                              ),
+                            );
+                          },
+                              child: Icon(Icons.notifications_none, size: 28)),
+                          Positioned(
+                            right: 0,
+                            top: 0,
+                            child: Container(
+                              width: 8,
+                              height: 8,
+                              decoration: BoxDecoration(
+                                color: AppColors.newUpdateColor,
+                                shape: BoxShape.circle,
+                              ),
+                            ),
+                          )
+                        ],
+                      ),
+                      SizedBox(width: 12),
+                      CircleAvatar(
+                        radius: 20,
+                        backgroundImage: (current_tailor_data?.profileUrl != null &&
+                            current_tailor_data!.profileUrl!.isNotEmpty)
+                            ? NetworkImage(current_tailor_data!.profileUrl!)
+                            : AssetImage('assets/images/tailorProfile.png') as ImageProvider,
+                      )
+                    ],
+                  )
+                ],
+              ),
+
+              SizedBox(height: 30),
+              customersList.isEmpty?Text(
+                AppLocalizations.of(context)!.let_get_started,
+                style: TextStyle(
+                  fontSize: 22,
+                  fontWeight: FontWeight.bold,
+                    color: Colors.black
+                ),
+              ):SizedBox(),
+             // const SizedBox(height: 30),
               SizedBox(
-                height: 300,
+                height: MediaQuery.of(context).size.height * 0.6, // screen height ka 40%
                 child: customersList.isNotEmpty?GridView.count(
+                  shrinkWrap: true, // <-- important
+                  physics: NeverScrollableScrollPhysics(), // <-- scroll disable
                   crossAxisCount:
                   MediaQuery.of(context).size.width > 600 ? 3 : 2,
                   // Adjust grid count based on screen width
@@ -152,25 +255,35 @@ class _DarziHomeScreenState extends State<DarziHomeScreen> {
                     _buildCustomGridItem(
                         AppLocalizations.of(context)!.addCustomer,
                         SvgPicture.asset(
-                      'assets/svgIcon/addCustomer.svg',//just change my image with your image
+                      //'assets/svgIcon/addCustomer.svg',//just change my image with your image
+                     'assets/svgIcon/abcd.svg',
                       color: Colors.black,
                     ), 0),
                     _buildCustomGridItem1(
-                      AppLocalizations.of(context)!.activeDresses, SvgPicture.asset(
-                      'assets/svgIcon/dress.svg',//just change my image with your image
+                      AppLocalizations.of(context)!.my_orders, SvgPicture.asset(
+                      'assets/svgIcon/active_dress.svg',//just change my image with your image
+                      //'assets/svgIcon/activeDress.svg',//just change my image with your image
                       color: Colors.black,
                     ), 1),
                     // Using dress icon here
                     _buildCustomGridItem2(
                         AppLocalizations.of(context)!.outstandingBalance, SvgPicture.asset(
-                      'assets/svgIcon/out_standing_balance.svg',//just change my image with your image
+                      'assets/svgIcon/outstanding.svg',
+                     // 'assets/svgIcon/out_standing_balance.svg',//just change my image with your image
                       color: Colors.black,
                     ), 2),
                     _buildCustomGridItem3(
                         AppLocalizations.of(context)!.report, SvgPicture.asset(
-                      'assets/svgIcon/report.svg',//just change my image with your image
+                      'assets/svgIcon/customer_report.svg',//just change my image with your image
+                      //'assets/svgIcon/report.svg',//just change my image with your image
                       color: Colors.black,
                     ), 3),
+                    _buildCustomGridItem4(
+                        AppLocalizations.of(context)!.stitching_history, SvgPicture.asset(
+                      'assets/image/stitching_history.png',//just change my image with your image
+                      //'assets/svgIcon/report.svg',//just change my image with your image
+                      color: Colors.black,
+                    ), 4),
                   ],
                 ):
                 Center(
@@ -184,7 +297,7 @@ class _DarziHomeScreenState extends State<DarziHomeScreen> {
                     children: [
                       _buildCustomGridItem(
                       AppLocalizations.of(context)!.addCustomer,  SvgPicture.asset(
-                        'assets/svgIcon/addCustomer.svg',//just change my image with your image
+                        'assets/svgIcon/abcd.svg',//just change my image with your image
                         color: Colors.black,
                       ), 0),
                     ],
@@ -199,49 +312,139 @@ class _DarziHomeScreenState extends State<DarziHomeScreen> {
     );
   }
 
+  // Widget _buildCustomGridItem(String label, Widget icon, int index) {
+  //   return GestureDetector(
+  //     onTapDown: (_) {
+  //       setState(() {
+  //         _isTapped[index] = true; // Set tapped state
+  //       });
+  //     },
+  //     onTapUp: (_) {
+  //       // Reset tapped state after a brief delay
+  //       Future.delayed(const Duration(milliseconds: 100), () async {
+  //         setState(() {
+  //           _isTapped[index] = false; // Reset tapped state
+  //         });
+  //         // Navigate to the corresponding page
+  //         if (index == 0) {
+  //           final result = await Navigator.push(
+  //             context,
+  //             MaterialPageRoute(
+  //                 builder: (context) =>
+  //                     AddCustomer(locale: widget.locale) // tailor page (new route will be added)
+  //             ),
+  //           );
+  //           // Refresh with the result
+  //           if (result == true) {
+  //             setState(() {
+  //               _loadData();
+  //               //data = result;
+  //             });
+  //           }
+  //
+  //         } else {
+  //           final result = await Navigator.push(
+  //             context,
+  //             MaterialPageRoute(
+  //                 builder: (context) =>
+  //                  ActiveDress(locale: widget.locale) // navigate to active dress page
+  //             ),
+  //           );
+  //           // Refresh with the result
+  //           if (result == true) {
+  //             setState(() {
+  //               _loadData();
+  //               //data = result;
+  //             });
+  //           }
+  //         }
+  //       });
+  //     },
+  //     onTapCancel: () {
+  //       setState(() {
+  //         _isTapped[index] = false; // Reset tapped state on cancel
+  //       });
+  //     },
+  //     child: Material(
+  //       elevation: 8,
+  //       shadowColor: Colors.black.withOpacity(1.0),
+  //       borderRadius: BorderRadius.circular(15),
+  //       child: Container(
+  //         decoration: BoxDecoration(
+  //           color: _isTapped[index]?AppColors.newUpdateColor:Colors.white,
+  //           borderRadius: BorderRadius.circular(15),
+  //           border: Border.all(
+  //               color: AppColors.newUpdateColor,
+  //               width: 2), // Keep your original border color
+  //         ),
+  //         child: Center(
+  //           child: Column(
+  //             mainAxisAlignment: MainAxisAlignment.center,
+  //             children: [
+  //               Text(
+  //                 softWrap: true,
+  //                 textAlign: TextAlign.center,
+  //                 label,
+  //                 maxLines: 2,
+  //                 style: TextStyle(
+  //                   fontFamily: 'Poppins',
+  //                   fontSize: 12,
+  //                   color:
+  //                   _isTapped[index] ? Colors.white : AppColors.newUpdateColor,
+  //                   fontWeight: FontWeight.w600,
+  //                 ),
+  //               ),
+  //               SvgPicture.asset(
+  //                 'assets/svgIcon/addCustomer.svg',//just change my image with your image
+  //                 color: _isTapped[index] ?Colors.white:AppColors.newUpdateColor,
+  //                 width: 39,
+  //                 height: 37,
+  //
+  //               ),
+  //               const SizedBox(height: 0),
+  //
+  //             ],
+  //           ),
+  //         ),
+  //       ),
+  //     ),
+  //   );
+  // }
   Widget _buildCustomGridItem(String label, Widget icon, int index) {
     return GestureDetector(
       onTapDown: (_) {
         setState(() {
-          _isTapped[index] = true; // Set tapped state
+          _isTapped[index] = true;
         });
       },
       onTapUp: (_) {
-        // Reset tapped state after a brief delay
         Future.delayed(const Duration(milliseconds: 100), () async {
           setState(() {
-            _isTapped[index] = false; // Reset tapped state
+            _isTapped[index] = false;
           });
-          // Navigate to the corresponding page
+
           if (index == 0) {
             final result = await Navigator.push(
               context,
               MaterialPageRoute(
-                  builder: (context) =>
-                      AddCustomer(locale: widget.locale) // tailor page (new route will be added)
+                builder: (context) => AddCustomer(locale: widget.locale),
               ),
             );
-            // Refresh with the result
             if (result == true) {
               setState(() {
                 _loadData();
-                //data = result;
               });
             }
-
           } else {
             final result = await Navigator.push(
               context,
               MaterialPageRoute(
-                  builder: (context) =>
-                   ActiveDress(locale: widget.locale) // navigate to active dress page
+                builder: (context) => ActiveDress(locale: widget.locale),
               ),
             );
-            // Refresh with the result
             if (result == true) {
               setState(() {
                 _loadData();
-                //data = result;
               });
             }
           }
@@ -249,61 +452,60 @@ class _DarziHomeScreenState extends State<DarziHomeScreen> {
       },
       onTapCancel: () {
         setState(() {
-          _isTapped[index] = false; // Reset tapped state on cancel
+          _isTapped[index] = false;
         });
       },
       child: Material(
         elevation: 8,
-        shadowColor: Colors.black.withOpacity(1.0),
-        borderRadius: BorderRadius.circular(25),
+        shadowColor: Colors.black.withOpacity(0.8),
+        borderRadius: BorderRadius.circular(12),
         child: Container(
           decoration: BoxDecoration(
-            color: _isTapped[index]?AppColors.newUpdateColor:Colors.white,
-            // gradient: LinearGradient(
-            //   colors: _isTapped[index]
-            //       ? AppColors.Gradient1 // Red gradient when pressed
-            //       : [
-            //     Colors.white,
-            //     Colors.white
-            //   ], // White background when not pressed
-            // ),
-            borderRadius: BorderRadius.circular(25),
+            color: Colors.white,
+            borderRadius: BorderRadius.circular(12),
             border: Border.all(
-                color: AppColors.newUpdateColor,
-                width: 2), // Keep your original border color
+              color: AppColors.newUpdateColor,
+              width: 1.5,
+            ),
           ),
-          child: Center(
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                SvgPicture.asset(
-                  'assets/svgIcon/addCustomer.svg',//just change my image with your image
-                  color: _isTapped[index] ?Colors.white:AppColors.newUpdateColor,
-                  width: 39,
-                  height: 37,
-
-                ),
-                const SizedBox(height: 0),
-                Text(
-                  softWrap: true,
-                  textAlign: TextAlign.center,
-                  label,
-                  maxLines: 2,
-                  style: TextStyle(
-                    fontFamily: 'Poppins',
-                    fontSize: 12,
-                    color:
-                    _isTapped[index] ? Colors.white : AppColors.newUpdateColor,
-                    fontWeight: FontWeight.w600,
+          child: Stack(
+            children: [
+              // ---- Top Center Text ----
+              Align(
+                alignment: Alignment.topCenter,
+                child: Padding(
+                  padding: const EdgeInsets.only(top: 20),
+                  child: Text(
+                    label,
+                    style: TextStyle(
+                      fontSize: 14,
+                      fontWeight: FontWeight.bold,
+                      color: AppColors.newUpdateColor,
+                    ),
                   ),
                 ),
-              ],
-            ),
+              ),
+
+              // ---- Bottom Right Icon/Image ----
+              Align(
+                alignment: Alignment.bottomRight,
+                child: Padding(
+                  padding: const EdgeInsets.only(right: 6, bottom: 6),
+                  child: SvgPicture.asset(
+                    "assets/svgIcon/abcd.svg", // आपका icon/image path
+                    height: 70,
+                    fit: BoxFit.contain,
+                    //color: AppColors.newUpdateColor,
+                  ),
+                ),
+              ),
+            ],
           ),
         ),
       ),
     );
   }
+
   Widget _buildCustomGridItem1(String label, Widget icon, int index) {
     return GestureDetector(
       onTapDown: (_) {
@@ -344,51 +546,91 @@ class _DarziHomeScreenState extends State<DarziHomeScreen> {
       },
       child: Material(
         elevation: 8,
-        shadowColor: Colors.black.withOpacity(1.0),
-        borderRadius: BorderRadius.circular(25),
+        shadowColor: Colors.black.withOpacity(0.8),
+        borderRadius: BorderRadius.circular(12),
         child: Container(
           decoration: BoxDecoration(
-            color: _isTapped[index]?AppColors.newUpdateColor:Colors.white,
-            // gradient: LinearGradient(
-            //   colors: _isTapped[index]
-            //       ? AppColors.Gradient1 // Red gradient when pressed
-            //       : [
-            //     Colors.white,
-            //     Colors.white
-            //   ], // White background when not pressed
-            // ),
-            borderRadius: BorderRadius.circular(25),
+            color: Colors.white,
+            borderRadius: BorderRadius.circular(12),
             border: Border.all(
-                color: AppColors.newUpdateColor,
-                width: 2), // Keep your original border color
-          ),
-          child: Center(
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                SvgPicture.asset(
-                  'assets/svgIcon/dress.svg',//just change my image with your image
-                  color: _isTapped[index] ? Colors.white : AppColors.newUpdateColor,
-                  width: 20,
-                  height: 40,
-                ),
-                const SizedBox(height: 0),
-                Text(
-                  textAlign: TextAlign.center,
-                  label,
-                  style: TextStyle(
-                    fontFamily: 'Poppins',
-                    fontSize: 12,
-                    color:
-                    _isTapped[index] ? Colors.white : AppColors.newUpdateColor,
-                    fontWeight: FontWeight.w600,
-                  ),
-                ),
-              ],
+              color: AppColors.newUpdateColor,
+              width: 1.5,
             ),
           ),
+          child: Stack(
+            children: [
+              // ---- Top Center Text ----
+              Align(
+                alignment: Alignment.topCenter,
+                child: Padding(
+                  padding: const EdgeInsets.only(top: 15),
+                  child: Text(
+                    label,
+                    style: TextStyle(
+                      fontSize: 14,
+                      fontWeight: FontWeight.bold,
+                      color: AppColors.newUpdateColor,
+                    ),
+                  ),
+                ),
+              ),
+
+              // ---- Bottom Right Icon/Image ----
+              Align(
+                alignment: Alignment.bottomRight,
+                child: Padding(
+                  padding: const EdgeInsets.only(right: 6, bottom: 6),
+                  child: SvgPicture.asset(
+                    "assets/svgIcon/active_dress.svg", // आपका icon/image path
+                    height: 70,
+                    fit: BoxFit.contain,
+                    //color: AppColors.newUpdateColor,
+                  ),
+                ),
+              ),
+            ],
+          ),
         ),
-      ),
+      )
+      // Material(
+      //   elevation: 8,
+      //   shadowColor: Colors.black.withOpacity(1.0),
+      //   borderRadius: BorderRadius.circular(25),
+      //   child: Container(
+      //     decoration: BoxDecoration(
+      //       color: _isTapped[index]?AppColors.newUpdateColor:Colors.white,
+      //       borderRadius: BorderRadius.circular(25),
+      //       border: Border.all(
+      //           color: AppColors.newUpdateColor,
+      //           width: 2), // Keep your original border color
+      //     ),
+      //     child: Center(
+      //       child: Column(
+      //         mainAxisAlignment: MainAxisAlignment.center,
+      //         children: [
+      //           SvgPicture.asset(
+      //             'assets/svgIcon/dress.svg',//just change my image with your image
+      //             color: _isTapped[index] ? Colors.white : AppColors.newUpdateColor,
+      //             width: 20,
+      //             height: 40,
+      //           ),
+      //           const SizedBox(height: 0),
+      //           Text(
+      //             textAlign: TextAlign.center,
+      //             label,
+      //             style: TextStyle(
+      //               fontFamily: 'Poppins',
+      //               fontSize: 12,
+      //               color:
+      //               _isTapped[index] ? Colors.white : AppColors.newUpdateColor,
+      //               fontWeight: FontWeight.w600,
+      //             ),
+      //           ),
+      //         ],
+      //       ),
+      //     ),
+      //   ),
+      // ),
     );
   }
   Widget _buildCustomGridItem2(String label, Widget icon, int index) {
@@ -437,53 +679,102 @@ class _DarziHomeScreenState extends State<DarziHomeScreen> {
           _isTapped[index] = false; // Reset tapped state on cancel
         });
       },
-      child: Material(
+      child:
+      Material(
         elevation: 8,
-        shadowColor: Colors.black.withOpacity(1.0),
-        borderRadius: BorderRadius.circular(25),
+        shadowColor: Colors.black.withOpacity(0.8),
+        borderRadius: BorderRadius.circular(12),
         child: Container(
           decoration: BoxDecoration(
-            color: _isTapped[index]?AppColors.newUpdateColor:Colors.white,
-            // gradient: LinearGradient(
-            //   colors: _isTapped[index]
-            //       ? AppColors.Gradient1 // Red gradient when pressed
-            //       : [
-            //     Colors.white,
-            //     Colors.white
-            //   ], // White background when not pressed
-            // ),
-            borderRadius: BorderRadius.circular(25),
+            color: Colors.white,
+            borderRadius: BorderRadius.circular(12),
             border: Border.all(
-                color: AppColors.newUpdateColor,
-                width: 2), // Keep your original border color
-          ),
-          child: Center(
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                SvgPicture.asset(
-                  'assets/svgIcon/out_standing_balance.svg',//just change my image with your image
-                  color: _isTapped[index] ?Colors.white:AppColors.newUpdateColor,
-                  width: 20,
-                  height: 40,
-                ),
-                const SizedBox(height: 0),
-                Text(
-                  textAlign: TextAlign.center,
-                  label,
-                  style: TextStyle(
-                    fontFamily: 'Poppins',
-                    fontSize: 12,
-                    color:
-                    _isTapped[index] ?Colors.white:AppColors.newUpdateColor,
-                    fontWeight: FontWeight.w600,
-                  ),
-                ),
-              ],
+              color: AppColors.newUpdateColor,
+              width: 1.5,
             ),
           ),
+          child: Stack(
+            children: [
+              // ---- Top Center Text ----
+              Align(
+                alignment: Alignment.topCenter,
+                child: Padding(
+                  padding: const EdgeInsets.only(top: 20),
+                  child: Text(
+                    label,
+                    style: TextStyle(
+                      fontSize: 14,
+                      fontWeight: FontWeight.bold,
+                      color: AppColors.newUpdateColor,
+                    ),
+                  ),
+                ),
+              ),
+
+              // ---- Bottom Right Icon/Image ----
+              Align(
+                alignment: Alignment.bottomRight,
+                child: Padding(
+                  padding: const EdgeInsets.only(right: 6, bottom: 6),
+                  child: SvgPicture.asset(
+                    "assets/svgIcon/outstanding.svg", // आपका icon/image path
+                    height: 70,
+                    fit: BoxFit.contain,
+                    //color: AppColors.newUpdateColor,
+                  ),
+                ),
+              ),
+            ],
+          ),
         ),
-      ),
+      )
+      // Material(
+      //   elevation: 8,
+      //   shadowColor: Colors.black.withOpacity(1.0),
+      //   borderRadius: BorderRadius.circular(25),
+      //   child: Container(
+      //     decoration: BoxDecoration(
+      //       color: _isTapped[index]?AppColors.newUpdateColor:Colors.white,
+      //       // gradient: LinearGradient(
+      //       //   colors: _isTapped[index]
+      //       //       ? AppColors.Gradient1 // Red gradient when pressed
+      //       //       : [
+      //       //     Colors.white,
+      //       //     Colors.white
+      //       //   ], // White background when not pressed
+      //       // ),
+      //       borderRadius: BorderRadius.circular(25),
+      //       border: Border.all(
+      //           color: AppColors.newUpdateColor,
+      //           width: 2), // Keep your original border color
+      //     ),
+      //     child: Center(
+      //       child: Column(
+      //         mainAxisAlignment: MainAxisAlignment.center,
+      //         children: [
+      //           SvgPicture.asset(
+      //             'assets/svgIcon/out_standing_balance.svg',//just change my image with your image
+      //             color: _isTapped[index] ?Colors.white:AppColors.newUpdateColor,
+      //             width: 20,
+      //             height: 40,
+      //           ),
+      //           const SizedBox(height: 0),
+      //           Text(
+      //             textAlign: TextAlign.center,
+      //             label,
+      //             style: TextStyle(
+      //               fontFamily: 'Poppins',
+      //               fontSize: 12,
+      //               color:
+      //               _isTapped[index] ?Colors.white:AppColors.newUpdateColor,
+      //               fontWeight: FontWeight.w600,
+      //             ),
+      //           ),
+      //         ],
+      //       ),
+      //     ),
+      //   ),
+      // ),
     );
   }
   Widget _buildCustomGridItem3(String label, Widget icon, int index) {
@@ -540,53 +831,263 @@ class _DarziHomeScreenState extends State<DarziHomeScreen> {
           _isTapped[index] = false; // Reset tapped state on cancel
         });
       },
-      child: Material(
+      child:Material(
         elevation: 8,
-        shadowColor: Colors.black.withOpacity(1.0),
-        borderRadius: BorderRadius.circular(25),
+        shadowColor: Colors.black.withOpacity(0.8),
+        borderRadius: BorderRadius.circular(12),
         child: Container(
           decoration: BoxDecoration(
-            color: _isTapped[index]?AppColors.newUpdateColor:Colors.white,
-            // gradient: LinearGradient(
-            //   colors: _isTapped[index]
-            //       ? AppColors.Gradient1 // Red gradient when pressed
-            //       : [
-            //     Colors.white,
-            //     Colors.white
-            //   ], // White background when not pressed
-            // ),
-            borderRadius: BorderRadius.circular(25),
+            color: Colors.white,
+            borderRadius: BorderRadius.circular(12),
             border: Border.all(
-                color: AppColors.newUpdateColor,
-                width: 2), // Keep your original border color
+              color: AppColors.newUpdateColor,
+              width: 1.5,
+            ),
           ),
-          child: Center(
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-              SvgPicture.asset(
-              'assets/svgIcon/report.svg',//just change my image with your image
-                  color: _isTapped[index] ? Colors.white : AppColors.newUpdateColor,
-                  width: 20,
-                  height: 40,
+          child: Stack(
+            children: [
+
+              // ---- Top Center Text ----
+              Align(
+                alignment: Alignment.topCenter,
+                child: Padding(
+                  padding: const EdgeInsets.only(top: 20),
+                  child: Text(
+                    label,
+                    style: TextStyle(
+                      fontSize: 14,
+                      fontWeight: FontWeight.bold,
+                      color: AppColors.newUpdateColor,
+                    ),
+                  ),
                 ),
-                const SizedBox(height: 0),
-                Text(
-                  textAlign: TextAlign.center,
-                  label,
-                  style: TextStyle(
-                    fontFamily: 'Poppins',
-                    fontSize: 12,
-                    color:
-                    _isTapped[index] ? Colors.white : AppColors.newUpdateColor,
-                    fontWeight: FontWeight.w600,
+              ),
+
+              // ---- Bottom Right Icon/Image ----
+              Align(
+                alignment: Alignment.bottomRight,
+                child: Padding(
+                  padding: const EdgeInsets.only(right: 6, bottom: 6),
+                  child: SvgPicture.asset(
+                    "assets/svgIcon/customer_report.svg", // आपका icon/image path
+                    height: 70,
+                    fit: BoxFit.contain,
+                    //color: AppColors.newUpdateColor,
+                  ),
+                ),
+              ),
+            ],
+          ),
+        ),
+      )
+      // Material(
+      //   elevation: 8,
+      //   shadowColor: Colors.black.withOpacity(1.0),
+      //   borderRadius: BorderRadius.circular(25),
+      //   child: Container(
+      //     decoration: BoxDecoration(
+      //       color: _isTapped[index]?AppColors.newUpdateColor:Colors.white,
+      //       // gradient: LinearGradient(
+      //       //   colors: _isTapped[index]
+      //       //       ? AppColors.Gradient1 // Red gradient when pressed
+      //       //       : [
+      //       //     Colors.white,
+      //       //     Colors.white
+      //       //   ], // White background when not pressed
+      //       // ),
+      //       borderRadius: BorderRadius.circular(25),
+      //       border: Border.all(
+      //           color: AppColors.newUpdateColor,
+      //           width: 2), // Keep your original border color
+      //     ),
+      //     child: Center(
+      //       child: Column(
+      //         mainAxisAlignment: MainAxisAlignment.center,
+      //         children: [
+      //         SvgPicture.asset(
+      //         'assets/svgIcon/report.svg',//just change my image with your image
+      //             color: _isTapped[index] ? Colors.white : AppColors.newUpdateColor,
+      //             width: 20,
+      //             height: 40,
+      //           ),
+      //           const SizedBox(height: 0),
+      //           Text(
+      //             textAlign: TextAlign.center,
+      //             label,
+      //             style: TextStyle(
+      //               fontFamily: 'Poppins',
+      //               fontSize: 12,
+      //               color:
+      //               _isTapped[index] ? Colors.white : AppColors.newUpdateColor,
+      //               fontWeight: FontWeight.w600,
+      //             ),
+      //           ),
+      //         ],
+      //       ),
+      //     ),
+      //   ),
+      // ),
+    );
+  }
+
+  Widget _buildCustomGridItem4(String label, Widget icon, int index) {
+    return GestureDetector(
+        onTapDown: (_) {
+          setState(() {
+            _isTapped[index] = true; // Set tapped state
+          });
+        },
+        onTapUp: (_) {
+          // Reset tapped state after a brief delay
+          Future.delayed(const Duration(milliseconds: 100), () {
+            setState(() {
+              _isTapped[index] = false; // Reset tapped state
+            });
+            // Navigate to the corresponding page
+            if (index == 0) {
+              Navigator.push(
+                context,
+                MaterialPageRoute(
+                    builder: (context) =>
+                        AddCustomer(locale: widget.locale,) // tailor page (new route will be added)
+                ),
+              );
+            } else if(index == 1){
+              Navigator.push(
+                context,
+                MaterialPageRoute(
+                    builder: (context) =>
+                        ActiveDress(locale: widget.locale,) // navigate to active dress page
+                ),
+              );
+            }else if(index == 2){
+              Navigator.push(
+                context,
+                MaterialPageRoute(
+                    builder: (context) =>
+                        CustomerOutstandingBalance(locale: widget.locale,) // navigate to active dress page
+                ),
+              );
+            }else if(index == 3){
+              Navigator.push(
+                context,
+                MaterialPageRoute(
+                    builder: (context) =>
+                        TailorReport(locale: widget.locale,) // navigate to active dress page
+                ),
+              );
+            }else{
+              print("Container is tapped");
+              Navigator.push(
+                context,
+                MaterialPageRoute(
+                    builder: (context) =>
+                        TailorStitchingHistory(locale: widget.locale,) // navigate to active dress page
+                ),
+              );
+            }
+          });
+        },
+        onTapCancel: () {
+          setState(() {
+            _isTapped[index] = false; // Reset tapped state on cancel
+          });
+        },
+        child:Material(
+          elevation: 8,
+          shadowColor: Colors.black.withOpacity(0.8),
+          borderRadius: BorderRadius.circular(12),
+          child: Container(
+            decoration: BoxDecoration(
+              color: Colors.white,
+              borderRadius: BorderRadius.circular(12),
+              border: Border.all(
+                color: AppColors.newUpdateColor,
+                width: 1.5,
+              ),
+            ),
+            child: Stack(
+              children: [
+                // ---- Top Center Text ----
+                Align(
+                  alignment: Alignment.topCenter,
+                  child: Padding(
+                    padding: const EdgeInsets.only(top: 20),
+                    child: Text(
+                      label,
+                      style: TextStyle(
+                        fontSize: 14,
+                        fontWeight: FontWeight.bold,
+                        color: AppColors.newUpdateColor,
+                      ),
+                    ),
+                  ),
+                ),
+
+                // ---- Bottom Right Icon/Image ----
+                Align(
+                  alignment: Alignment.bottomRight,
+                  child: Padding(
+                    padding: const EdgeInsets.only(right: 6, bottom: 6),
+                    child: Image.asset(
+                      "assets/images/stitching_history.png", // आपका icon/image path
+                      height: 70,
+                      fit: BoxFit.contain,
+                      //color: AppColors.newUpdateColor,
+                    ),
                   ),
                 ),
               ],
             ),
           ),
-        ),
-      ),
+        )
+      // Material(
+      //   elevation: 8,
+      //   shadowColor: Colors.black.withOpacity(1.0),
+      //   borderRadius: BorderRadius.circular(25),
+      //   child: Container(
+      //     decoration: BoxDecoration(
+      //       color: _isTapped[index]?AppColors.newUpdateColor:Colors.white,
+      //       // gradient: LinearGradient(
+      //       //   colors: _isTapped[index]
+      //       //       ? AppColors.Gradient1 // Red gradient when pressed
+      //       //       : [
+      //       //     Colors.white,
+      //       //     Colors.white
+      //       //   ], // White background when not pressed
+      //       // ),
+      //       borderRadius: BorderRadius.circular(25),
+      //       border: Border.all(
+      //           color: AppColors.newUpdateColor,
+      //           width: 2), // Keep your original border color
+      //     ),
+      //     child: Center(
+      //       child: Column(
+      //         mainAxisAlignment: MainAxisAlignment.center,
+      //         children: [
+      //         SvgPicture.asset(
+      //         'assets/svgIcon/report.svg',//just change my image with your image
+      //             color: _isTapped[index] ? Colors.white : AppColors.newUpdateColor,
+      //             width: 20,
+      //             height: 40,
+      //           ),
+      //           const SizedBox(height: 0),
+      //           Text(
+      //             textAlign: TextAlign.center,
+      //             label,
+      //             style: TextStyle(
+      //               fontFamily: 'Poppins',
+      //               fontSize: 12,
+      //               color:
+      //               _isTapped[index] ? Colors.white : AppColors.newUpdateColor,
+      //               fontWeight: FontWeight.w600,
+      //             ),
+      //           ),
+      //         ],
+      //       ),
+      //     ),
+      //   ),
+      // ),
     );
   }
 

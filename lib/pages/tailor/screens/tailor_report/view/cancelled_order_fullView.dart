@@ -64,18 +64,37 @@ class _CancelledOrderFullviewState extends State<CancelledOrderFullview> {
           return false;
         },
         child:isLoading == true?Center(child: CircularProgressIndicator(color: AppColors.darkRed,)):Scaffold(
-          appBar: CustomAppBarWithBack(
-            title: AppLocalizations.of(context)!.cancel_order_details_title,
-            hasBackButton: true,
-            onBackButtonPressed: () async{
-              Navigator.pop(context, true);
-            },
-            elevation: 2.0,
-            leadingIcon: SvgPicture.asset(
-              'assets/svgIcon/activeDress.svg',
-              color: Colors.black,
+          appBar: AppBar(
+            title: Text(AppLocalizations.of(context)!.cancel_order_details_title,
+              style: const TextStyle(
+                fontFamily: 'Poppins',
+                fontWeight: FontWeight.w600,
+                fontSize: 24,
+              ),
+              textAlign: TextAlign.center,),
+            backgroundColor: Colors.white,
+            elevation: 0,
+            centerTitle: true,
+            scrolledUnderElevation: 0,
+            leading: IconButton(
+              icon: Icon(Icons.arrow_back_ios),
+              onPressed: () async {
+                Navigator.pop(context, true);
+              },
             ),
           ),
+          // CustomAppBarWithBack(
+          //   title: AppLocalizations.of(context)!.cancel_order_details_title,
+          //   hasBackButton: true,
+          //   onBackButtonPressed: () async{
+          //     Navigator.pop(context, true);
+          //   },
+          //   elevation: 2.0,
+          //   leadingIcon: SvgPicture.asset(
+          //     'assets/svgIcon/activeDress.svg',
+          //     color: Colors.black,
+          //   ),
+          // ),
           body: Stack(
             children: [
               Padding(

@@ -1,26 +1,21 @@
-import 'dart:convert';
 import 'dart:io';
 import 'package:darzi/apiData/model/add_new_customer_response_model.dart';
 import 'package:darzi/apiData/model/aws_response_model.dart';
+import 'package:darzi/common/all_text_form_field1.dart';
 import 'package:darzi/common/widgets/tailor/custom_toggle_button.dart';
 import 'package:darzi/l10n/app_localizations.dart';
+import 'package:darzi/pages/tailor/screens/tailor_add_customer/view/add_customer1.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:intl/intl.dart';
-import 'package:permission_handler/permission_handler.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:http/http.dart' as http;
-import '../../../../../apiData/all_urls/all_urls.dart';
 import '../../../../../apiData/call_api_service/call_service.dart';
 import '../../../../../apiData/model/verify_mobile_model.dart';
 import '../../../../../colors.dart';
 import '../../../../../common/all_text.dart';
-import '../../../../../common/all_text_form_field.dart';
-import '../../../../../common/widgets/tailor/commAddCustTextField.dart';
-import '../../../../../common/widgets/tailor/common_app_bar_with_back.dart';
-import '../../../../../constants/string_constant.dart';
 import '../../tailor_dashboard/view/tailor_dashboard_new.dart';
 import 'package:path/path.dart' as p;
 
@@ -144,15 +139,21 @@ class _AddCustomerState extends State<AddCustomer> {
           constraints: BoxConstraints(
             maxHeight: MediaQuery.of(context).size.height,),
           child: Scaffold(
-              appBar: CustomAppBarWithBack(
-                  title: AppLocalizations.of(context)!.newCustomer,
-                  hasBackButton: true,
-                  elevation: 2.0,
-                  leadingIcon: SvgPicture.asset(
-                    'assets/svgIcon/addCust.svg',
-                    color: Colors.black,
+              appBar:AppBar(
+                centerTitle: true, // 👈 yeh add karo
+                title: Text(AppLocalizations.of(context)!.newCustomer,
+                  style: const TextStyle(
+                    fontFamily: 'Poppins',
+                    fontWeight: FontWeight.w600,
+                    fontSize: 24,
                   ),
-                  onBackButtonPressed: () async {
+                  textAlign: TextAlign.center,),
+                backgroundColor: Colors.white,
+                elevation: 0,
+                scrolledUnderElevation: 0,
+                leading: IconButton(
+                  icon: Icon(Icons.arrow_back_ios),
+                  onPressed: () async {
                     if (_isFormDirty()) {
                       showWarningMessage(
                         context,
@@ -168,234 +169,308 @@ class _AddCustomerState extends State<AddCustomer> {
                             builder: (context) => TailorDashboardNew(locale: widget.locale)),
                       );
                     }
-
-                  }
+                  },
+                ),
               ),
+              // CustomAppBarWithBack(
+              //     title: AppLocalizations.of(context)!.newCustomer,
+              //     hasBackButton: true,
+              //     elevation: 2.0,
+              //     leadingIcon: SvgPicture.asset(
+              //       'assets/svgIcon/addCust.svg',
+              //       color: Colors.black,
+              //     ),
+              //     onBackButtonPressed: () async {
+              //       if (_isFormDirty()) {
+              //         showWarningMessage(
+              //           context,
+              //           locale: widget.locale,
+              //           onChangeLanguage: (newLocale) {
+              //             print("Language changed to: ${newLocale.languageCode}");
+              //           },
+              //         );
+              //       } else {
+              //         Navigator.pushReplacement(
+              //           context,
+              //           MaterialPageRoute(
+              //               builder: (context) => TailorDashboardNew(locale: widget.locale)),
+              //         );
+              //       }
+              //
+              //     }
+              // ),
               body: SingleChildScrollView(
                   child: Container(
                       color: Colors.white,
                       child: Column(
                           children: [
+                            SizedBox(height: 20,),
                             Container(
-                                child: Card(
-                                  color: Colors.white,
-                                  elevation: 6,
-                                  shape: RoundedRectangleBorder(borderRadius:
-                                  BorderRadius.vertical(bottom: Radius.circular(40)),),
-                                  child: Container(
-                                      padding: const EdgeInsets.all(12.0),
-                                      child: Align(
-                                        alignment: Alignment.centerLeft,
-                                        child: Column(
-                                            crossAxisAlignment: CrossAxisAlignment.start,
-                                            mainAxisSize: MainAxisSize.min,
-                                            children: [
-                                              Row(
-                                                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                                                children: [
-                                                  Expanded(
-                                                      flex: 2,
-                                                      child: AllText(text: AppLocalizations.of(context)!.userName, fontFamily: 'Poppins', fontSize: 15, fontWeight: FontWeight.w500,)),
-                                                  SizedBox(width: 8),
-                                                  Expanded(
-                                                      flex: 3,
-                                                      child: AllTextFormField(inputType: TextInputType.text, hintText: AppLocalizations.of(context)!.enterName, mController: nameController, readOnly: false,)
-                                                  ),
-                                                ],
-                                              ),
-                                              SizedBox(height: 8),
-                                              Row(
-                                                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                                                children: [
-                                                  Expanded(
+                                child: Container(
+                                    padding: const EdgeInsets.all(12.0),
+                                    child: Align(
+                                      alignment: Alignment.centerLeft,
+                                      child: Column(
+                                          crossAxisAlignment: CrossAxisAlignment.start,
+                                          mainAxisSize: MainAxisSize.min,
+                                          children: [
+                                            Row(
+                                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                              children: [
+                                                Expanded(
                                                     flex: 2,
-                                                    child: AllText(text: AppLocalizations.of(context)!.mobileNumber, fontFamily: 'Poppins', fontSize: 15, fontWeight: FontWeight.w500,),
-                                                  ),
-                                                  SizedBox(width: 8),
-                                                  Expanded(
+                                                    child: AllText(text: AppLocalizations.of(context)!.userName, fontFamily: 'Poppins', fontSize: 15, fontWeight: FontWeight.w500,)),
+                                                SizedBox(width: 8),
+                                                Expanded(
                                                     flex: 3,
-                                                    child: Column(
-                                                      crossAxisAlignment: CrossAxisAlignment.start,
-                                                      children: [
-                                                        Stack(
-                                                          children: [
-                                                            Material(elevation: 8, shadowColor: Colors.black.withOpacity(0.8), borderRadius: BorderRadius.circular(30),
-                                                              child: TextFormField(
-                                                                keyboardType: TextInputType.number,
-                                                                onChanged: (value) => _checkInput(value),
-                                                                readOnly: false,
-                                                                focusNode: _focusNode,
-                                                                controller: mobileNoController,
-                                                                decoration: InputDecoration(
-                                                                  hintMaxLines: 1,
-                                                                  hintText: AppLocalizations.of(context)!.enterMobileNumber,
-                                                                  contentPadding: EdgeInsets.only(left: 15.0),
-                                                                  hintStyle: TextStyle(fontFamily: 'Inter', fontSize: 11, color: Color(0xff454545), fontWeight: FontWeight.w400,),
-                                                                  border: OutlineInputBorder(borderRadius: BorderRadius.circular(30),borderSide: BorderSide.none,),
-                                                                  filled: true,
-                                                                  fillColor: Colors.white,
+                                                    child: AllTextFormField1(inputType: TextInputType.text, hintText: AppLocalizations.of(context)!.enterName, mController: nameController, readOnly: false,)
+                                                ),
+                                              ],
+                                            ),
+                                            SizedBox(height: 8),
+                                            Row(
+                                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                              children: [
+                                                Expanded(
+                                                  flex: 2,
+                                                  child: AllText(text: AppLocalizations.of(context)!.mobileNumber, fontFamily: 'Poppins', fontSize: 15, fontWeight: FontWeight.w500,),
+                                                ),
+                                                SizedBox(width: 8),
+                                                Expanded(
+                                                  flex: 3,
+                                                  child: Column(
+                                                    crossAxisAlignment: CrossAxisAlignment.start,
+                                                    children: [
+                                                      Stack(
+                                                        children: [
+                                                          Material(
+                                                            elevation:4,
+                                                            child: TextFormField(
+                                                              keyboardType: TextInputType.number,
+                                                              onChanged: (value) => _checkInput(value),
+                                                              readOnly: false,
+                                                              focusNode: _focusNode,
+                                                              controller: mobileNoController,
+                                                              // decoration: InputDecoration(
+                                                              //   hintMaxLines: 1,
+                                                              //   hintText: AppLocalizations.of(context)!.enterMobileNumber,
+                                                              //   contentPadding: EdgeInsets.only(left: 15.0),
+                                                              //   hintStyle: TextStyle(fontFamily: 'Inter', fontSize: 11, color: Color(0xff454545), fontWeight: FontWeight.w400,),
+                                                              //   border: OutlineInputBorder(borderRadius: BorderRadius.circular(30),borderSide: BorderSide.none,),
+                                                              //   filled: true,
+                                                              //   fillColor: Colors.white,
+                                                              // ),
+                                                              decoration: InputDecoration(
+                                                                hintMaxLines: 1,
+                                                                hintText: AppLocalizations.of(context)!.enterMobileNumber,
+                                                                contentPadding: EdgeInsets.only(left: 15.0),
+                                                                hintStyle: const TextStyle(
+                                                                  fontFamily: 'Inter',
+                                                                  fontSize: 11,
+                                                                  color: Color(0xff454545),
+                                                                  fontWeight: FontWeight.w400,
                                                                 ),
+                                                                border: InputBorder.none,
+                                                                filled: true,
+                                                                fillColor: Colors.white,
                                                               ),
                                                             ),
-                                                            if (isLoading)
-                                                              Positioned(
-                                                                right: 8.0,
-                                                                top: 12.0,
-                                                                child: SizedBox(width: 24, height: 24,
-                                                                  child: CircularProgressIndicator(strokeWidth: 2.0),
-                                                                ),
+                                                          ),
+                                                          if (isLoading)
+                                                            Positioned(
+                                                              right: 8.0,
+                                                              top: 12.0,
+                                                              child: SizedBox(width: 24, height: 24,
+                                                                child: CircularProgressIndicator(strokeWidth: 2.0),
                                                               ),
+                                                            ),
+                                                        ],
+                                                      ),
+                                                      SizedBox(height: 3),
+                                                      // Debugging Text
+                                                      //Text("Current message: $message", style: TextStyle(color: Colors.red)),
+                                                      if (message.contains("Number registered on Darzi App")&& message.isNotEmpty)
+                                                        Container(
+                                                          padding: EdgeInsets.symmetric(vertical: 8, horizontal: 12),
+                                                          decoration: BoxDecoration(
+                                                            color: Colors.green.withOpacity(0.1),
+                                                            borderRadius: BorderRadius.circular(10),
+                                                            border: Border.all(color: Colors.green),
+                                                          ),
+                                                          child: Text(
+                                                            message,
+                                                            style: TextStyle(
+                                                              fontFamily: 'Poppins',
+                                                              fontSize: 13,
+                                                              fontWeight: FontWeight.w500,
+                                                              color: AppColors.newUpdateColor,
+                                                            ),
+                                                          ),
+                                                        ),
+                                                    ],
+                                                  ),
+                                                ),
+                                              ],
+                                            ),
+                                            SizedBox(height: 8),
+                                            Row(
+                                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                              children: [
+                                                Expanded(flex: 2,
+                                                    child: AllText(text: AppLocalizations.of(context)!.dressName, fontFamily: 'Poppins', fontSize: 15, fontWeight: FontWeight.w500)),
+                                                SizedBox(width: 8),
+                                                Expanded(flex: 3,
+                                                    child: AllTextFormField1(inputType: TextInputType.text, hintText: AppLocalizations.of(context)!.enterDressName, mController: dressNameController, readOnly: false,)),
+                                              ],
+                                            ),
+                                            SizedBox(height: 8),
+                                            Row(crossAxisAlignment: CrossAxisAlignment.center,
+                                              children: [
+                                                Expanded(flex: 2,
+                                                  child: Text(AppLocalizations.of(context)!.dressPhoto, style: TextStyle(fontFamily: 'Popins', fontSize: 15, fontWeight: FontWeight.w500,),),),
+                                                SizedBox(width: 8),
+                                                Expanded(
+                                                    flex: 3,
+                                                    child: GestureDetector(onTap: () async {
+                                                      _handleImagePickerTap(context);
+                                                    },
+                                                      child: Container(
+                                                        height: 45,
+                                                        decoration: BoxDecoration(
+                                                          color: Colors.white,
+                                                          borderRadius: BorderRadius.circular(6), // halka sa rounded corner
+                                                          boxShadow: [
+                                                            BoxShadow(
+                                                              color: Colors.grey.withOpacity(0.8), // halka shadow
+                                                              spreadRadius: 1,
+                                                              blurRadius: 5,
+                                                              offset: const Offset(0, 2), // shadow niche ki taraf
+                                                            ),
                                                           ],
                                                         ),
-                                                        SizedBox(height: 3),
-                                                        // Debugging Text
-                                                        //Text("Current message: $message", style: TextStyle(color: Colors.red)),
-                                                        if (message.contains("Number registered on Darzi App")&& message.isNotEmpty)
-                                                          Container(
-                                                            padding: EdgeInsets.symmetric(vertical: 8, horizontal: 12),
-                                                            decoration: BoxDecoration(
-                                                              color: Colors.green.withOpacity(0.1),
-                                                              borderRadius: BorderRadius.circular(10),
-                                                              border: Border.all(color: Colors.green),
+                                                        child: Row(
+                                                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                                          children: [
+                                                            Padding(
+                                                              padding: const EdgeInsets.symmetric(horizontal: 16),
+                                                              child: Text(
+                                                                AppLocalizations.of(context)!.addImage,
+                                                                style: TextStyle(
+                                                                  fontFamily: 'Inter',
+                                                                  fontSize: 11,
+                                                                  color: AppColors.newUpdateColor,
+                                                                  fontWeight: FontWeight.w400,
+                                                                ),
+                                                              ),
                                                             ),
-                                                            child: Text(
-                                                              message,
-                                                              style: TextStyle(
-                                                                fontFamily: 'Poppins',
-                                                                fontSize: 13,
-                                                                fontWeight: FontWeight.w500,
+                                                            const Padding(
+                                                              padding: EdgeInsets.symmetric(horizontal: 16),
+                                                              child: Icon(
+                                                                Icons.add_circle_outline_sharp,
+                                                                size: 15,
                                                                 color: AppColors.newUpdateColor,
                                                               ),
                                                             ),
-                                                          ),
-                                                      ],
-                                                    ),
-                                                  ),
-                                                ],
-                                              ),
-                                              SizedBox(height: 8),
-                                              Row(
-                                                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                                                children: [
-                                                  Expanded(flex: 2,
-                                                      child: AllText(text: AppLocalizations.of(context)!.dressName, fontFamily: 'Poppins', fontSize: 15, fontWeight: FontWeight.w500)),
-                                                  SizedBox(width: 8),
-                                                  Expanded(flex: 3,
-                                                      child: AllTextFormField(inputType: TextInputType.text, hintText: AppLocalizations.of(context)!.enterDressName, mController: dressNameController, readOnly: false,)),
-                                                ],
-                                              ),
-                                              SizedBox(height: 8),
-                                              Row(crossAxisAlignment: CrossAxisAlignment.center,
-                                                children: [
-                                                  Expanded(flex: 2,
-                                                    child: Text(AppLocalizations.of(context)!.dressPhoto, style: TextStyle(fontFamily: 'Popins', fontSize: 15, fontWeight: FontWeight.w500,),),),
-                                                  SizedBox(width: 8),
-                                                  Expanded(
-                                                      flex: 3,
-                                                      child: GestureDetector(onTap: () async {
-                                                        _handleImagePickerTap(context);
-                                                      },
-                                                        child: Container(
-                                                          height: 45,
-                                                          decoration: BoxDecoration(color: Colors.white,
-                                                            borderRadius: BorderRadius.circular(25),
-                                                            border: Border.all(color: Colors.white),
-                                                            boxShadow: [BoxShadow(color: Colors.grey.withOpacity(0.5), spreadRadius: 4.0, blurRadius: 4.0, offset: const Offset(0, 3),),],),
-                                                          child: Row(
-                                                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                                                            children: [
-                                                              Padding(padding: EdgeInsets.symmetric(horizontal: 16),
-                                                                child: Text(AppLocalizations.of(context)!.addImage, style: TextStyle(fontFamily:'Inter',fontSize: 11,color:AppColors.newUpdateColor, fontWeight: FontWeight.w400),),),
-                                                              Padding(padding: EdgeInsets.symmetric(horizontal: 16),
-                                                                child: Icon(Icons.add_circle_outline_sharp, size: 15, color: AppColors.newUpdateColor),
-                                                              ),
-                                                            ],
-                                                          ),
+                                                          ],
                                                         ),
-                                                      )),
-                                                ],
-                                              ),
-                                              SizedBox(height: 3),
-                                              Visibility(
-                                                visible: _selectedImage != null,
-                                                child: Center(
-                                                  child: Container(
-                                                    margin: EdgeInsets.only(left: 30),
-                                                    child: Card(elevation: 4.0,
-                                                      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10.0),),
-                                                      child: Column(
-                                                        children: [
-                                                          Container(child: _selectedImage == null
-                                                              ? SvgPicture.asset('assets/svgIcon/profilepic.svg', width: 80, height: 80,)
-                                                              : ClipOval(child: Image.file(_selectedImage!, fit: BoxFit.cover, width: 120, height: 120,
-                                                          ),
-                                                          ),
-                                                          ),
-                                                        ],
-                                                      ),
+                                                      )
+
+                                                    )),
+                                              ],
+                                            ),
+                                            SizedBox(height: 3),
+                                            Visibility(
+                                              visible: _selectedImage != null,
+                                              child: Center(
+                                                child: Container(
+                                                  margin: EdgeInsets.only(left: 30),
+                                                  child: Card(elevation: 4.0,
+                                                    shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10.0),),
+                                                    child: Column(
+                                                      children: [
+                                                        Container(child: _selectedImage == null
+                                                            ? SvgPicture.asset('assets/svgIcon/profilepic.svg', width: 80, height: 80,)
+                                                            : ClipOval(child: Image.file(_selectedImage!, fit: BoxFit.cover, width: 120, height: 120,
+                                                        ),
+                                                        ),
+                                                        ),
+                                                      ],
                                                     ),
                                                   ),
                                                 ),
                                               ),
-                                              SizedBox(height: 8),
-                                              Row(
-                                                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                                                children: [
-                                                  Expanded(flex: 2,
-                                                      child: AllText(text: AppLocalizations.of(context)!.dueDate, fontFamily: 'Poppins', fontSize: 15, fontWeight: FontWeight.w500)),
-                                                  SizedBox(width: 8),
-                                                  Expanded(
-                                                    flex: 3,
-                                                    child: GestureDetector(
-                                                      onTap: () async {
-                                                      setState(() {
-                                                      print("Field is tapped");});
-                                                    //_pickedImages(context);
-                                                    },
-                                                      child: Material(elevation: 10, shadowColor: Colors.black.withOpacity(1.0),
-                                                        borderRadius: BorderRadius.circular(30),
-                                                        child: TextFormField(
-                                                          onTap: () async {
-                                                            DateTime? pickedDate =
-                                                            await showDatePicker(context: context,
-                                                                initialDate: DateTime.now(),
-                                                                firstDate: DateTime.now(),
-                                                                lastDate: DateTime(2100),
-                                                                builder: (context, child){
-                                                                  return Theme(data: Theme.of(context).copyWith(
-                                                                      colorScheme:  ColorScheme.light(primary: AppColors.newUpdateColor,onPrimary: Colors.white,onSurface: Colors.black,)
-                                                                  ), child: child!);
-                                                                });
-                                                            if (pickedDate != null) {
-                                                              print(pickedDate);
-                                                              formattedDate = DateFormat('yyyy-MM-dd').format(pickedDate);
-                                                              print("Date Value is : $formattedDate");
-                                                              setState(() {dueDateController.text = formattedDate;});
-                                                              value:formattedDate;}
-                                                            if (pickedDate != null) {
-                                                              formattedDate = DateFormat('yyyy-MM-dd').format(pickedDate);
-                                                              dueDateController.text = formattedDate;
-                                                            }
-                                                          },
-                                                          readOnly: true,
-                                                          controller: dueDateController,
-                                                          decoration: InputDecoration(
-                                                            hintText:
-                                                            formattedDate.isEmpty ? AppLocalizations.of(context)!.noDateSelected : formattedDate.toString(),
-                                                            contentPadding: EdgeInsets.only(left: 15.0),
-                                                            hintStyle: const TextStyle(fontFamily: 'Inter', fontSize: 11, color: Color(0xff454545), fontWeight: FontWeight.w400),
-                                                            border: OutlineInputBorder(borderRadius: BorderRadius.circular(30), borderSide: BorderSide.none), filled: true, fillColor: Colors.white,
+                                            ),
+                                            SizedBox(height: 8),
+                                            Row(
+                                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                              children: [
+                                                Expanded(flex: 2,
+                                                    child: AllText(text: AppLocalizations.of(context)!.dueDate, fontFamily: 'Poppins', fontSize: 15, fontWeight: FontWeight.w500)),
+                                                SizedBox(width: 8),
+                                                Expanded(
+                                                  flex: 3,
+                                                  child: GestureDetector(
+                                                    onTap: () async {
+                                                    setState(() {
+                                                    print("Field is tapped");});
+                                                  //_pickedImages(context);
+                                                  },
+                                                    child: Material(
+                                                      elevation: 4,
+                                                      child: TextFormField(
+                                                        onTap: () async {
+                                                          DateTime? pickedDate =
+                                                          await showDatePicker(context: context,
+                                                              initialDate: DateTime.now(),
+                                                              firstDate: DateTime.now(),
+                                                              lastDate: DateTime(2100),
+                                                              builder: (context, child){
+                                                                return Theme(data: Theme.of(context).copyWith(
+                                                                    colorScheme:  ColorScheme.light(primary: AppColors.newUpdateColor,onPrimary: Colors.white,onSurface: Colors.black,)
+                                                                ), child: child!);
+                                                              });
+                                                          if (pickedDate != null) {
+                                                            print(pickedDate);
+                                                            formattedDate = DateFormat('yyyy-MM-dd').format(pickedDate);
+                                                            print("Date Value is : $formattedDate");
+                                                            setState(() {dueDateController.text = formattedDate;});
+                                                            value:formattedDate;}
+                                                          if (pickedDate != null) {
+                                                            formattedDate = DateFormat('yyyy-MM-dd').format(pickedDate);
+                                                            dueDateController.text = formattedDate;
+                                                          }
+                                                        },
+                                                        readOnly: true,
+                                                        controller: dueDateController,
+                                                        // decoration: InputDecoration(
+                                                        //   hintText:
+                                                        //   formattedDate.isEmpty ? AppLocalizations.of(context)!.noDateSelected : formattedDate.toString(),
+                                                        //   contentPadding: EdgeInsets.only(left: 15.0),
+                                                        //   hintStyle: const TextStyle(fontFamily: 'Inter', fontSize: 11, color: Color(0xff454545), fontWeight: FontWeight.w400),
+                                                        //   border: OutlineInputBorder(borderRadius: BorderRadius.circular(30), borderSide: BorderSide.none), filled: true, fillColor: Colors.white,
+                                                        // ),
+                                                        decoration: InputDecoration(
+                                                          hintText: formattedDate.isEmpty ? AppLocalizations.of(context)!.noDateSelected : formattedDate.toString(),
+                                                          contentPadding: EdgeInsets.only(left: 15.0),
+                                                          hintStyle: const TextStyle(
+                                                            fontFamily: 'Inter',
+                                                            fontSize: 11,
+                                                            color: Color(0xff454545),
+                                                            fontWeight: FontWeight.w400,
                                                           ),
+                                                          border: InputBorder.none,
+                                                          filled: true,
+                                                          fillColor: Colors.white,
                                                         ),
                                                       ),
                                                     ),
                                                   ),
-                                                ],
-                                              ),
-                                            ]
-                                        ),)
+                                                ),
+                                              ],
+                                            ),
+                                          ]
+                                      ),)
 
-                                  ),
                                 )
                             ),
                             Container(
@@ -420,7 +495,7 @@ class _AddCustomerState extends State<AddCustomer> {
                                                 print("Toggle value is: $selectValue");
                                               });
                                             },
-                                            enabledTrackColor: AppColors.primaryRed,  // Custom color for the active state
+                                            enabledTrackColor: AppColors.newUpdateColor,  // Custom color for the active state
                                           ),
                                           const SizedBox(width: 10),
                                           Text(
@@ -429,67 +504,191 @@ class _AddCustomerState extends State<AddCustomer> {
                                           ),
                                         ],
                                       ),
-                                      SizedBox(height: 10,),
+                                      SizedBox(height: 20,),
                                       Container(
                                         margin: EdgeInsets.all(0),
-                                        child: Row(mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                                            crossAxisAlignment: CrossAxisAlignment.start,
-                                            children: [
-                                              Expanded(
-                                                child: Container(
-                                                  decoration: BoxDecoration(borderRadius: BorderRadius.circular(10),color: Colors.white),
-                                                  child: Column(
-                                                    children: [
-                                                      Commonaddcusttextfield(inputType: TextInputType.number, text: AppLocalizations.of(context)!.neck, hintText: optional, controller: neckController,),
-                                                      SizedBox(height: 10,),
-                                                      Commonaddcusttextfield(inputType: TextInputType.number,text: AppLocalizations.of(context)!.bust, hintText: optional, controller: bustController,),
-                                                      SizedBox(height: 10,),
-                                                      Commonaddcusttextfield(inputType: TextInputType.number, text: AppLocalizations.of(context)!.underBust, hintText: optional, controller: underBustController,),
-                                                      SizedBox(height: 10,),
-                                                      Commonaddcusttextfield(inputType: TextInputType.number, text: AppLocalizations.of(context)!.waist, hintText: optional, controller: waistController,),
-                                                      SizedBox(height: 10,),
-                                                      Commonaddcusttextfield(inputType: TextInputType.number, text: AppLocalizations.of(context)!.hips, hintText: optional, controller: hipsController,),
-                                                      SizedBox(height: 10,),
-                                                      Commonaddcusttextfield(inputType: TextInputType.number, text: AppLocalizations.of(context)!.neckAbove, hintText: optional, controller: neckToAboveKneeController,),
-                                                      SizedBox(height: 10,),
-                                                      Commonaddcusttextfield(inputType: TextInputType.number, text: AppLocalizations.of(context)!.armLength, hintText: optional, controller: armLengthController,),
-                                                      SizedBox(height: 10,),
-                                                      Commonaddcusttextfield(inputType: TextInputType.number, text: AppLocalizations.of(context)!.shoulderSeam, hintText: optional, controller: shoulderSeamController,),
-                                                      SizedBox(height: 10,),
-                                                      Commonaddcusttextfield(inputType: TextInputType.number, text: AppLocalizations.of(context)!.armHole, hintText: optional, controller: armHoleController,),
-                                                      SizedBox(height: 10,),
-                                                      Commonaddcusttextfield(inputType: TextInputType.number, text: AppLocalizations.of(context)!.bicep, hintText: optional, controller: bicepController,),
-                                                      SizedBox(height: 10,),
-                                                      Commonaddcusttextfield(inputType: TextInputType.number, text: AppLocalizations.of(context)!.foreArm, hintText: optional, controller: foreArmController,),
-                                                      SizedBox(height: 10,),
-                                                      Commonaddcusttextfield(inputType: TextInputType.number, text: AppLocalizations.of(context)!.wrist, hintText: optional, controller: wristController,),
-                                                      SizedBox(height: 10,),
-                                                      Commonaddcusttextfield(inputType: TextInputType.number, text: AppLocalizations.of(context)!.shoulderWaist, hintText: optional, controller: shoulderToWaistController,),
-                                                      SizedBox(height: 10,),
-                                                      Commonaddcusttextfield(inputType: TextInputType.number, text: AppLocalizations.of(context)!.bottomLength, hintText: optional, controller: bottomLengthController,),
-                                                      SizedBox(height: 10,),
-                                                      Commonaddcusttextfield(inputType: TextInputType.number, text: AppLocalizations.of(context)!.ankle, hintText: optional, controller: ankleController,),
-                                                      SizedBox(height: 10,),
-                                                      Commonaddcusttextfield(inputType: TextInputType.number, text: AppLocalizations.of(context)!.stitchingCost, hintText: "₹", controller: stitchingCostController,),
-                                                      SizedBox(height: 10,),
-                                                      Commonaddcusttextfield(inputType: TextInputType.number, text: AppLocalizations.of(context)!.advancedCost, hintText: "₹", controller: advancedReceivedController,),
-                                                      SizedBox(height: 10,),
-                                                      Commonaddcusttextfield(inputType: TextInputType.number, text: AppLocalizations.of(context)!.outstandingBalance, hintText: "₹", controller: outStandingBalanceController,),
-                                                    ],
-                                                  ),
-                                                ),
-                                              ),
-                                            ]
+                                        child: Column(
+                                          children: [
+                                            // Row 1
+                                            Row(
+                                              children: [
+                                                Expanded(child: MeasurementField(label: AppLocalizations.of(context)!.neck, controller: neckController,inputType: TextInputType.number,)),
+                                                const SizedBox(width: 20),
+                                                Expanded(child: MeasurementField(label: AppLocalizations.of(context)!.bust, controller: bustController,inputType: TextInputType.number,)),
+                                                // const SizedBox(width: 12),
+                                                // Expanded(child: MeasurementField(label: AppLocalizations.of(context)!.underBust, controller: underBustController,inputType: TextInputType.number,)),
+                                              ],
+                                            ),
+                                            const SizedBox(height: 12),
+
+                                            // Row 2
+                                            Row(
+                                              children: [
+                                                Expanded(child: MeasurementField(label: AppLocalizations.of(context)!.underBust, controller: underBustController,inputType: TextInputType.number,)),
+                                                const SizedBox(width: 20),
+                                                Expanded(child: MeasurementField(label: AppLocalizations.of(context)!.waist, controller: waistController,inputType: TextInputType.number,)),
+                                                // Expanded(child: MeasurementField(label:  AppLocalizations.of(context)!.hips, controller: hipsController,inputType: TextInputType.number,)),
+                                                // const SizedBox(width: 12),
+                                                // Expanded(child: MeasurementField(label: AppLocalizations.of(context)!.neckAbove, controller: wristController,inputType: TextInputType.number,)),
+                                              ],
+                                            ),
+                                            const SizedBox(height: 12),
+                                            // Row 3
+                                            Row(
+                                              children: [
+                                                // Expanded(child: MeasurementField(label: AppLocalizations.of(context)!.underBust, controller: underBustController,inputType: TextInputType.number,)),
+                                                // const SizedBox(width: 20),
+                                                // Expanded(child: MeasurementField(label: AppLocalizations.of(context)!.waist, controller: waistController,inputType: TextInputType.number,)),
+                                                // const SizedBox(width: 12),
+                                                Expanded(child: MeasurementField(label:  AppLocalizations.of(context)!.hips, controller: hipsController,inputType: TextInputType.number,)),
+                                                const SizedBox(width: 20),
+                                                Expanded(child: MeasurementField(label: AppLocalizations.of(context)!.neckAbove, controller: wristController,inputType: TextInputType.number,)),
+                                              ],
+                                            ),
+                                            SizedBox(height: 12,),
+                                            // Row 4
+                                            Row(
+                                              children: [
+                                                Expanded(child: MeasurementField(label: AppLocalizations.of(context)!.armLength, controller: armLengthController,inputType: TextInputType.number,)),
+                                                const SizedBox(width: 20),
+                                                Expanded(child: MeasurementField(label: AppLocalizations.of(context)!.shoulderSeam, controller: shoulderSeamController,inputType: TextInputType.number,)),
+                                                // const SizedBox(width: 12),
+                                                // Expanded(child: MeasurementField(label: AppLocalizations.of(context)!.armHole, controller: armHoleController,inputType: TextInputType.number,)),
+                                              ],
+                                            ),
+                                            const SizedBox(height: 12),
+                                            // Row 5
+                                            Row(
+                                              children: [
+                                                Expanded(child: MeasurementField(label: AppLocalizations.of(context)!.armHole, controller: armHoleController,inputType: TextInputType.number,)),
+                                                const SizedBox(width: 20),
+                                                Expanded(child: MeasurementField(label: AppLocalizations.of(context)!.bicep, controller: bicepController,inputType: TextInputType.number,)),
+                                                // const SizedBox(width: 12),
+                                                // Expanded(child: MeasurementField(label: AppLocalizations.of(context)!.foreArm, controller: foreArmController,inputType: TextInputType.number,)),
+                                                // const SizedBox(width: 12),
+                                                // Expanded(child: MeasurementField(label: AppLocalizations.of(context)!.wrist, controller: wristController,inputType: TextInputType.number,)),
+                                              ],
+                                            ),
+                                            const SizedBox(height: 12),
+                                            Row(
+                                              children: [
+                                                Expanded(child: MeasurementField(label: AppLocalizations.of(context)!.foreArm, controller: foreArmController,inputType: TextInputType.number,)),
+                                                const SizedBox(width: 20),
+                                                Expanded(child: MeasurementField(label: AppLocalizations.of(context)!.wrist, controller: wristController,inputType: TextInputType.number,)),
+                                              ],
+                                            ),
+                                            const SizedBox(height: 12),
+                                            // Row 6
+                                            Row(
+                                              children: [
+                                                Expanded(child: MeasurementField(label: AppLocalizations.of(context)!.shoulderWaist, controller: shoulderToWaistController,inputType: TextInputType.number,)),
+                                                const SizedBox(width: 20),
+                                                Expanded(child: MeasurementField(label: AppLocalizations.of(context)!.bottomLength, controller: bottomLengthController,inputType: TextInputType.number,)),
+                                                //const SizedBox(width: 12),
+                                              ],
+                                            ),
+                                            const SizedBox(height: 12),
+                                            Row(
+                                              children: [
+                                                Expanded(child: MeasurementField(label: AppLocalizations.of(context)!.ankle, controller: ankleController,inputType: TextInputType.number,)),
+                                                Spacer()
+                                              ],
+                                            ),
+                                            const SizedBox(height: 10),
+                                            Row(
+                                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                              children: [
+                                                Expanded(flex: 2,
+                                                    child: AllText(text: AppLocalizations.of(context)!.stitchingCost, fontFamily: 'Poppins', fontSize: 15, fontWeight: FontWeight.w500)),
+                                                SizedBox(width: 8),
+                                                Expanded(flex: 3,
+                                                    child: AllTextFormField1(inputType: TextInputType.text, hintText: "₹", mController: stitchingCostController, readOnly: false,)),
+                                              ],
+                                            ),
+                                            const SizedBox(height: 12),
+                                            Row(
+                                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                              children: [
+                                                Expanded(flex: 2,
+                                                    child: AllText(text: AppLocalizations.of(context)!.advancedCost, fontFamily: 'Poppins', fontSize: 15, fontWeight: FontWeight.w500)),
+                                                SizedBox(width: 8),
+                                                Expanded(flex: 3,
+                                                    child: AllTextFormField1(inputType: TextInputType.text, hintText: "₹", mController: advancedReceivedController, readOnly: false,)),
+                                              ],
+                                            ),
+                                            const SizedBox(height: 12),
+                                            Row(
+                                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                              children: [
+                                                Expanded(flex: 2,
+                                                    child: AllText(text: AppLocalizations.of(context)!.outstandingBalance, fontFamily: 'Poppins', fontSize: 15, fontWeight: FontWeight.w500)),
+                                                SizedBox(width: 8),
+                                                Expanded(flex: 3,
+                                                    child: AllTextFormField1(inputType: TextInputType.text, hintText: "₹", mController: outStandingBalanceController, readOnly: false,)),
+                                              ],
+                                            ),
+                                          ],
                                         ),
+                                        // Row(mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                        //     crossAxisAlignment: CrossAxisAlignment.start,
+                                        //     children: [
+                                        //       Expanded(
+                                        //         child: Container(
+                                        //           decoration: BoxDecoration(borderRadius: BorderRadius.circular(10),color: Colors.white),
+                                        //           child: Column(
+                                        //             children: [
+                                        //               Commonaddcusttextfield(inputType: TextInputType.number, text: AppLocalizations.of(context)!.neck, hintText: optional, controller: neckController,),
+                                        //               SizedBox(height: 10,),
+                                        //               Commonaddcusttextfield(inputType: TextInputType.number,text: AppLocalizations.of(context)!.bust, hintText: optional, controller: bustController,),
+                                        //               SizedBox(height: 10,),
+                                        //               Commonaddcusttextfield(inputType: TextInputType.number, text: AppLocalizations.of(context)!.underBust, hintText: optional, controller: underBustController,),
+                                        //               SizedBox(height: 10,),
+                                        //               Commonaddcusttextfield(inputType: TextInputType.number, text: AppLocalizations.of(context)!.waist, hintText: optional, controller: waistController,),
+                                        //               SizedBox(height: 10,),
+                                        //               Commonaddcusttextfield(inputType: TextInputType.number, text: AppLocalizations.of(context)!.hips, hintText: optional, controller: hipsController,),
+                                        //               SizedBox(height: 10,),
+                                        //               Commonaddcusttextfield(inputType: TextInputType.number, text: AppLocalizations.of(context)!.neckAbove, hintText: optional, controller: neckToAboveKneeController,),
+                                        //               SizedBox(height: 10,),
+                                        //               Commonaddcusttextfield(inputType: TextInputType.number, text: AppLocalizations.of(context)!.armLength, hintText: optional, controller: armLengthController,),
+                                        //               SizedBox(height: 10,),
+                                        //               Commonaddcusttextfield(inputType: TextInputType.number, text: AppLocalizations.of(context)!.shoulderSeam, hintText: optional, controller: shoulderSeamController,),
+                                        //               SizedBox(height: 10,),
+                                        //               Commonaddcusttextfield(inputType: TextInputType.number, text: AppLocalizations.of(context)!.armHole, hintText: optional, controller: armHoleController,),
+                                        //               SizedBox(height: 10,),
+                                        //               Commonaddcusttextfield(inputType: TextInputType.number, text: AppLocalizations.of(context)!.bicep, hintText: optional, controller: bicepController,),
+                                        //               SizedBox(height: 10,),
+                                        //               Commonaddcusttextfield(inputType: TextInputType.number, text: AppLocalizations.of(context)!.foreArm, hintText: optional, controller: foreArmController,),
+                                        //               SizedBox(height: 10,),
+                                        //               Commonaddcusttextfield(inputType: TextInputType.number, text: AppLocalizations.of(context)!.wrist, hintText: optional, controller: wristController,),
+                                        //               SizedBox(height: 10,),
+                                        //               Commonaddcusttextfield(inputType: TextInputType.number, text: AppLocalizations.of(context)!.shoulderWaist, hintText: optional, controller: shoulderToWaistController,),
+                                        //               SizedBox(height: 10,),
+                                        //               Commonaddcusttextfield(inputType: TextInputType.number, text: AppLocalizations.of(context)!.bottomLength, hintText: optional, controller: bottomLengthController,),
+                                        //               SizedBox(height: 10,),
+                                        //               Commonaddcusttextfield(inputType: TextInputType.number, text: AppLocalizations.of(context)!.ankle, hintText: optional, controller: ankleController,),
+                                        //               SizedBox(height: 10,),
+                                        //               Commonaddcusttextfield(inputType: TextInputType.number, text: AppLocalizations.of(context)!.stitchingCost, hintText: "₹", controller: stitchingCostController,),
+                                        //               SizedBox(height: 10,),
+                                        //               Commonaddcusttextfield(inputType: TextInputType.number, text: AppLocalizations.of(context)!.advancedCost, hintText: "₹", controller: advancedReceivedController,),
+                                        //               SizedBox(height: 10,),
+                                        //               Commonaddcusttextfield(inputType: TextInputType.number, text: AppLocalizations.of(context)!.outstandingBalance, hintText: "₹", controller: outStandingBalanceController,),
+                                        //             ],
+                                        //           ),
+                                        //         ),
+                                        //       ),
+                                        //     ]
+                                        // ),
                                       ),
+                                      SizedBox(height: 12,),
                                       Text(
                                         AppLocalizations.of(context)!.notes,
                                         style: TextStyle(fontFamily: 'Poppins', fontWeight: FontWeight.w600, fontSize: 14),),
-                                      SizedBox(height: 5,),
+                                      SizedBox(height: 10,),
                                       TextField(controller: textarea,
                                         keyboardType: TextInputType.multiline, maxLines: 4, maxLength: 500,
-                                        decoration: InputDecoration(hintText: AppLocalizations.of(context)!.textHere, enabledBorder: const OutlineInputBorder(
-                                          borderSide: const BorderSide(color: Colors.grey, width: 0.0),),
+                                        decoration: InputDecoration(hintText: AppLocalizations.of(context)!.textHere,
+                                            enabledBorder: const OutlineInputBorder(
+                                          borderSide: const BorderSide(color: Colors.grey, width: 0.5),),
                                             focusedBorder: OutlineInputBorder(borderSide: BorderSide(width: 0.0, color: Colors.grey))),
                                       ),
                                     ]
@@ -1002,4 +1201,5 @@ class _AddCustomerState extends State<AddCustomer> {
       ),
     );
   }
+
 }

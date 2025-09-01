@@ -6,6 +6,7 @@ import 'package:darzi/apiData/model/aws_response_model.dart';
 import 'package:darzi/colors.dart';
 import 'package:darzi/common/all_text.dart';
 import 'package:darzi/common/all_text_form_field.dart';
+import 'package:darzi/common/all_text_form_field1.dart';
 import 'package:darzi/common/widgets/tailor/common_app_bar_with_back.dart';
 import 'package:darzi/constants/string_constant.dart';
 import 'package:darzi/l10n/app_localizations.dart';
@@ -109,31 +110,65 @@ class _AddNewDressState extends State<AddNewDress> {
         color: Colors.white,
         child: Scaffold(
           backgroundColor: Colors.white,
-          appBar: CustomAppBarWithBack(
-            title: AppLocalizations.of(context)!.addNewDress,
-            hasBackButton: true,
-            leadingIcon: SvgPicture.asset(
-              'assets/svgIcon/add.svg',
+          appBar: AppBar(
+            title: Text(AppLocalizations.of(context)!.addNewDress,
+              style: const TextStyle(
+                fontFamily: 'Poppins',
+                fontWeight: FontWeight.w600,
+                fontSize: 24,
+              ),
+              textAlign: TextAlign.center,),
+            centerTitle: true, // 👈 yeh add karo
+            backgroundColor: Colors.white,
+            elevation: 0,
+            scrolledUnderElevation: 0,
+            leading: IconButton(
+              icon: Icon(Icons.arrow_back_ios),
+              onPressed: () async {
+                    if (_isFormDirty()) {
+                      bool? shouldPop = await showWarningMessage(
+                        context,
+                        locale: widget.locale,
+                        onChangeLanguage: (newLocale) {
+                          print("Language changed to: ${newLocale.languageCode}");
+                        },
+                      );
+                      print("pop up value is $shouldPop");
+                      if (shouldPop == true) {
+                        Navigator.pop(context);
+                      }
+                    } else {
+                      Navigator.pop(context); // No warning if form untouched
+                    }
+                    //Navigator.pop(widget.context);
+              },
             ),
-            onBackButtonPressed: () async {
-              if (_isFormDirty()) {
-                bool? shouldPop = await showWarningMessage(
-                  context,
-                  locale: widget.locale,
-                  onChangeLanguage: (newLocale) {
-                    print("Language changed to: ${newLocale.languageCode}");
-                  },
-                );
-                print("pop up value is $shouldPop");
-                if (shouldPop == true) {
-                  Navigator.pop(context);
-                }
-              } else {
-                Navigator.pop(context); // No warning if form untouched
-              }
-              //Navigator.pop(widget.context);
-            },
           ),
+          // CustomAppBarWithBack(
+          //   title: AppLocalizations.of(context)!.addNewDress,
+          //   hasBackButton: true,
+          //   leadingIcon: SvgPicture.asset(
+          //     'assets/svgIcon/add.svg',
+          //   ),
+          //   onBackButtonPressed: () async {
+          //     if (_isFormDirty()) {
+          //       bool? shouldPop = await showWarningMessage(
+          //         context,
+          //         locale: widget.locale,
+          //         onChangeLanguage: (newLocale) {
+          //           print("Language changed to: ${newLocale.languageCode}");
+          //         },
+          //       );
+          //       print("pop up value is $shouldPop");
+          //       if (shouldPop == true) {
+          //         Navigator.pop(context);
+          //       }
+          //     } else {
+          //       Navigator.pop(context); // No warning if form untouched
+          //     }
+          //     //Navigator.pop(widget.context);
+          //   },
+          // ),
           body: SingleChildScrollView(
             child: Container(
               margin: EdgeInsets.only(top: 10),
@@ -156,7 +191,7 @@ class _AddNewDressState extends State<AddNewDress> {
                         flex: 3,
                         child: Container(
                           margin: EdgeInsets.only(right: 5),
-                          child: AllTextFormField(
+                          child: AllTextFormField1(
                             inputType: TextInputType.text,
                             hintText:
                             AppLocalizations.of(context)!.enterDressName,
@@ -188,59 +223,50 @@ class _AddNewDressState extends State<AddNewDress> {
                     SizedBox(width: 8),
                     Expanded(
                         flex: 3,
-                        child: Container(
-                          margin: EdgeInsets.only(right: 5),
-                          child: GestureDetector(
-                            onTap: () async {
-                              // var cameraStatus =
-                              // await Permission.camera.request();
-                              // if (cameraStatus.isGranted) {
-                              //   _showImageSourceActionSheet(context);
-                              // }
-                              _handleImagePickerTap(context);
-                              //_showPermissionDisclosure(context);
-                            },
+                        child: GestureDetector(onTap: () async {
+                          _handleImagePickerTap(context);
+                        },
                             child: Container(
                               height: 45,
                               decoration: BoxDecoration(
                                 color: Colors.white,
-                                borderRadius: BorderRadius.circular(25),
-                                border: Border.all(color: Colors.white),
+                                borderRadius: BorderRadius.circular(6), // halka sa rounded corner
                                 boxShadow: [
                                   BoxShadow(
-                                    color: Colors.grey.withOpacity(0.5),
-                                    spreadRadius: 4.0,
-                                    blurRadius: 4.0,
-                                    offset: const Offset(0, 3),
+                                    color: Colors.grey.withOpacity(0.8), // halka shadow
+                                    spreadRadius: 1,
+                                    blurRadius: 5,
+                                    offset: const Offset(0, 2), // shadow niche ki taraf
                                   ),
                                 ],
                               ),
                               child: Row(
-                                mainAxisAlignment:
-                                MainAxisAlignment.spaceBetween,
+                                mainAxisAlignment: MainAxisAlignment.spaceBetween,
                                 children: [
                                   Padding(
-                                    padding:
-                                    EdgeInsets.symmetric(horizontal: 16),
+                                    padding: const EdgeInsets.symmetric(horizontal: 16),
                                     child: Text(
                                       AppLocalizations.of(context)!.addImage,
                                       style: TextStyle(
-                                          fontFamily: 'Inter',
-                                          fontSize: 11,
-                                          color: AppColors.newUpdateColor,
-                                          fontWeight: FontWeight.w400),
+                                        fontFamily: 'Inter',
+                                        fontSize: 11,
+                                        color: AppColors.newUpdateColor,
+                                        fontWeight: FontWeight.w400,
+                                      ),
                                     ),
                                   ),
-                                  Padding(
-                                    padding:
-                                    EdgeInsets.symmetric(horizontal: 16),
-                                    child: Icon(Icons.add_circle_outline_sharp,
-                                        size: 15, color: AppColors.newUpdateColor),
+                                  const Padding(
+                                    padding: EdgeInsets.symmetric(horizontal: 16),
+                                    child: Icon(
+                                      Icons.add_circle_outline_sharp,
+                                      size: 15,
+                                      color: AppColors.newUpdateColor,
+                                    ),
                                   ),
                                 ],
                               ),
-                            ),
-                          ),
+                            )
+
                         )),
                   ],
                 ),
@@ -281,141 +307,174 @@ class _AddNewDressState extends State<AddNewDress> {
                               fontWeight: FontWeight.w500)),
                       SizedBox(width: 8),
                       Expanded(
-                          flex: 3,
-                          child: GestureDetector(
+                        flex: 3,
+                        child: GestureDetector(
+                          onTap: () async {
+                            setState(() {
+                              print("Field is tapped");});
+                            //_pickedImages(context);
+                          },
+                          child: Material(
+                            elevation: 4,
+                            child: TextFormField(
                               onTap: () async {
-                                setState(() {
-                                  print("Field is tapped");
-                                });
+                                DateTime? pickedDate =
+                                await showDatePicker(context: context,
+                                    initialDate: DateTime.now(),
+                                    firstDate: DateTime.now(),
+                                    lastDate: DateTime(2100),
+                                    builder: (context, child){
+                                      return Theme(data: Theme.of(context).copyWith(
+                                          colorScheme:  ColorScheme.light(primary: AppColors.newUpdateColor,onPrimary: Colors.white,onSurface: Colors.black,)
+                                      ), child: child!);
+                                    });
+                                if (pickedDate != null) {
+                                  print(pickedDate);
+                                  formattedDate = DateFormat('yyyy-MM-dd').format(pickedDate);
+                                  print("Date Value is : $formattedDate");
+                                  setState(() {dueDateController.text = formattedDate;});
+                                  value:formattedDate;}
+                                if (pickedDate != null) {
+                                  formattedDate = DateFormat('yyyy-MM-dd').format(pickedDate);
+                                  dueDateController.text = formattedDate;
+                                }
                               },
-                              child: Material(
-                                  elevation: 10,
-                                  shadowColor: Colors.black.withOpacity(1.0),
-                                  borderRadius: BorderRadius.circular(30),
-                                  child: TextFormField(
-                                    onTap: () async {
-                                      DateTime? pickedDate =
-                                      await showDatePicker(context: context,
-                                          initialDate: DateTime.now(),
-                                          firstDate: DateTime.now(),
-                                          lastDate: DateTime(2100),
-                                          builder: (context, child){
-                                            return Theme(data: Theme.of(context).copyWith(
-                                                colorScheme:  ColorScheme.light(primary: AppColors.newUpdateColor,onPrimary: Colors.white,onSurface: Colors.black,)
-                                            ), child: child!);
-                                          });
-                                      if (pickedDate != null) {
-                                        print(pickedDate);
-                                        formattedDate = DateFormat('yyyy-MM-dd').format(pickedDate);
-                                        print("Date Value is : $formattedDate");
-                                        setState(() {dueDateController.text = formattedDate;});
-                                        value:formattedDate;}
-                                      if (pickedDate != null) {
-                                        formattedDate = DateFormat('yyyy-MM-dd').format(pickedDate);
-                                        dueDateController.text = formattedDate;
-                                      }
-                                    },
-                                    readOnly: true,
-                                    controller: dueDateController,
-                                    decoration: InputDecoration(
-                                      hintText: formattedDate.isEmpty
-                                          ? AppLocalizations.of(context)!
-                                          .noDateSelected
-                                          : formattedDate.toString(),
-                                      contentPadding:
-                                      EdgeInsets.only(left: 15.0),
-                                      hintStyle: const TextStyle(
-                                          fontFamily: 'Inter',
-                                          fontSize: 11,
-                                          color: Color(0xff454545),
-                                          fontWeight: FontWeight.w400),
-                                      border: OutlineInputBorder(
-                                          borderRadius:
-                                          BorderRadius.circular(30),
-                                          borderSide: BorderSide.none),
-                                      filled: true,
-                                      fillColor: Colors.white,
-                                    ),
-                                  ))))
+                              readOnly: true,
+                              controller: dueDateController,
+                              // decoration: InputDecoration(
+                              //   hintText:
+                              //   formattedDate.isEmpty ? AppLocalizations.of(context)!.noDateSelected : formattedDate.toString(),
+                              //   contentPadding: EdgeInsets.only(left: 15.0),
+                              //   hintStyle: const TextStyle(fontFamily: 'Inter', fontSize: 11, color: Color(0xff454545), fontWeight: FontWeight.w400),
+                              //   border: OutlineInputBorder(borderRadius: BorderRadius.circular(30), borderSide: BorderSide.none), filled: true, fillColor: Colors.white,
+                              // ),
+                              decoration: InputDecoration(
+                                hintText: formattedDate.isEmpty ? AppLocalizations.of(context)!.noDateSelected : formattedDate.toString(),
+                                contentPadding: EdgeInsets.only(left: 15.0),
+                                hintStyle: const TextStyle(
+                                  fontFamily: 'Inter',
+                                  fontSize: 11,
+                                  color: Color(0xff454545),
+                                  fontWeight: FontWeight.w400,
+                                ),
+                                border: InputBorder.none,
+                                filled: true,
+                                fillColor: Colors.white,
+                              ),
+                            ),
+                          ),
+                        ),
+                      ),
                     ],
                   ),
                 ),
                 SizedBox(height: 8),
-                Container(
-                  margin: EdgeInsets.only(left: 10, right: 5),
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      Expanded(
-                          flex: 2,
-                          child: AllText(
-                              text:
-                              AppLocalizations.of(context)!.stitchingCost1,
-                              fontFamily: 'Poppins',
-                              fontSize: 15,
-                              fontWeight: FontWeight.w500)),
-                      SizedBox(width: 8),
-                      Expanded(
-                          flex: 3,
-                          child: AllTextFormField(
-                            inputType: TextInputType.number,
-                            hintText: '₹',
-                            mController: stitchingCostController,
-                            readOnly: false,
-                          )),
-                    ],
-                  ),
+                // Container(
+                //   margin: EdgeInsets.only(left: 10, right: 5),
+                //   child: Row(
+                //     mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                //     children: [
+                //       Expanded(
+                //           flex: 2,
+                //           child: AllText(
+                //               text:
+                //               AppLocalizations.of(context)!.stitchingCost1,
+                //               fontFamily: 'Poppins',
+                //               fontSize: 15,
+                //               fontWeight: FontWeight.w500)),
+                //       SizedBox(width: 8),
+                //       Expanded(
+                //           flex: 3,
+                //           child: AllTextFormField(
+                //             inputType: TextInputType.number,
+                //             hintText: '₹',
+                //             mController: stitchingCostController,
+                //             readOnly: false,
+                //           )),
+                //     ],
+                //   ),
+                // ),
+                // SizedBox(height: 8),
+                // Container(
+                //   margin: EdgeInsets.only(left: 10, right: 5),
+                //   child: Row(
+                //     mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                //     children: [
+                //       Expanded(
+                //           flex: 2,
+                //           child: AllText(
+                //               text: AppLocalizations.of(context)!.advancedCost,
+                //               fontFamily: 'Poppins',
+                //               fontSize: 15,
+                //               fontWeight: FontWeight.w500)),
+                //       SizedBox(width: 8),
+                //       Expanded(
+                //           flex: 3,
+                //           child: AllTextFormField(
+                //             inputType: TextInputType.number,
+                //             hintText: '₹',
+                //             mController: advancedCostController,
+                //             readOnly: false,
+                //           )),
+                //     ],
+                //   ),
+                // ),
+                // SizedBox(height: 8),
+                // Container(
+                //   margin: EdgeInsets.only(left: 10, right: 5),
+                //   child: Row(
+                //     mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                //     children: [
+                //       Expanded(
+                //           flex: 2,
+                //           child: AllText(
+                //               text: AppLocalizations.of(context)!.outstandingBalance1,
+                //               fontFamily: 'Poppins',
+                //               fontSize: 15,
+                //               fontWeight: FontWeight.w500)),
+                //       SizedBox(width: 8),
+                //       Expanded(
+                //           flex: 3,
+                //           child: AllTextFormField(
+                //             inputType: TextInputType.number,
+                //             hintText: '₹',
+                //             mController: outStandingBalancedController,
+                //             readOnly: false,
+                //           )),
+                //     ],
+                //   ),
+                // ),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    Expanded(flex: 2,
+                        child: AllText(text: AppLocalizations.of(context)!.stitchingCost1, fontFamily: 'Poppins', fontSize: 15, fontWeight: FontWeight.w500)),
+                    SizedBox(width: 8),
+                    Expanded(flex: 3,
+                        child: AllTextFormField1(inputType: TextInputType.text, hintText: "₹", mController: stitchingCostController, readOnly: false,)),
+                  ],
                 ),
-                SizedBox(height: 8),
-                Container(
-                  margin: EdgeInsets.only(left: 10, right: 5),
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      Expanded(
-                          flex: 2,
-                          child: AllText(
-                              text: AppLocalizations.of(context)!.advancedCost,
-                              fontFamily: 'Poppins',
-                              fontSize: 15,
-                              fontWeight: FontWeight.w500)),
-                      SizedBox(width: 8),
-                      Expanded(
-                          flex: 3,
-                          child: AllTextFormField(
-                            inputType: TextInputType.number,
-                            hintText: '₹',
-                            mController: advancedCostController,
-                            readOnly: false,
-                          )),
-                    ],
-                  ),
+                const SizedBox(height: 12),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    Expanded(flex: 2,
+                        child: AllText(text: AppLocalizations.of(context)!.advancedCost, fontFamily: 'Poppins', fontSize: 15, fontWeight: FontWeight.w500)),
+                    SizedBox(width: 8),
+                    Expanded(flex: 3,
+                        child: AllTextFormField1(inputType: TextInputType.text, hintText: "₹", mController: advancedCostController, readOnly: false,)),
+                  ],
                 ),
-                SizedBox(height: 8),
-                Container(
-                  margin: EdgeInsets.only(left: 10, right: 5),
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      Expanded(
-                          flex: 2,
-                          child: AllText(
-                              text: AppLocalizations.of(context)!
-                                  .outstandingBalance1,
-                              fontFamily: 'Poppins',
-                              fontSize: 15,
-                              fontWeight: FontWeight.w500)),
-                      SizedBox(width: 8),
-                      Expanded(
-                          flex: 3,
-                          child: AllTextFormField(
-                            inputType: TextInputType.number,
-                            hintText: '₹',
-                            mController: outStandingBalancedController,
-                            readOnly: false,
-                          )),
-                    ],
-                  ),
+                const SizedBox(height: 12),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    Expanded(flex: 2,
+                        child: AllText(text: AppLocalizations.of(context)!.outstandingBalance1, fontFamily: 'Poppins', fontSize: 15, fontWeight: FontWeight.w500)),
+                    SizedBox(width: 8),
+                    Expanded(flex: 3,
+                        child: AllTextFormField1(inputType: TextInputType.text, hintText: "₹", mController: outStandingBalancedController, readOnly: false,)),
+                  ],
                 ),
                 SizedBox(height: 8),
                 Padding(

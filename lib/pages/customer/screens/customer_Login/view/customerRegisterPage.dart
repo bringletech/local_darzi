@@ -29,10 +29,8 @@ class _CustomerregisterpagePageState extends State<CustomerregisterpagePage> {
   bool rememberMe = false,
       isLoading = false,isSelected = false;
   String phoneNumber = "",deviceToken = "";
-  final TextEditingController nameController = TextEditingController();
   final Uri _privacyPolicyUrl = Uri.parse('https://mannytechnologies.com/privacy-policy-2/');
   final Uri _terms_of_use_Url = Uri.parse('https://mannytechnologies.com/terms-conditions/');
-  bool isFirstTime = true;
 
   @override
   void initState() {
@@ -41,19 +39,12 @@ class _CustomerregisterpagePageState extends State<CustomerregisterpagePage> {
     _changeLanguage(widget.locale);
     print("Current Locale in OTP Screen: ${widget.locale.languageCode}");
     getDeviceToken();
-    checkIfFirstTime();
   }
 
   Future<void> getDeviceToken() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     deviceToken = prefs.getString('deviceToken')!;
     print("My Device Token Value is: $deviceToken");
-  }
-
-  Future<void> checkIfFirstTime() async {
-    SharedPreferences prefs = await SharedPreferences.getInstance();
-    isFirstTime = prefs.getBool('isFirstTimeLogin') ?? true;
-    setState(() {});
   }
 
   void _changeLanguage(Locale locale) {
@@ -64,7 +55,6 @@ class _CustomerregisterpagePageState extends State<CustomerregisterpagePage> {
       });
     });
   }
-
 
 
   @override
@@ -143,46 +133,7 @@ class _CustomerregisterpagePageState extends State<CustomerregisterpagePage> {
                             Column(
                               children: [
                                 SizedBox(height: 10,),
-                                if (isFirstTime)
-                                  Container(
-                                    decoration: BoxDecoration(
-                                      boxShadow: [
-                                        BoxShadow(
-                                          color: Colors.black.withOpacity(0.3),
-                                          blurRadius: 8,
-                                          offset: Offset(0, 4),
-                                        ),
-                                      ],
-                                      borderRadius: BorderRadius.circular(20),
-                                    ),
-                                    child: TextField(
-                                      controller: nameController,
-                                      decoration: InputDecoration(
-                                        hintText: AppLocalizations.of(context)!.enter_name,
-                                        hintStyle: TextStyle(
-                                          fontFamily: 'Poppins',
-                                          fontSize: 15,
-                                          fontWeight: FontWeight.w400,
-                                          color: Colors.black.withOpacity(0.6),
-                                        ),
-                                        filled: true,
-                                        fillColor: Colors.white,
-                                        contentPadding: EdgeInsets.symmetric(vertical: 16.0, horizontal: 20.0),
-                                        enabledBorder: OutlineInputBorder(
-                                          borderSide: BorderSide(color: Colors.black),
-                                        ),
-                                        focusedBorder: OutlineInputBorder(
-                                          borderSide: BorderSide(color: Colors.black),
-                                        ),
-                                      ),
-                                      style: TextStyle(
-                                        fontFamily: 'Poppins',
-                                        fontSize: 15,
-                                        fontWeight: FontWeight.w400,
-                                      ),
-                                    ),
-                                  ),
-                                SizedBox(height: 20,),
+                                //SizedBox(height: 20,),
                                 // Phone number input
                                 IntlPhoneField(
                                   focusNode: focusNode,
@@ -214,22 +165,8 @@ class _CustomerregisterpagePageState extends State<CustomerregisterpagePage> {
                                           rememberMe = value!;
                                         });
 
-                                        String name = nameController.text.trim();
-
                                         if (rememberMe) {
                                           // ✅ Check for first-time name requirement
-                                          if (isFirstTime && name.isEmpty) {
-                                            Fluttertoast.showToast(
-                                              msg: AppLocalizations.of(context)!.enter_name1,
-                                              toastLength: Toast.LENGTH_SHORT,
-                                              gravity: ToastGravity.BOTTOM,
-                                              backgroundColor: AppColors.newUpdateColor,
-                                              textColor: Colors.white,
-                                              fontSize: 16.0,
-                                            );
-                                            return;
-                                          }
-
                                           if (phoneNumber.isEmpty) {
                                             Fluttertoast.showToast(
                                               msg: AppLocalizations.of(context)!.enter_name2,
@@ -242,7 +179,7 @@ class _CustomerregisterpagePageState extends State<CustomerregisterpagePage> {
                                             return;
                                           }
                                           // ✅ Call API only when both fields are valid
-                                          callCustomerLoginApi(phoneNumber,name);
+                                          callCustomerLoginApi(phoneNumber);
                                         } else {
                                           Fluttertoast.showToast(
                                             msg: AppLocalizations.of(context)!.agreeContinue,
@@ -333,11 +270,9 @@ class _CustomerregisterpagePageState extends State<CustomerregisterpagePage> {
     );
   }
 
-  void callCustomerLoginApi(String phoneNumber, String name) {
+  void callCustomerLoginApi(String phoneNumber) {
     var map = <String, dynamic>{};
     map['mobileNo'] = phoneNumber;
-    map['name'] = name;
-    map['device_fcm_token'] = deviceToken;
     print("Map value is$map");
     isLoading = true;
     WidgetsBinding.instance.addPostFrameCallback((_) async {
@@ -349,14 +284,11 @@ class _CustomerregisterpagePageState extends State<CustomerregisterpagePage> {
       print("Customer Otp is $otp");
       showCustomToast(context, message, 10);
       if (model.status == true){
-        SharedPreferences prefs = await SharedPreferences.getInstance();
-        await prefs.setBool('isFirstTimeLogin', false);
-
         Navigator.pop(context);
         Navigator.push(
           context,
           MaterialPageRoute(
-              builder: (context) => CustomerOtpVerificationPage(phoneNumber,name,locale: widget.locale)),
+              builder: (context) => CustomerOtpVerificationPage(phoneNumber,locale: widget.locale)),
         );
       }
 
