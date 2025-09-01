@@ -783,53 +783,24 @@ class _AddCustomerState extends State<AddCustomer> {
   void _pickedImages(BuildContext context) async {
     showModalBottomSheet(
       context: context,
-      shape: RoundedRectangleBorder(
+      shape: const RoundedRectangleBorder(
         borderRadius: BorderRadius.vertical(top: Radius.circular(20.0)),
       ),
       builder: (BuildContext context) {
         return Wrap(
           children: [
             ListTile(
-              leading: Icon(Icons.camera_alt, color: Colors.black),
-              title: Text('Camera'),
+              leading: const Icon(Icons.camera_alt, color: Colors.black),
+              title: const Text('Camera'),
               onTap: () async {
-                final XFile? photo =
-                await _picker.pickImage(source: ImageSource.camera);
-
-                if (photo != null) {
-                  setState(() {
-                    _selectedImage = File(photo.path);
-                    fileName = p.basename(photo.path); // Get file name with extension
-                    String extension = p.extension(photo.path); // Get extension with dot
-                    extensionWithoutDot = extension.substring(1); // Remove dot
-                    print("File Name: $fileName");
-                    print("File Extension (with dot): $extension");
-                    print("File Extension (without dot): $extensionWithoutDot");
-                  });
-
-                }
-                Navigator.pop(context); // Close the modal after action
+                await _pickImage(context, ImageSource.camera);
               },
             ),
             ListTile(
-              leading: Icon(Icons.photo_library, color: Colors.black),
-              title: Text('Gallery'),
+              leading: const Icon(Icons.photo_library, color: Colors.black),
+              title: const Text('Gallery'),
               onTap: () async {
-                final XFile? photo =
-                await _picker.pickImage(source: ImageSource.gallery);
-
-                if (photo != null) {
-                  setState(() {
-                    _selectedImage = File(photo.path);
-                    fileName = p.basename(photo.path); // Get file name with extension
-                    String extension = p.extension(photo.path); // Get extension with dot
-                    extensionWithoutDot = extension.substring(1); // Remove dot
-                    print("File Name: $fileName");
-                    print("File Extension (with dot): $extension");
-                    print("File Extension (without dot): $extensionWithoutDot");
-                  });
-                }
-                Navigator.pop(context); // Close the modal after action
+                await _pickImage(context, ImageSource.gallery);
               },
             ),
           ],
@@ -837,6 +808,100 @@ class _AddCustomerState extends State<AddCustomer> {
       },
     );
   }
+
+  /// Helper function to pick image safely
+  Future<void> _pickImage(BuildContext context, ImageSource source) async {
+    try {
+      final XFile? photo = await _picker.pickImage(
+        source: source,
+        imageQuality: 70, // Compress image (0-100)
+        maxWidth: 1080,   // Resize to avoid huge images
+      );
+
+      if (photo != null) {
+        if (!mounted) return; // Lifecycle safety
+
+        setState(() {
+          _selectedImage = File(photo.path);
+          fileName = p.basename(photo.path); // Get file name
+          String extension = p.extension(photo.path); // e.g. ".jpg"
+          extensionWithoutDot = extension.replaceFirst('.', ''); // e.g. "jpg"
+
+          debugPrint("File Name: $fileName");
+          debugPrint("File Extension (with dot): $extension");
+          debugPrint("File Extension (without dot): $extensionWithoutDot");
+        });
+      }
+    } catch (e) {
+      debugPrint("Image pick error: $e");
+      if (!mounted) return;
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(content: Text("Image selection failed, try again.")),
+      );
+    } finally {
+      if (Navigator.canPop(context)) {
+        Navigator.pop(context); // Close modal safely
+      }
+    }
+  }
+
+  // void _pickedImages(BuildContext context) async {
+  //   showModalBottomSheet(
+  //     context: context,
+  //     shape: RoundedRectangleBorder(
+  //       borderRadius: BorderRadius.vertical(top: Radius.circular(20.0)),
+  //     ),
+  //     builder: (BuildContext context) {
+  //       return Wrap(
+  //         children: [
+  //           ListTile(
+  //             leading: Icon(Icons.camera_alt, color: Colors.black),
+  //             title: Text('Camera'),
+  //             onTap: () async {
+  //               final XFile? photo =
+  //               await _picker.pickImage(source: ImageSource.camera);
+  //
+  //               if (photo != null) {
+  //                 setState(() {
+  //                   _selectedImage = File(photo.path);
+  //                   fileName = p.basename(photo.path); // Get file name with extension
+  //                   String extension = p.extension(photo.path); // Get extension with dot
+  //                   extensionWithoutDot = extension.substring(1); // Remove dot
+  //                   print("File Name: $fileName");
+  //                   print("File Extension (with dot): $extension");
+  //                   print("File Extension (without dot): $extensionWithoutDot");
+  //                 });
+  //
+  //               }
+  //               Navigator.pop(context); // Close the modal after action
+  //             },
+  //           ),
+  //           ListTile(
+  //             leading: Icon(Icons.photo_library, color: Colors.black),
+  //             title: Text('Gallery'),
+  //             onTap: () async {
+  //               final XFile? photo =
+  //               await _picker.pickImage(source: ImageSource.gallery);
+  //
+  //               if (photo != null) {
+  //                 setState(() {
+  //                   _selectedImage = File(photo.path);
+  //                   fileName = p.basename(photo.path); // Get file name with extension
+  //                   String extension = p.extension(photo.path); // Get extension with dot
+  //                   extensionWithoutDot = extension.substring(1); // Remove dot
+  //                   print("File Name: $fileName");
+  //                   print("File Extension (with dot): $extension");
+  //                   print("File Extension (without dot): $extensionWithoutDot");
+  //                 });
+  //               }
+  //               Navigator.pop(context); // Close the modal after action
+  //             },
+  //           ),
+  //         ],
+  //       );
+  //     },
+  //   );
+  // }
 
   void showToast(String msg, {bool isError = false}) {
     Fluttertoast.showToast(
