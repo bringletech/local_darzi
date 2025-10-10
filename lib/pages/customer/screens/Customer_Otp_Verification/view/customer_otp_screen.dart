@@ -313,7 +313,7 @@ class _CustomerOtpVerificationPageState
     var map = {
       'mobileNo': phoneNumber,
       'otp': otp,
-    'device_fcm_token':deviceToken
+      'device_fcm_token':deviceToken
     };
     print("Customer Otp map value is $map");
     setState(() => isLoading = true);
@@ -375,14 +375,14 @@ class _CustomerOtpVerificationPageState
       String otp = model.otp.toString();
       print("Customer Otp is $otp");
       showCustomToast(context, message, 10);
-      Fluttertoast.showToast(
-          msg: message,
-          toastLength: Toast.LENGTH_LONG,
-          gravity: ToastGravity.CENTER,
-          timeInSecForIosWeb: 1,
-          backgroundColor: AppColors.newUpdateColor,
-          textColor: Colors.white,
-          fontSize: 16.0);
+      // Fluttertoast.showToast(
+      //     msg: message,
+      //     toastLength: Toast.LENGTH_LONG,
+      //     gravity: ToastGravity.CENTER,
+      //     timeInSecForIosWeb: 1,
+      //     backgroundColor: AppColors.newUpdateColor,
+      //     textColor: Colors.white,
+      //     fontSize: 16.0);
       Navigator.pop(context);
       Navigator.push(
         context,
@@ -401,7 +401,7 @@ class _CustomerOtpVerificationPageState
               child: Container(
                 padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 12),
                 decoration: BoxDecoration(
-                  color: Colors.black87,
+                  color: AppColors.newUpdateColor,
                   borderRadius: BorderRadius.circular(8),
                 ),
                 child: Text(

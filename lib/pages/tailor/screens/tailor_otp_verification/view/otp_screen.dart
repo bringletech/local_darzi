@@ -362,14 +362,14 @@ class _OtpVerificationPageState extends State<OtpVerificationPage> {
       String otp = model.otp.toString();
       print("Otp Value is $otp");
       showCustomToast(context, message, 10);
-      Fluttertoast.showToast(
-          msg: message,
-          toastLength: Toast.LENGTH_SHORT,
-          gravity: ToastGravity.CENTER,
-          timeInSecForIosWeb: 1,
-          backgroundColor: AppColors.newUpdateColor,
-          textColor: Colors.white,
-          fontSize: 16.0);
+      // Fluttertoast.showToast(
+      //     msg: message,
+      //     toastLength: Toast.LENGTH_SHORT,
+      //     gravity: ToastGravity.CENTER,
+      //     timeInSecForIosWeb: 1,
+      //     backgroundColor: AppColors.newUpdateColor,
+      //     textColor: Colors.white,
+      //     fontSize: 16.0);
     });
   }
   void showCustomToast(BuildContext context, String message, int durationInSeconds) {
@@ -382,7 +382,7 @@ class _OtpVerificationPageState extends State<OtpVerificationPage> {
               child: Container(
                 padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 12),
                 decoration: BoxDecoration(
-                  color: Colors.black87,
+                  color: AppColors.newUpdateColor,
                   borderRadius: BorderRadius.circular(8),
                 ),
                 child: Text(

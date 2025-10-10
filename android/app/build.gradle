@@ -30,20 +30,31 @@ android {
 
     defaultConfig {
         applicationId "com.mannytech.darzi"
-        minSdk 21
+        minSdkVersion 21
         targetSdk 35
         versionCode flutter.versionCode
         versionName flutter.versionName
 
         multiDexEnabled true
+        // ✅ NDK flags (16KB support ke liye important)
+        ndk {
+            abiFilters "armeabi-v7a", "arm64-v8a"
+        }
+    }
+
+    // ✅ Add packagingOptions (jitne bhi .so files hain unke liye 16KB page size apply ho)
+    packagingOptions {
+        jniLibs {
+            useLegacyPackaging false
+        }
     }
 
     signingConfigs {
         release {
-            keyAlias keystoreProperties["keyAlias"]
-            keyPassword keystoreProperties["keyPassword"]
-            storeFile file(keystoreProperties["storeFile"])
-            storePassword keystoreProperties["storePassword"]
+            keyAlias = keystoreProperties["keyAlias"]
+            keyPassword = keystoreProperties["keyPassword"]
+            storeFile = file(keystoreProperties["storeFile"])
+            storePassword = keystoreProperties["storePassword"]
         }
     }
 

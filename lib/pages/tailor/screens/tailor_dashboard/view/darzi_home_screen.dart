@@ -223,7 +223,15 @@ class _DarziHomeScreenState extends State<DarziHomeScreen> {
                         backgroundImage: (current_tailor_data?.profileUrl != null &&
                             current_tailor_data!.profileUrl!.isNotEmpty)
                             ? NetworkImage(current_tailor_data!.profileUrl!)
-                            : AssetImage('assets/images/tailorProfile.png') as ImageProvider,
+                            : null, // null rakho jab URL nahi ho
+                        child: (current_tailor_data?.profileUrl == null ||
+                            current_tailor_data!.profileUrl!.isEmpty)
+                            ? SvgPicture.asset(
+                          'assets/svgIcon/profilepic.svg',
+                          width: 24,
+                          height: 24,
+                        )
+                            : null,
                       )
                     ],
                   )

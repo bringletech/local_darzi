@@ -51,7 +51,7 @@ class TailorProfilePageState extends State<TailorProfilePage> {
   bool isLoading = false;
   bool isButtonLoading = false;
   bool isPressed = false;
-  bool notificationValue = false;
+  bool notificationValue = true;
   bool showNumberValue = false;
   bool deleteAccountValue = false;
   //bool hideNumber;

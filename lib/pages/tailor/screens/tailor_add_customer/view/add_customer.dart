@@ -700,48 +700,42 @@ class _AddCustomerState extends State<AddCustomer> {
                                 onTap: () {
                                   if (isLoading) return; // Prevent double tap
 
-                                  setState(() {
-                                    isLoading = true;
-                                  });
-
-                                  if (nameController.text.isEmpty) {
+                                  // --- VALIDATIONS ---
+                                  if (nameController.text.trim().isEmpty) {
                                     showToast(AppLocalizations.of(context)!.enterName);
-                                    setState(() => isLoading = false);
                                     return;
                                   }
-                                  if (mobileNoController.text.isEmpty) {
+                                  if (mobileNoController.text.trim().isEmpty) {
                                     showToast(AppLocalizations.of(context)!.enterMobileNumber);
-                                    setState(() => isLoading = false);
                                     return;
                                   }
-                                  if (dressNameController.text.isEmpty) {
+                                  if (dressNameController.text.trim().isEmpty) {
                                     showToast(AppLocalizations.of(context)!.enterDressName);
-                                    setState(() => isLoading = false);
                                     return;
                                   }
                                   if (_selectedImage == null) {
                                     showToast(AppLocalizations.of(context)!.selectImage, isError: true);
-                                    setState(() => isLoading = false);
                                     return;
                                   }
-                                  if (dueDateController.text.isEmpty) {
+                                  if (dueDateController.text.trim().isEmpty) {
                                     showToast(AppLocalizations.of(context)!.enterDueDate, isError: true);
-                                    setState(() => isLoading = false);
                                     return;
                                   }
-
-                                  if (stitchingCostController.text.isEmpty) {
+                                  if (stitchingCostController.text.trim().isEmpty) {
                                     showToast(AppLocalizations.of(context)!.add_warning_message1);
-                                    setState(() => isLoading = false);
                                     return;
                                   }
 
                                   int cost = int.tryParse(stitchingCostController.text.trim()) ?? 0;
                                   if (cost < 0) {
-                                    showToast("Cost cannot be negative");
+                                    showToast("Cost cannot be negative", isError: true);
                                     return;
                                   }
 
+                                  // ✅ Validation pass hone ke baad hi loader start karo
+                                  setState(() => isLoading = true);
+
+                                  // ✅ Call AWS upload flow
                                   getAwsUrl();
                                 },
                                 child: Container(
@@ -749,29 +743,24 @@ class _AddCustomerState extends State<AddCustomer> {
                                   height: 60,
                                   decoration: BoxDecoration(
                                     color: AppColors.newUpdateColor,
-                                    //color: isPressed ? AppColors.newUpdateColor:Colors.white,
-                                    // gradient: LinearGradient(
-                                    //   colors: isPressed ? AppColors.Gradient1 : [Colors.white, Colors.white],),
                                     borderRadius: BorderRadius.circular(8),
-                                    // border: Border.all(color: AppColors.newUpdateColor, width: 2),
                                   ),
                                   child: Center(
                                     child: isLoading
                                         ? CircularProgressIndicator(color: Colors.white)
-                                        : Row(
-                                      mainAxisAlignment: MainAxisAlignment.center,
-                                      children: [
-                                        Text(AppLocalizations.of(context)!.saveDetails1,
-                                          style: TextStyle(
-                                            color: Colors.white,
-                                            // color: isPressed ? Colors.white : AppColors.newUpdateColor,
-                                            fontFamily: 'Poppins', fontWeight: FontWeight.w600, fontSize: 19,),),
-                                      ],
+                                        : Text(
+                                      AppLocalizations.of(context)!.saveDetails1,
+                                      style: TextStyle(
+                                        color: Colors.white,
+                                        fontFamily: 'Poppins',
+                                        fontWeight: FontWeight.w600,
+                                        fontSize: 19,
+                                      ),
                                     ),
                                   ),
                                 ),
-                              ), //buildSaveButton(context),
-                            ),
+                              ),
+                            )
                           ]
                       )
                   )
@@ -919,9 +908,7 @@ class _AddCustomerState extends State<AddCustomer> {
     print('Image FileType is $fileType');
     print('Folder Name is $folder_name');
 
-    setState(() {
-      isLoading = true; // Start loader
-    });
+    if (mounted) setState(() => isLoading = true); // Start loader
 
     try {
       AwsResponseModel model = await CallService().getAwsUrl(fileType, folder_name);
@@ -931,34 +918,17 @@ class _AddCustomerState extends State<AddCustomer> {
       print("Presigned URL: $presignedUrl");
       print("Object URL: $objectUrl");
 
-      await callPresignedUrl(presignedUrl); // ✅ Await here
+      await callPresignedUrl(presignedUrl); // ✅ Upload image
     } catch (error) {
-      Fluttertoast.showToast(
-        msg: "Failed to update details. Please try again.",
-        toastLength: Toast.LENGTH_SHORT,
-        gravity: ToastGravity.CENTER,
-        timeInSecForIosWeb: 1,
-        backgroundColor: AppColors.newUpdateColor,
-        textColor: Colors.white,
-        fontSize: 16.0,
-      );
+      showToast("Failed to update details. Please try again.", isError: true);
     } finally {
-      setState(() {
-        isLoading = false; // Stop loader AFTER everything
-      });
+      if (mounted) setState(() => isLoading = false); // Stop loader
     }
   }
 
-
   Future<void> callPresignedUrl(String presignedUrl) async {
     if (_selectedImage == null) {
-      Fluttertoast.showToast(
-        msg: "No image selected",
-        toastLength: Toast.LENGTH_SHORT,
-        gravity: ToastGravity.CENTER,
-        backgroundColor: Colors.red,
-        textColor: Colors.white,
-      );
+      showToast("No image selected", isError: true);
       return;
     }
 
@@ -980,79 +950,60 @@ class _AddCustomerState extends State<AddCustomer> {
       print("Upload response status: ${response.statusCode}");
 
       if (response.statusCode == 200) {
-        print("Image uploaded successfully.");
-        await addCustomerMethod(); // 👈 Profile update after image upload
+        print("✅ Image uploaded successfully.");
+        await addCustomerMethod(); // Proceed
       } else {
-        Fluttertoast.showToast(
-          msg: "Image upload failed. Status: ${response.statusCode}",
-          toastLength: Toast.LENGTH_SHORT,
-          gravity: ToastGravity.CENTER,
-          backgroundColor: Colors.red,
-          textColor: Colors.white,
-        );
+        showToast("Image upload failed. Status: ${response.statusCode}", isError: true);
       }
     } catch (e) {
       print("Upload error: $e");
-      Fluttertoast.showToast(
-        msg: "An error occurred during upload: $e",
-        toastLength: Toast.LENGTH_SHORT,
-        gravity: ToastGravity.CENTER,
-        backgroundColor: Colors.red,
-        textColor: Colors.white,
-      );
+      showToast("An error occurred during upload: $e", isError: true);
     }
   }
 
   Future<void> addCustomerMethod() async {
-    setState(() {
-      isLoading = true;
-    });
+    if (mounted) setState(() => isLoading = true);
 
-    var map = <String, dynamic>{};
-    map['name'] = nameController.text.trim();
-    map['dressImgUrl'] = objectUrl;
-    map['dueDate'] = formattedDate;
-    map['mobileNo'] =  mobileNoController.text.trim();
-    map['neck'] = neckController.text.trim();
-    map['Bust'] = bustController.text.trim();
-    map['underBust'] = underBustController.text.trim();
-    map['waist'] = waistController.text.trim();
-    map['hips'] = hipsController.text.trim();
-    map['neckToAboveKnee'] = neckToAboveKneeController.text.trim();
-    map['armLength'] = armLengthController.text.trim();
-    map['shoulderSeam'] = shoulderSeamController.text.trim();
-    map['armHole'] = armHoleController.text.trim();
-    map['bicep'] = bicepController.text.trim();
-    map['foreArm'] = foreArmController.text.trim();
-    map['wrist'] = wristController.text.trim();
-    map['shoulderToWaist'] = shoulderToWaistController.text.trim();
-    map['bottomLength'] = bottomLengthController.text.trim();
-    map['ankle'] = ankleController.text.trim();
-    map['stitchingCost'] =stitchingCostController.text.trim();
-    map['advanceReceived'] = advancedReceivedController.text.isEmpty
-        ? "00"
-        : advancedReceivedController.text.trim();
-    map['outstandingBalance'] = outStandingBalanceController.text.trim();
-    map['notes'] = textarea.text.trim();
-    map['dressName'] = dressNameController.text.trim();
-    map['measurementUnit'] = optional;
+    var map = <String, dynamic>{
+      'name': nameController.text.trim(),
+      'dressImgUrl': objectUrl,
+      'dueDate': formattedDate,
+      'mobileNo': mobileNoController.text.trim(),
+      'neck': neckController.text.trim(),
+      'Bust': bustController.text.trim(),
+      'underBust': underBustController.text.trim(),
+      'waist': waistController.text.trim(),
+      'hips': hipsController.text.trim(),
+      'neckToAboveKnee': neckToAboveKneeController.text.trim(),
+      'armLength': armLengthController.text.trim(),
+      'shoulderSeam': shoulderSeamController.text.trim(),
+      'armHole': armHoleController.text.trim(),
+      'bicep': bicepController.text.trim(),
+      'foreArm': foreArmController.text.trim(),
+      'wrist': wristController.text.trim(),
+      'shoulderToWaist': shoulderToWaistController.text.trim(),
+      'bottomLength': bottomLengthController.text.trim(),
+      'ankle': ankleController.text.trim(),
+      'stitchingCost': stitchingCostController.text.trim(),
+      'advanceReceived': advancedReceivedController.text.isEmpty
+          ? "00"
+          : advancedReceivedController.text.trim(),
+      'outstandingBalance': outStandingBalanceController.text.trim(),
+      'notes': textarea.text.trim(),
+      'dressName': dressNameController.text.trim(),
+      'measurementUnit': optional,
+    };
 
     print("Tailor Data Map value is $map");
+
     try {
       Add_New_Customer_Response_Model model = await CallService().addNewCustomer(map);
 
       String message = model.message.toString();
-      Fluttertoast.showToast(
-        msg: message,
-        toastLength: Toast.LENGTH_SHORT,
-        gravity: ToastGravity.CENTER,
-        timeInSecForIosWeb: 1,
-        backgroundColor: AppColors.newUpdateColor,
-        textColor: Colors.white,
-        fontSize: 16.0,
-      );
+      showToast(message);
 
       updateUI();
+
       /// Clear all form fields
       nameController.clear();
       mobileNoController.clear();
@@ -1077,17 +1028,21 @@ class _AddCustomerState extends State<AddCustomer> {
       textarea.clear();
       dressNameController.clear();
       dueDateController.clear();
-      optional = "";
+     // optional = "";
       formattedDate = "";
+      extensionWithoutDot = "";
+      objectUrl = "";
+      presignedUrl = "";
       fileName = "";
       _selectedImage = null;
     } catch (e) {
       print("Error in addCustomerMethod: $e");
       showToast("Something went wrong. Please try again.", isError: true);
     } finally {
-      setState(() => isLoading = false);
+      if (mounted) setState(() => isLoading = false);
     }
   }
+
 
   void updateUI() {
     setState(() {});

@@ -232,6 +232,3 @@ class CustomMonthYearPickerLocalizationsDelegate
   @override
   bool shouldReload(covariant LocalizationsDelegate old) => false;
 }
-
-
-

@@ -53,8 +53,8 @@ class _AnimatedSwitchState extends State<AnimatedSwitch> {
         decoration: BoxDecoration(
           borderRadius: BorderRadius.circular(25),
           color: isEnabled
-              ? AppColors.newUpdatedColor // ON color
-              :widget.enabledTrackColor, // OFF color
+              ?  widget.enabledTrackColor// ON color
+              :AppColors.newUpdatedColor, // OFF color
         ),
         child: AnimatedAlign(
           duration: animationDuration,

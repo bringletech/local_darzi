@@ -174,7 +174,7 @@ class _WelcomeScreenState extends State<WelcomeScreen> {
   void initState() {
     // TODO: implement initState
     super.initState();
-    getDeviceToken();
+     getDeviceToken();
     //checkIfFirstTime();
   }
 

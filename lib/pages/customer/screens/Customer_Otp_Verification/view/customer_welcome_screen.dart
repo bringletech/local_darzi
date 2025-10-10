@@ -192,7 +192,8 @@ class _CustomerWelcomeScreenState extends State<CustomerWelcomeScreen> {
     try {
       var map = {
         'mobileNo': widget.phoneNumber,
-        'name': userName
+        'name': userName,
+        'device_fcm_token': deviceToken,
       };
       print("📤 Sending data to API: $map");
 

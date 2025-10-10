@@ -50,7 +50,7 @@ class _CustomerProfilePageState extends State<CustomerProfilePage> {
   final ImagePicker _picker = ImagePicker();
   File? _selectedImage;
   String? profileUrl;
-  bool notificationValue = false;
+  bool notificationValue = true;
   bool showNumberValue = false;
   bool deleteAccountValue = false;
   final Uri _privacyPolicyUrl = Uri.parse('https://mannytechnologies.com/contact-us/');

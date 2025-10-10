@@ -736,8 +736,9 @@ class _CustomerHomeScreenState extends State<CustomerHomeScreen> {
   bool isLoading = true;
   final PageController _pageController = PageController(viewportFraction: 0.8);
   bool isBackArrowTapped = false; // By default, icon color is grey
-  String userName = "", userAddress = "";
+  String userName = "";
   String?userProfile;
+  String?userAddress;
 
   // Common method for access token check and navigation
   Future<bool> checkAccessTokenAndShowPopup({
@@ -934,7 +935,8 @@ class _CustomerHomeScreenState extends State<CustomerHomeScreen> {
                       ),
                     ),
                     const SizedBox(height: 4),
-                    userAddress.isNotEmpty?Row(
+                    (userAddress != null && userAddress.toString().trim().isNotEmpty)
+                        ? Row(
                       children: [
                         Icon(
                           Icons.location_on,
@@ -943,13 +945,15 @@ class _CustomerHomeScreenState extends State<CustomerHomeScreen> {
                         ),
                         const SizedBox(width: 4),
                         Text(
-                          userAddress,
+                          userAddress!,
                           style: TextStyle(
                             color: AppColors.newUpdateColor,
                           ),
-                        )
+                        ),
                       ],
-                    ):SizedBox(),
+                    )
+                        : SizedBox.shrink(),
+
                   ],
                 ),
 
@@ -988,12 +992,27 @@ class _CustomerHomeScreenState extends State<CustomerHomeScreen> {
                       ],
                     ),
                     const SizedBox(width: 12),
+                    // CircleAvatar(
+                    //   radius: 20,
+                    //   backgroundImage: (userProfile != null &&
+                    //       userProfile!.isNotEmpty)
+                    //       ? NetworkImage(userProfile!)
+                    //       : AssetImage('assets/images/tailorProfile.png') as ImageProvider,
+                    // )
                     CircleAvatar(
                       radius: 20,
                       backgroundImage: (userProfile != null &&
                           userProfile!.isNotEmpty)
                           ? NetworkImage(userProfile!)
-                          : AssetImage('assets/images/tailorProfile.png') as ImageProvider,
+                          : null, // null rakho jab URL nahi ho
+                      child: (userProfile == null ||
+                          userProfile!.isEmpty)
+                          ? SvgPicture.asset(
+                        'assets/svgIcon/profilepic.svg',
+                        width: 24,
+                        height: 24,
+                      )
+                          : null,
                     )
                   ],
                 )

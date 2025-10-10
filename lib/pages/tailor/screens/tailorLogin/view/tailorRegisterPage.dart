@@ -243,7 +243,6 @@ class _TailorPageState extends State<TailorPage> {
   void callTailorLoginApi(String phoneNumber) {
     var map = <String, dynamic>{};
     map['mobileNo'] = phoneNumber;
-    // map['device_fcm_token'] = deviceToken;
 
     print("Map value is$map");
     isLoading = true;

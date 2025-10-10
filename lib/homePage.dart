@@ -142,7 +142,7 @@ class _HomePageState extends State<HomePage> {
             child: Padding(
               padding: const EdgeInsets.only(top: 50),
               child: Image.asset(
-                'assets/images/darjiLogo.png',
+                'assets/images/darzi_logo.png',
                 width: 250,
                 height: 250,
               ),
